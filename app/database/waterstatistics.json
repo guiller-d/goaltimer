@@ -1,0 +1,194 @@
+[
+    {
+      "index": 0,
+      "weekly_percentage": [
+        {
+          "date": "18-10-2020",
+          "day_percentage": 30,
+          "day": 0,
+          "oz": "8oz"
+        },
+        {
+          "date": "19-10-2020",
+          "day_percentage": 19,
+          "day": 1,
+          "oz": "8oz"
+        },
+        {
+          "date": "20-10-2020",
+          "day_percentage": 15,
+          "day": 2,
+          "oz": "8oz"
+        },
+        {
+          "date": "21-10-2020",
+          "day_percentage": 30,
+          "day": 3,
+          "oz": "8oz"
+        },
+        {
+          "date": "22-10-2020",
+          "day_percentage": 11,
+          "day": 4,
+          "oz": "8oz"
+        },
+        {
+          "date": "23-10-2020",
+          "day_percentage": 14,
+          "day": 5,
+          "oz": "8oz"
+        },
+        {
+          "date": "24-10-2020",
+          "day_percentage": 17,
+          "day": 6,
+          "oz": "8oz"
+        }
+      ],
+      "streak": 14
+    },
+    {
+      "index": 1,
+      "weekly_percentage": [
+        {
+          "date": "25-10-2020",
+          "day_percentage": 48.2,
+          "day": 0,
+          "oz": "8oz"
+        },
+        {
+          "date": "26-10-2020",
+          "day_percentage": 13.6,
+          "day": 1,
+          "oz": "8oz"
+        },
+        {
+          "date": "27-10-2020",
+          "day_percentage": 8.9,
+          "day": 2,
+          "oz": "8oz"
+        },
+        {
+          "date": "28-10-2020",
+          "day_percentage": 30.7,
+          "day": 3,
+          "oz": "8oz"
+        },
+        {
+          "date": "29-10-2020",
+          "day_percentage": 29.6,
+          "day": 4,
+          "oz": "8oz"
+        },
+        {
+          "date": "30-10-2020",
+          "day_percentage": 42.5,
+          "day": 5,
+          "oz": "8oz"
+        },
+        {
+          "date": "31-10-2020",
+          "day_percentage": 62.5,
+          "day": 6,
+          "oz": "8oz"
+        }
+      ],
+      "streak": 21
+    },
+    {
+      "index": 2,
+      "weekly_percentage": [
+        {
+          "date": "01-11-2020",
+          "day_percentage": 45.5,
+          "day": 0,
+          "oz": "8oz"
+        },
+        {
+          "date": "02-11-2020",
+          "day_percentage": 18.4,
+          "day": 1,
+          "oz": "8oz"
+        },
+        {
+          "date": "03-11-2020",
+          "day_percentage": 13.2,
+          "day": 2,
+          "oz": "8oz"
+        },
+        {
+          "date": "04-11-2020",
+          "day_percentage": 16.9,
+          "day": 3,
+          "oz": "8oz"
+        },
+        {
+          "date": "05-11-2020",
+          "day_percentage": 13.7,
+          "day": 4,
+          "oz": "8oz"
+        },
+        {
+          "date": "06-11-2020",
+          "day_percentage": 11.2,
+          "day": 5,
+          "oz": "8oz"
+        },
+        {
+          "date": "07-11-2020",
+          "day_percentage": 15.1,
+          "day": 6,
+          "oz": "8oz"
+        }
+      ],
+      "streak": 12
+    },
+    {
+      "index": 3,
+      "weekly_percentage": [
+        {
+          "date": "08-11-2020",
+          "day_percentage": 19.9,
+          "day": 0,
+          "oz": "8oz"
+        },
+        {
+          "date": "09-11-2020",
+          "day_percentage": 14.8,
+          "day": 1,
+          "oz": "8oz"
+        },
+        {
+          "date": "10-11-2020",
+          "day_percentage": 30.2,
+          "day": 2,
+          "oz": "8oz"
+        },
+        {
+          "date": "11-11-2020",
+          "day_percentage": 34.9,
+          "day": 3,
+          "oz": "8oz"
+        },
+        {
+          "date": "12-11-2020",
+          "day_percentage": 35.8,
+          "day": 4,
+          "oz": "8oz"
+        },
+        {
+          "date": "13-11-2020",
+          "day_percentage": 38.6,
+          "day": 5,
+          "oz": "8oz"
+        },
+        {
+          "date": "14-11-2020",
+          "day_percentage": 25.5,
+          "day": 6,
+          "oz": "8oz"
+        }
+      ],
+      "streak": 10
+    }
+  ]

@@ -1,0 +1,100 @@
+[
+    {
+      "index": 0,
+      "challenge_name": "5 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 5 days.",
+      "isActive": false,
+      "isComplete": true
+    },
+    {
+      "index": 1,
+      "challenge_name": "10 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 10 days.",
+      "isActive": true,
+      "isComplete": true
+    },
+    {
+      "index": 2,
+      "challenge_name": "15 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 15 days.",
+      "isActive": true,
+      "isComplete": true
+    },
+    {
+      "index": 3,
+      "challenge_name": "20 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 20 days.",
+      "isActive": true,
+      "isComplete": false
+    },
+    {
+      "index": 4,
+      "challenge_name": "25 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 25 days.",
+      "isActive": true,
+      "isComplete": false
+    },
+    {
+      "index": 5,
+      "challenge_name": "30 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 30 days.",
+      "isActive": true,
+      "isComplete": true
+    },
+    {
+      "index": 6,
+      "challenge_name": "35 Day Challenge",
+      "challenge_description": "Drink at least 8 glass of water for 35 days.",
+      "isActive": false,
+      "isComplete": true
+    },
+    {
+        "index": 7,
+        "challenge_name": "5 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 5 days.",
+        "isActive": false,
+        "isComplete": true
+      },
+      {
+        "index": 8,
+        "challenge_name": "10 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 10 days.",
+        "isActive": true,
+        "isComplete": true
+      },
+      {
+        "index": 9,
+        "challenge_name": "15 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 15 days.",
+        "isActive": true,
+        "isComplete": true
+      },
+      {
+        "index": 10,
+        "challenge_name": "20 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 20 days.",
+        "isActive": true,
+        "isComplete": false
+      },
+      {
+        "index": 11,
+        "challenge_name": "25 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 25 days.",
+        "isActive": true,
+        "isComplete": false
+      },
+      {
+        "index": 12,
+        "challenge_name": "30 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 30 days.",
+        "isActive": true,
+        "isComplete": true
+      },
+      {
+        "index": 13,
+        "challenge_name": "35 Day Challenge",
+        "challenge_description": "Drink at least 8 glass of water for 35 days.",
+        "isActive": false,
+        "isComplete": true
+      }
+  ]

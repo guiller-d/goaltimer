@@ -1,0 +1,53 @@
+[
+    {
+        "date": "1998-04-30",
+        "firstname": "Marti",
+        "lastname": "Tengdin",
+        "city": "Muscat",
+        "country": "Holy See (Vatican City State)",
+        "countryCode": "TR",
+        "email": "Marti.Tengdin@gmail.com",
+        "password": "password"
+    },
+    {
+        "date": "1993-06-08",
+        "firstname": "Allis",
+        "lastname": "Wyn",
+        "city": "Jinan",
+        "country": "Korea, Democratic People\"S Republic of",
+        "countryCode": "ZM",
+        "email": "Allis.Wyn@gmail.com",
+        "password": "password"
+    },
+    {
+        "date": "1992-07-04",
+        "firstname": "Alexine",
+        "lastname": "Lilas",
+        "city": "Moroni",
+        "country": "Belgium",
+        "countryCode": "FM",
+        "email": "Alexine.Lilas@gmail.com",
+        "password": "password"
+    },
+    {
+        "date": "1992-11-27",
+        "firstname": "Genevra",
+        "lastname": "Sperling",
+        "city": "Damascus",
+        "country": "Georgia",
+        "countryCode": "JO",
+        "email": "Genevra.Sperling@gmail.com",
+        "password": "password"
+    },
+    {
+        "date": "1985-07-02",
+        "firstname": "Nonnah",
+        "lastname": "Whittaker",
+        "city": "San Salvador",
+        "country": "Saint Pierre and Miquelon",
+        "countryCode": "VI",
+        "email": "Nonnah.Whittaker@gmail.com",
+        "password": "password"
+    }
+
+]
