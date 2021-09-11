@@ -2,3 +2,10 @@ node_modules
 temp-db-springboot/javacore.20210905.114430.21510.0002.txt
 .gitignore
 temp-db-springboot/Snap.20210905.114430.21510.0003.trc
+goaltimer-frontend/ios/Pods/Headers/.DS_Store
+goaltimer-frontend/ios/Pods/boost-for-react-native/boost/.DS_Store
+goaltimer-frontend/ios/Pods/boost-for-react-native/.DS_Store
+goaltimer-frontend/ios/Pods/.DS_Store
+goaltimer-frontend/ios/.DS_Store
+goaltimer-frontend/.DS_Store
+.DS_Store
