@@ -9,3 +9,5 @@ goaltimer-frontend/ios/Pods/.DS_Store
 goaltimer-frontend/ios/.DS_Store
 goaltimer-frontend/.DS_Store
 .DS_Store
+goaltimer-frontend/app/screens/SettingScreen.js
+.gitignore
