@@ -3,8 +3,8 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://bw-upq.anonymous.goaltimer-frontend.exp.direct",
+  "packagerNgrokUrl": "https://packager.bw-upq.anonymous.goaltimer-frontend.exp.direct",
+  "ngrokPid": 1356,
   "webpackServerPort": null
 }
