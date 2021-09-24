@@ -11,3 +11,7 @@ goaltimer-frontend/.DS_Store
 .DS_Store
 goaltimer-frontend/app/screens/SettingScreen.js
 .gitignore
+goaltimer-frontend/app/screens/TaskDetailScreen.js
+.DS_Store
+goaltimer-frontend/.DS_Store
+goaltimer-frontend/ios/Pods/boost-for-react-native/boost/.DS_Store

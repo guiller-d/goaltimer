@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
@@ -10,7 +10,7 @@ import Button from '../components/Button';
 import Modal from 'react-native-modal';
 import Duration from '../components/Duration';
 import ColorButton from '../components/ColorButton';
-import { VictoryPie } from "victory-native";
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis } from "victory-native";
 
 const fetchFont = () => {
     return Font.loadAsync({
@@ -56,62 +56,94 @@ function HomeScreen({ navigation }) {
         setIsMonthly(true);
     };
 
-    const graphicData = [
+    const pieData = [
         { y: 5, x: '5%' },
         { y: 90, x: '90%' },
         { y: 50, x: '50%' },
         { y: 20, x: '20%' },
         { y: 70, x: '70%' },
     ]
+    const barData = [
+        { x: 5, y: 20, },
+        { x: 17, y: 30 },
+        { x: 2, y: 20 },
+        { x: 31, y: 20 },
+        { x: 25, y: 40 }
+    ]
     const graphicColor = ['orange', 'red', 'blue', 'pink', 'brown']
+    const scrollView = useRef();
 
     return (
         <Screen>
-            <View style={styles.homeContainer}>
-                <View style={{
-                    borderColor: '#A7A7A7',
-                    borderWidth: 1,
-                    borderRadius: 45,
-                    width: '95%',
-                    margin: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.titleLabel}>Overview of all of your time</Text>
-                        <Text style={styles.introLabel}>See how much time you spent on each activity.</Text>
-                    </View>
-                    <VictoryPie
-                        data={graphicData}
-                        radius={({ datum }) =>  datum.y}
-                        innerRadius={35}
-                        style={ { labels: { fill: "black", fontSize: 20, fontWeight: "bold" }}}
-                        colorScale={graphicColor}
-                        width = {Dimensions.get('window').width}
-                        height = {Dimensions.get('window').height/3}
-                    />
-                  
-                
 
+            {/*intro and labels */}
+            <View style={{ justifyContent: 'center' }}>
+                <Text style={styles.titleLabel}>Overview of all of your time</Text>
+                <Text style={styles.introLabel}>See how much time you spent on each activity.</Text>
+            </View>
+            {/*home containter */}
+            <View style={styles.homeContainer}>
+                <View style={{ height: '40%' }}>
+                    <ScrollView ref={scrollView} horizontal={true} decelerationRate={0} snapToInterval={Dimensions.get('window').width} snapToAlignment={"center"} showsHorizontalScrollIndicator={false} bounces={false} style={{ alignSelf: 'center', }}>
+
+                        <VictoryPie
+                            data={barData}
+                            innerRadius={60}
+                            radius={({ datum }) => 50 + datum.y * 1}
+                            innerRadius={50}
+                            labels={({ datum }) => `${datum.y} min `}
+                            colorScale={graphicColor}
+                            width={Dimensions.get('window').width}
+                            height={Dimensions.get('window').height / 3}
+                        >
+                        </VictoryPie>
+                        <VictoryChart
+                            theme={VictoryTheme.grayscale}
+                            domainPadding={{ x: 15 }}
+                        >
+                            <VictoryBar
+                                style={{
+                                    data: {
+                                        fill: '#3B97ED',
+                                        width: 25
+                                    }
+                                }}
+                                data={barData}
+
+                            />
+                            <VictoryAxis
+                                label="Days (ms)"
+                            />
+                            <VictoryAxis dependentAxis
+                                 label="Time (min)"
+                                 padding={{ left: 10, bottom: 60 }}
+                            />
+
+                        </VictoryChart>
+
+
+                    </ScrollView>
                 </View>
 
-                <View style={{
-                    borderColor: '#A7A7A7',
-                    width: '97%',
-                    borderWidth: 1,
-                    flex: 1,
-                    borderTopLeftRadius: 45,
-                    borderTopRightRadius: 45,
-                    margin: 5
-                }}>
+                {/*activity box container */}
+                <View style={styles.activityBox}>
+                    {/*activity intro and label */}
                     <View style={{ justifyContent: 'center' }}>
                         <Text style={styles.titleLabel}> Your Activities </Text>
                         <Text style={styles.introLabel}> See how much time you spent on each activity. </Text>
                     </View>
+                    {/*all activity container */}
+                   
                     <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'baseliine', alignItems: 'center' }}>
                         <View style={styles.activityContainer}>
                             {/*<ScrollView bouncesZoom={true} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> */}
-                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange' onPress={() => navigation.navigate('TaskDetailScreen')} />
+                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange' 
+                            onPress={() => navigation.navigate('TaskDetailScreen', {
+                                activityName: 'Aerobic Exercise',
+                                activityDuration: "30 minutes",
+                                activitySchedule:"Daily Task",
+                                color:'orange' 
+                            })} />
                             <Activity activityName="Sleep" activityDuration="30 minutes" activitySchedule="Daily Task" color='red' />
                             <Activity activityName="Studying" activityDuration="30 minutes" activitySchedule="Daily Task" color='blue' />
                             <Activity activityName="Meditation" activityDuration="30 minutes" activitySchedule="Daily Task" color='pink' />
@@ -146,7 +178,7 @@ function HomeScreen({ navigation }) {
                             <View style={{ width: '90%', borderRadius: 5, borderWidth: 1, paddingLeft: 5, borderColor: '#DBDBDB' }}>
                                 <TextInput
                                     style={styles.inputText}
-                                    placeholder="Read Books"
+                                    placeholder="Meditate"
                                 />
                             </View>
                         </View>
@@ -188,20 +220,20 @@ const styles = StyleSheet.create({
     homeContainer: {
         height: '100%',
         width: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
     },
-    container: {
+    activityBox: {
+        borderColor: '#A7A7A7',
+        width: '97%',
+        borderWidth: 1,
         flex: 1,
-        alignItems: 'center'
-    },
-    title: {
-        fontSize: 24,
-        margin: 10
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        margin: 5
     },
     activityContainer: {
         width: '100%',
         justifyContent: 'center',
-
     },
     introLabel: {
         fontSize: 13,

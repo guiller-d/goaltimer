@@ -21,6 +21,7 @@ const DrawerButton = (props) => {
     </View>
   );
 };
+
 const FeedNavigator = ({navigation}) => (
     <Stack.Navigator >
         <Stack.Screen name="HomeScreen"         
@@ -28,7 +29,7 @@ const FeedNavigator = ({navigation}) => (
         <Stack.Screen name="Progress" 
             options={{ headerLeft: ()=> <DrawerButton navigation={navigation}  />, title: '', headerStyle: {backgroundColor: 'red'},headerShown: true }} component={ProgressScreen} />
         <Stack.Screen name="TaskDetailScreen" 
-            options={{title: 'a', headerStyle: {backgroundColor: '#e7305b'}}}  component={TaskDetailScreen} options={{headerShown: true}} />
+            options={{title: 'a', headerStyle: {backgroundColor: '#3B97ED'}}}  component={TaskDetailScreen} options={{headerShown: true}} />
         <Stack.Screen name="SaveActivityScreen" 
             options={{  headerLeft:null, title: '', headerStyle: {backgroundColor: '#e7305b'}}}  component={SaveActivityScreen} options={{headerShown: false}} />
         <Stack.Screen name="CreateActivityScreen" component={CreateActivityScreen} options= { {title: 'Availability',  headerTintColor: 'white', headerStyle: { backgroundColor: '#3B97ED'}, headerTitleStyle: {fontFamily: 'Avenir-Medium', },  headerLeft: null }}/>
