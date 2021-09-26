@@ -22,7 +22,8 @@ function AvailabilityScreen(props) {
       <Text style= {styles.titleContainer}>Availability</Text>
       <Text style= {styles.introLabel}>Manage Your Availability</Text>
       <View style={styles.container}>
-      <Text style= {styles.container}>Monday                       </Text>
+      <Text style= {styles.text}>Monday</Text>
+      <View style={styles.container}>
       <Switch
         trackColor={{ false: "black", true: "green" }}
         ios_backgroundColor="#3e3e3e"
@@ -31,9 +32,11 @@ function AvailabilityScreen(props) {
       />
       <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
       </View>
+      </View>
 
       <View style={styles.container}>
-      <Text style= {styles.container}>Tuesday                      </Text>
+      <Text style= {styles.text}>Tuesday</Text>
+      <View style={styles.container}>
         <Switch
           trackColor={{ false: "#black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
@@ -42,9 +45,11 @@ function AvailabilityScreen(props) {
         />
         <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
         </View>
+        </View>
 
         <View style={styles.container}>
-      <Text style= {styles.container}>Wednesday               </Text>
+      <Text style= {styles.text}>Wednesday</Text>
+      <View style={styles.container}>
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
@@ -53,9 +58,11 @@ function AvailabilityScreen(props) {
         />
         <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
         </View>
+        </View>
 
         <View style={styles.container}>
-      <Text style= {styles.container}>Thursday                   </Text>
+      <Text style= {styles.text}>Thursday</Text>
+      <View style={styles.container}>
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
@@ -64,9 +71,11 @@ function AvailabilityScreen(props) {
         />
         <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
         </View>
+        </View>
 
-        <View style={styles.container}>
-      <Text style= {styles.container}>Friday                          </Text>
+      <View style={styles.container}>
+      <Text style= {styles.text}>Friday</Text>
+      <View style={styles.container}>
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
@@ -75,27 +84,32 @@ function AvailabilityScreen(props) {
         />
         <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
         </View>
+        </View>
 
         <View style={styles.container}>
-      <Text style= {styles.container}>Saturday                    </Text>
+        <Text style= {styles.text}>Saturday</Text>
+        <View style={styles.container}>
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
           onValueChange={Saturday}
           value={isEnabled5}
         />
-        <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
+        <Button title="Edit" color = '#775E5E' borderColor = '#0062FF' />
+        </View>
         </View>
 
         <View style={styles.container}>
-      <Text style= {styles.container}>Sunday                       </Text>
+        <Text style= {styles.text}>Sunday</Text>
+        <View style={styles.container}>
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"
           onValueChange={Sunday}
           value={isEnabled6}
         />
-        <Button title="Edit" color = '#775E5E' borderColor = '#0062FF'/>
+        <Button title="Edit" color = '#775E5E' borderColor = '#0062FF' />
+        </View>
         </View>
     </Screen>
     );
@@ -107,7 +121,8 @@ const styles = StyleSheet.create({
     paddingBottom:15,
     fontSize: 35,
     marginLeft: 12,
-    color: "#775E5E"
+    color: "#775E5E",
+    justifyContent: "space-between"
   },
   titleContainer: {
     paddingBottom:3,
@@ -121,7 +136,15 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginLeft: 12,
     paddingBottom:10
-}
+},
+ text:{
+  flexDirection:'row', 
+  paddingBottom:15,
+  fontSize: 35,
+  marginLeft: 12,
+  color: "#775E5E",
+  justifyContent: 'flex-start'
+ }
 
 });
 
