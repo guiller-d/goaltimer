@@ -62,7 +62,7 @@ function AvailabilityScreen(props) {
 
         <View style={styles.container}>
       <Text style= {styles.text}>Thursday</Text>
-      <View style={styles.container}>
+      <View style={styles.container}> 
         <Switch
           trackColor={{ false: "black", true: "green" }}
           ios_backgroundColor="#3e3e3e"

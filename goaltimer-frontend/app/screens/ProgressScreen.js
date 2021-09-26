@@ -7,8 +7,8 @@ function ProgressScreen(props) {
     return (
         <Screen>
             <View style={styles.loadingBarContainer}>
-                <LoadingBar color='orange' activityName="Aerobic Exercise" activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34"/>
-                <LoadingBar color='red' activityName="Aerobic Exercise" activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34"/>
+                <LoadingBar color='orange' activityName={props.activityName} activityDuration={props.activityName} dateToday={new Date().toDateString()} timer="00:35:34"/>
+                <LoadingBar color='red' activityName="Aerobic " activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34"/>
                 <LoadingBar color='blue' activityName="Aerobic Exercise" activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34"/>
                 <LoadingBar color='pink' activityName="Aerobic Exercise" activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34"/>
           </View>
