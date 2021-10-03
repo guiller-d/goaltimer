@@ -10,7 +10,7 @@ import Button from '../components/Button';
 import Modal from 'react-native-modal';
 import Duration from '../components/Duration';
 import ColorButton from '../components/ColorButton';
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer,VictoryScatter  } from "victory-native";
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer, VictoryScatter } from "victory-native";
 import { LinearGradient } from 'expo-linear-gradient';
 
 const fetchFont = () => {
@@ -87,26 +87,26 @@ function HomeScreen({ navigation }) {
             <View style={styles.homeContainer}>
                 <View style={styles.graphContainer}>
                     <ScrollView ref={scrollView} horizontal={true} decelerationRate={0} snapToInterval={Dimensions.get('window').width} snapToAlignment={"center"} showsHorizontalScrollIndicator={false} bounces={false} style={{ alignSelf: 'center', }}>
-                        
+
                         <VictoryChart
-                     
+
                             theme={VictoryTheme.material}
                             domainPadding={{ x: 15 }}
                             height={Dimensions.get('window').height / 3}
-                           
+
                         >
-                            <VictoryBar   
+                            <VictoryBar
                                 style={{
                                     data: {
                                         fill: ({ datum }) => datum.color,
-                                        
+
                                     }
                                 }}
                                 data={barData}
                                 cornerRadius={5}
-                              
+
                             />
-                          
+
                             <VictoryAxis
                                 axisLabelComponent={<VictoryLabel dy={20} />}
                                 label={"Dependent axis"}
@@ -154,28 +154,26 @@ function HomeScreen({ navigation }) {
                     <Text style={styles.introLabel}> See how much time you spent on each activity. </Text>
                 </View>
 
-                <View style={styles.activityBox}>
-                    {/*all activity container */}
-                    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'baseliine', alignItems: 'center' }}>
-                        <View style={styles.activityContainer}>
-                            {/*<ScrollView bouncesZoom={true} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> */}
-                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange'
-                                onPress={() => navigation.navigate('TaskDetailScreen', {
-                                    activityName: 'Aerobic Exercise',
-                                    activityDuration: "30 minutes",
-                                    activitySchedule: "Daily Task",
-                                    color: 'orange'
-                                })} />
-                            <Activity activityName="Sleep" activityDuration="30 minutes" activitySchedule="Daily Task" color='red' />
-                            <Activity activityName="Studying" activityDuration="30 minutes" activitySchedule="Daily Task" color='blue' />
-                            <Activity activityName="Meditation" activityDuration="30 minutes" activitySchedule="Daily Task" color='pink' />
-                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='brown' />
-                            {/*</ScrollView>*/}
-                        </View>
-                    </ScrollView>
-                </View>
-
             </View>
+
+            {/*all activity container */}
+            <ScrollView ref={scrollView} decelerationRate={0} contentContainerStyle={{ flexGrow: 1, justifyContent: 'baseliine', alignItems: 'center', }}>
+                <View style={styles.activityContainer}>
+                    {/*<ScrollView bouncesZoom={true} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> */}
+                    <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange'
+                        onPress={() => navigation.navigate('TaskDetailScreen', {
+                            activityName: 'Aerobic Exercise',
+                            activityDuration: "30 minutes",
+                            activitySchedule: "Daily Task",
+                            color: 'orange'
+                        })} />
+                    <Activity activityName="Sleep" activityDuration="30 minutes" activitySchedule="Daily Task" color='red' />
+                    <Activity activityName="Studying" activityDuration="30 minutes" activitySchedule="Daily Task" color='blue' />
+                    <Activity activityName="Meditation" activityDuration="30 minutes" activitySchedule="Daily Task" color='pink' />
+                    <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='brown' />
+                    {/*</ScrollView>*/}
+                </View>
+            </ScrollView>
 
 
             <AddButton onPress={toggleModal} />
@@ -240,13 +238,9 @@ function HomeScreen({ navigation }) {
 }
 const styles = StyleSheet.create({
     homeContainer: {
-        height: '100%',
-        width: '100%',
         alignItems: 'center',
-
     },
     graphContainer: {
-        height: '35%',
         width: '97%',
         alignSelf: 'center',
         backgroundColor: 'white',
@@ -260,7 +254,6 @@ const styles = StyleSheet.create({
     statsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '100%',
         backgroundColor: 'white',
         width: '97%',
         alignSelf: 'center',
@@ -270,24 +263,24 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         borderColor: '#A7A7A7',
-
     },
     activityBox: {
         borderColor: '#A7A7A7',
         width: '97%',
         borderWidth: 0.5,
-        flex: 1,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         margin: 5,
         backgroundColor: 'white'
     },
     activityContainer: {
-        width: '100%',
+        width: '97%',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        borderWidth: 0.5,
+        borderColor: '#a7a7a7'
     },
     introLabel: {
         fontSize: 13,

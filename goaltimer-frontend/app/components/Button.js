@@ -1,36 +1,49 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Image, Text} from 'react-native';
-function Button({title, color, onPress, isPressed, type}) {
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+function Button({ title, color, onPress, isPressed, type }) {
 
     return (
         <TouchableOpacity style={{
             height: 40,
-            width: 85,
-            borderRadius: 100,
-            backgroundColor: isPressed ? '#8CBAF0' : 'white',
+            backgroundColor: 'white',
             justifyContent: 'center',
             alignItems: 'center',
-            borderColor: '#DBDBDB', 
-            borderWidth: 1,
-         
+            borderColor: '#85AAE6',
+          
+
         }} onPress={onPress}>
-            <Text style={{
-                 fontSize: 18,
-                 color:  isPressed ? 'white' : '#3A413F',
-                 fontFamily: 'Avenir-Medium'
-            }}>{title}</Text>
+            {
+                isPressed ?
+                    <View style={{alignItems: 'center', width: '100%', marginTop: 10}}>
+                        <Text style={{
+                            fontSize: 34 ,
+                            color: '#85AAE6',
+                            fontFamily: 'Avenir-Medium'
+                        }}>{title}</Text>
+                        <View style={{width: '100%', height: 5, backgroundColor: '#85AAE6', borderRadius: 20}} />
+                        <View style={{width: 10, height: 10, backgroundColor: '#85AAE6', borderRadius: 50}} />
+                    </View> :
+                    <View>
+                        <Text style={{
+                            fontSize: 18,
+                            color: '#85AAE6',
+                            fontFamily: 'Avenir-Medium'
+                        }}>{title}</Text>
+                    </View>
+            }
+
         </TouchableOpacity>
     );
 }
 const styles = StyleSheet.create({
-    buttonContainer:{
+    buttonContainer: {
         height: 45,
         width: 90,
         borderRadius: 10,
         backgroundColor: '#8CBAF0',
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#DBDBDB', 
+        borderColor: '#DBDBDB',
         borderWidth: 1,
     },
     titleText: {
@@ -38,6 +51,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'Avenir-Medium'
     },
-  
+
 });
 export default Button;

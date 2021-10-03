@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Platform, StatusBar} from 'react-native'
+import { useColorScheme } from 'react-native';
 
 function Screen(props) {
     return (

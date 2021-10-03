@@ -100,14 +100,14 @@ function TimeVGraph(props) {
                         <BarGraph data={data} dataCount={water_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
                     </View>
                     <View style={{ marginLeft: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 5, }}>
-                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['#C5D7F4', 'white']}>
+                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
                             <View style={{ alignSelf: 'center', alignItems: 'center' }}>
                                 <Text style={styles.text2}>Total</Text>
                                 <Text style={styles.text5}> {water_count}</Text>
                             </View>
 
                         </LinearGradient>
-                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['#C5D7F4', 'white']}>
+                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
                         <View style={{ alignSelf: 'center', alignItems: 'center' }}>
                                 <Text style={styles.text2}>Average</Text>
                                 <Text style={styles.text5}> {average} min </Text>
@@ -181,13 +181,12 @@ function TimeVGraph(props) {
 }
 const styles = StyleSheet.create({
     filterButtonContainer: {
-        width: '95%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
+        backgroundColor: 'white',
+        height: 70,
         flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10,
-        alignSelf: 'center'
+        justifyContent: 'space-around',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     barGraph: {
         width: '95%',
@@ -209,8 +208,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Avenir-Medium'
     },
     text2: {
-        fontSize: 20,
-        color: 'white',
+        fontSize: 18,
+        color: 'black',
         fontFamily: 'Avenir-Medium'
     },
     text4: {
@@ -229,7 +228,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Avenir-Medium'
     },
     text5: {
-        fontSize: 20,
+        fontSize: 16,
         color: 'gray',
         fontFamily: 'Avenir-Medium'
     }

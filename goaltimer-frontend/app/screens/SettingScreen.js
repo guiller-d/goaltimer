@@ -1,10 +1,12 @@
 
 import React, { Component, useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import SettingButton from '../components/SettingButton';
 import Screen from '../components/Screen';
+import LoginScreen from '../screens/LoginScreen';
 
 function SettingScreen(props) {
+
     return (
         <Screen>
             <View style={styles.setting}>
@@ -21,9 +23,11 @@ function SettingScreen(props) {
                         <SettingButton title="Delete all my Data" />
                         <SettingButton title="Dark Mode" />
                         <SettingButton title="Delete Account" />
+                        {/* need to be updated - just waiting for the backend to run */}
                         <SettingButton title="Logout" />
+              
                     </View>
-                   
+                 
                 </View>
 
             </View>
