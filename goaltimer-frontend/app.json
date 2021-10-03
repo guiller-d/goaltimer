@@ -5,6 +5,7 @@
     "name": "GoalTimer V.10",
     "slug": "goaltimer",
     "version": "1.0.0",
+    "icon": "Logo2.png",
     "assetBundlePatterns": [
       "**/*"
     ],
