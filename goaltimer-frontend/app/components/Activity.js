@@ -4,17 +4,17 @@ import { StyleSheet, TouchableOpacity, Text, View, Dimensions, Image} from 'reac
 function Activity({activityName, activityDuration, activitySchedule, onPress, color}) {
 
     return (
-        <View style={{width: '90%', alignSelf: 'center'}}>
+        <View style={{width: '95%', alignSelf: 'center'}}>
             <View style={{
-                    height: 65, 
-                    borderWidth: 1,
-                    borderColor: '#DBDBDB',
+                    height: 60, 
+                    borderWidth: 0.5,
+                    borderColor: '#A7A7A7',
                     marginTop: 5, 
-                    borderRadius: 15, 
+                    borderRadius: 10, 
                     backgroundColor: 'white', 
                     flexDirection: 'row', 
                     borderTopColor: color,
-                    borderTopWidth: 3,
+                    borderTopWidth: 2,
                     }}>
             
                 <View style={styles.detailsContainer}>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         right: 2
     },
     activityNameText: {
-        fontSize: 20,
+        fontSize: 18,
         color: 'black',
         fontFamily: 'Avenir-Medium'
     },
