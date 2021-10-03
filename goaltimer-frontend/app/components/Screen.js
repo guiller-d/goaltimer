@@ -10,7 +10,7 @@ function Screen(props) {
 }
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: 'white',
+        backgroundColor: '#dee8f2',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight: 0,
     }
 })

@@ -10,7 +10,8 @@ import Button from '../components/Button';
 import Modal from 'react-native-modal';
 import Duration from '../components/Duration';
 import ColorButton from '../components/ColorButton';
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis } from "victory-native";
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer,VictoryScatter  } from "victory-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const fetchFont = () => {
     return Font.loadAsync({
@@ -64,14 +65,15 @@ function HomeScreen({ navigation }) {
         { y: 70, x: '70%' },
     ]
     const barData = [
-        { x: 5, y: 20, },
-        { x: 17, y: 30 },
-        { x: 2, y: 20 },
-        { x: 31, y: 20 },
-        { x: 25, y: 40 }
+        { x: 5, y: 20, color: 'orange' },
+        { x: 17, y: 30, color: 'red' },
+        { x: 2, y: 20, color: 'blue' },
+        { x: 31, y: 20, color: 'pink' },
+        { x: 25, y: 40, color: 'brown' }
     ]
-    const graphicColor = ['orange', 'red', 'blue', 'pink', 'brown']
+    const graphicColor = ['orange', 'red', 'blue', 'pink', 'brown',]
     const scrollView = useRef();
+    var color_index = 0;
 
     return (
         <Screen>
@@ -83,9 +85,39 @@ function HomeScreen({ navigation }) {
             </View>
             {/*home containter */}
             <View style={styles.homeContainer}>
-                <View style={{ height: '40%' }}>
+                <View style={styles.graphContainer}>
                     <ScrollView ref={scrollView} horizontal={true} decelerationRate={0} snapToInterval={Dimensions.get('window').width} snapToAlignment={"center"} showsHorizontalScrollIndicator={false} bounces={false} style={{ alignSelf: 'center', }}>
+                        
+                        <VictoryChart
+                     
+                            theme={VictoryTheme.material}
+                            domainPadding={{ x: 15 }}
+                            height={Dimensions.get('window').height / 3}
+                           
+                        >
+                            <VictoryBar   
+                                style={{
+                                    data: {
+                                        fill: ({ datum }) => datum.color,
+                                        
+                                    }
+                                }}
+                                data={barData}
+                                cornerRadius={5}
+                              
+                            />
+                          
+                            <VictoryAxis
+                                axisLabelComponent={<VictoryLabel dy={20} />}
+                                label={"Dependent axis"}
+                            />
+                            <VictoryAxis
+                                dependentAxis
+                                label="Time (min)"
+                                axisLabelComponent={<VictoryLabel dy={-21} />}
+                            />
 
+                        </VictoryChart>
                         <VictoryPie
                             data={barData}
                             innerRadius={60}
@@ -97,53 +129,43 @@ function HomeScreen({ navigation }) {
                             height={Dimensions.get('window').height / 3}
                         >
                         </VictoryPie>
-                        <VictoryChart
-                            theme={VictoryTheme.grayscale}
-                            domainPadding={{ x: 15 }}
-                        >
-                            <VictoryBar
-                                style={{
-                                    data: {
-                                        fill: '#3B97ED',
-                                        width: 25
-                                    }
-                                }}
-                                data={barData}
-
-                            />
-                            <VictoryAxis
-                                label="Days (ms)"
-                            />
-                            <VictoryAxis dependentAxis
-                                 label="Time (min)"
-                                 padding={{ left: 10, bottom: 60 }}
-                            />
-
-                        </VictoryChart>
-
-
                     </ScrollView>
+                </View>
+                <View style={styles.statsContainer}>
+                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 55, borderRadius: 10, }} colors={['white', 'white']}>
+                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                            <Text style={styles.text2}>Total</Text>
+                            <Text style={styles.text5}> 5 </Text>
+                        </View>
+
+                    </LinearGradient>
+                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 55, borderRadius: 10, }} colors={['white', 'white']}>
+                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                            <Text style={styles.text2}>Average</Text>
+                            <Text style={styles.text5}> 23 min </Text>
+                        </View>
+                    </LinearGradient>
                 </View>
 
                 {/*activity box container */}
+                {/*activity intro and label */}
+                <View style={{ justifyContent: 'center', alignSelf: 'flex-start' }}>
+                    <Text style={styles.titleLabel}> Your Activities </Text>
+                    <Text style={styles.introLabel}> See how much time you spent on each activity. </Text>
+                </View>
+
                 <View style={styles.activityBox}>
-                    {/*activity intro and label */}
-                    <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.titleLabel}> Your Activities </Text>
-                        <Text style={styles.introLabel}> See how much time you spent on each activity. </Text>
-                    </View>
                     {/*all activity container */}
-                   
                     <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'baseliine', alignItems: 'center' }}>
                         <View style={styles.activityContainer}>
                             {/*<ScrollView bouncesZoom={true} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> */}
-                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange' 
-                            onPress={() => navigation.navigate('TaskDetailScreen', {
-                                activityName: 'Aerobic Exercise',
-                                activityDuration: "30 minutes",
-                                activitySchedule:"Daily Task",
-                                color:'orange' 
-                            })} />
+                            <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange'
+                                onPress={() => navigation.navigate('TaskDetailScreen', {
+                                    activityName: 'Aerobic Exercise',
+                                    activityDuration: "30 minutes",
+                                    activitySchedule: "Daily Task",
+                                    color: 'orange'
+                                })} />
                             <Activity activityName="Sleep" activityDuration="30 minutes" activitySchedule="Daily Task" color='red' />
                             <Activity activityName="Studying" activityDuration="30 minutes" activitySchedule="Daily Task" color='blue' />
                             <Activity activityName="Meditation" activityDuration="30 minutes" activitySchedule="Daily Task" color='pink' />
@@ -221,19 +243,51 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         alignItems: 'center',
+
+    },
+    graphContainer: {
+        height: '35%',
+        width: '97%',
+        alignSelf: 'center',
+        backgroundColor: 'white',
+        borderTopWidth: 0.5,
+        borderLeftWidth: 0.5,
+        borderRightWidth: 0.5,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderColor: '#A7A7A7',
+    },
+    statsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        backgroundColor: 'white',
+        width: '97%',
+        alignSelf: 'center',
+        borderBottomWidth: 0.5,
+        borderLeftWidth: 0.5,
+        borderRightWidth: 0.5,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        borderColor: '#A7A7A7',
+
     },
     activityBox: {
         borderColor: '#A7A7A7',
         width: '97%',
-        borderWidth: 1,
+        borderWidth: 0.5,
         flex: 1,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        margin: 5
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        margin: 5,
+        backgroundColor: 'white'
     },
     activityContainer: {
         width: '100%',
         justifyContent: 'center',
+        backgroundColor: 'white',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     introLabel: {
         fontSize: 13,
@@ -271,6 +325,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black',
         fontFamily: 'Avenir-Book'
+    },
+    text2: {
+        fontSize: 18,
+        color: 'black',
+        fontFamily: 'Avenir-Medium'
+    },
+    text5: {
+        fontSize: 16,
+        color: 'gray',
+        fontFamily: 'Avenir-Medium'
     }
 });
 export default HomeScreen;

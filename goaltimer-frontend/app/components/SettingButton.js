@@ -5,12 +5,12 @@ function SettingButton({ title, color, onPress, isPressed, type }) {
 
     return (
         <TouchableOpacity style={{
-            width: '90%',
-            height: 60,
+            width: '95%',
+            height: 55,
             alignSelf: 'center',
             borderColor: '#A7A7A7',
-            borderWidth: 1,
-            margin: 10,
+            borderWidth: 0.5,
+            margin: 3,
             borderRadius: 10,
             alignItems: 'flex-start',
             justifyContent: 'center',
