@@ -8,12 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.springrest.model.User;
-import com.example.springrest.user.UserRepository;
+import com.example.springrest.controller.challenge.ChallengeRepository;
+import com.example.springrest.controller.time.TimeRepository;
+import com.example.springrest.controller.user.UserRepository;
 import com.example.springrest.model.Challenge;
-import com.example.springrest.challenge.ChallengeRepository;
-
 import com.example.springrest.model.Time;
-import com.example.springrest.time.TimeRepository;
 
 @Configuration
 class LoadDatabase {
