@@ -2,13 +2,13 @@
   "name": "GoalTimer",
   "displayName": "GoalTimer",
   "expo": {
-    "name": "GoalTimer V.10",
+    "name": "GoalTimer V.1.1",
     "slug": "goaltimer",
     "version": "1.0.0",
     "icon": "Logo2.png",
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": "Version 1.0"
+    "description": "Version 1.1"
   }
 }
