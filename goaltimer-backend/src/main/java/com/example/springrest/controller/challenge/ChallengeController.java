@@ -1,5 +1,6 @@
 package com.example.springrest.controller.challenge;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,13 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 
-import com.example.springrest.controller.user.UserController;
 import com.example.springrest.model.Challenge;
 
 @RestController
 class ChallengeController {
 
-  private static String session_id = UserController.getSessionID();
   private final ChallengeRepository repository;
 
   ChallengeController(ChallengeRepository repository) {
@@ -39,7 +38,7 @@ class ChallengeController {
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
-   
+ 
     return null;
   }
 

@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.springrest.model.User;
+import com.example.springrest.controller.activity.ActivityRepository;
 import com.example.springrest.controller.challenge.ChallengeRepository;
 import com.example.springrest.controller.time.TimeRepository;
 import com.example.springrest.controller.user.UserRepository;
+import com.example.springrest.model.Activity;
 import com.example.springrest.model.Challenge;
 import com.example.springrest.model.Time;
 
@@ -20,7 +22,7 @@ class LoadDatabase {
   private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
   @Bean
-  CommandLineRunner initDatabase(ChallengeRepository challengeRepository, UserRepository userRepository, TimeRepository waterRepository) {
+  CommandLineRunner initDatabase(ChallengeRepository challengeRepository, UserRepository userRepository, TimeRepository waterRepository, ActivityRepository acitivityRepository) {
 
     return args -> {
       
@@ -38,7 +40,6 @@ class LoadDatabase {
       log.info("Preloading " + userRepository.save(new User("Genevra", "Sperling", "Genevra.Sperling@gmail.com", "password")));
       log.info("Preloading " + userRepository.save(new User("Bilbo" ,"Baggins", "bilbobaggins@gmail.com", "password")));
       log.info("Preloading " + userRepository.save(new User("Frodo", "Baggins", "frodobaggins@gmail.com", "password")));
-
 
       log.info("Preloading " + waterRepository.save(new Time(7, "67", "10/21/2021")));
       log.info("Preloading " + waterRepository.save(new Time(7, "77", "10/22/2021")));
@@ -58,6 +59,12 @@ class LoadDatabase {
       log.info("Preloading " + waterRepository.save(new Time(9, "95", "10/24/2021")));
       log.info("Preloading " + waterRepository.save(new Time(9, "105", "10/25/2021")));
 
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "30 min daily", "Meditation")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Aerobic Exercise" ,true, "1 hr weekly", "Aerobic Exercise")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "30 min daily", "Meditation" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "1 hr weekly", "Movie Night" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "30 min daily", "Cooking" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "30 Minutes Daily", "Reading")));
 
     };
   }

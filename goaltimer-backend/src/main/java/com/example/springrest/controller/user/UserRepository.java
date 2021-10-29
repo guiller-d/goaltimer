@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.springrest.model.User;
 
+
 public interface UserRepository extends JpaRepository<User, Long> {
 
 
