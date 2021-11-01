@@ -11,11 +11,6 @@ import * as yup from 'yup'
 function LoginScreen({ navigation }) {
     const authContext = useContext(AuthContext);
     const [user, setUser] = useState();
-
-    const tempUser = {
-        username: 'John',
-        password: 'password'
-    };
     {/* To validate */ }
     const loginValidationSchema = yup.object().shape({
         email: yup
@@ -36,7 +31,6 @@ function LoginScreen({ navigation }) {
                 setUser(response.data);
             }
             else {
-                setUser(tempUser);
                 Alert.alert(
                     "Login Failed",
                     "Invalid email or password",
@@ -50,7 +44,6 @@ function LoginScreen({ navigation }) {
                     ]
                 );
             }
-
         });
     }
     useEffect(() => {

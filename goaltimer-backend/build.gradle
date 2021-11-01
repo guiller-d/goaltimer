@@ -11,9 +11,11 @@ sourceCompatibility = '11'
 repositories {
 	mavenCentral()
 }
-
+ext {
+	set('springCloudGcpVersion', "2.0.4")
+	set('springCloudVersion', "2020.0.4")
+}
 dependencies {
-
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -21,13 +23,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.google.cloud:google-cloud-pubsub'
+	implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
+	implementation platform('com.google.cloud:libraries-bom:24.0.0')
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
-	
 }
-
+dependencyManagement {
+	imports {
+		mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:${springCloudGcpVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
 test {
 	useJUnitPlatform()
 }

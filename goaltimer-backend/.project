@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>spring-rest</name>
+	<name>goaltimer-backend</name>
 	<comment>Project goaltimer-backend created by Buildship.</comment>
 	<projects>
 	</projects>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1633887672431</id>
+			<id>0</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
