@@ -12,17 +12,18 @@ import com.example.springrest.controller.activity.ActivityRepository;
 import com.example.springrest.controller.challenge.ChallengeRepository;
 import com.example.springrest.controller.time.TimeRepository;
 import com.example.springrest.controller.user.UserRepository;
+import com.example.springrest.controller.availability.AvailabilityRepository;
 import com.example.springrest.model.Activity;
 import com.example.springrest.model.Challenge;
 import com.example.springrest.model.Time;
-
+import com.example.springrest.model.Availability;
 @Configuration
 class LoadDatabase {
 
   private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
   @Bean
-  CommandLineRunner initDatabase(ChallengeRepository challengeRepository, UserRepository userRepository, TimeRepository waterRepository, ActivityRepository acitivityRepository) {
+  CommandLineRunner initDatabase(ChallengeRepository challengeRepository, UserRepository userRepository, TimeRepository waterRepository, ActivityRepository acitivityRepository, AvailabilityRepository availabilityRepository) {
 
     return args -> {
       
@@ -65,6 +66,10 @@ class LoadDatabase {
       log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "1 hr weekly", "Movie Night" )));
       log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "30 min daily", "Cooking" )));
       log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "30 Minutes Daily", "Reading")));
+
+      log.info("Preloading " + availabilityRepository.save(new Availability(7,9,15,"am", "monday")));
+      log.info("Preloading " + availabilityRepository.save(new Availability(8,9,15,"am", "monday")));
+      log.info("Preloading " + availabilityRepository.save(new Availability(9,9,15,"am", "monday")));
 
     };
   }
