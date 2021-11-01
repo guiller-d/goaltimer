@@ -16,7 +16,6 @@ function ChallengeScreen(props) {
     useEffect(() => {
         console.log(api.baseURL.getBaseURL());
         api.baseURL.get(endpoints.challenges).then(response => {
-       
             setArray(response.data);
       
         });
