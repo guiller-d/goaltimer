@@ -25,11 +25,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.ReadChannel;
+
+import java.io.IOException;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.nio.ByteBuffer;
+
 @RestController
 public class UserController {
 
   private final UserRepository repository;
   private static String session_id;
+  private final String bucket_name = "goaltimer";
+  private Storage storage = StorageOptions.getDefaultInstance().getService();
 
   UserController(UserRepository repository) {
     this.repository = repository;
@@ -39,11 +53,58 @@ public class UserController {
     return session_id;
   }
 
+  public String get_data(String data_loc) throws IOException {
+    StringBuffer sb = new StringBuffer();
+    if (storage.get(bucket_name, data_loc) == null) {
+      return "File doesn't exists: " + data_loc;
+    } else {
+      try (ReadChannel channel = storage.reader(bucket_name, data_loc)) {
+        ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+        while (channel.read(bytes) > 0) {
+          bytes.flip();
+          String data = new String(bytes.array(), 0, bytes.limit());
+          sb.append(data);
+          bytes.clear();
+        }
+        return sb.toString();
+      }
+    }
+  }
+
+  public String store_data(String data_loc, byte[] arr) {
+    if (storage.get(bucket_name, data_loc) == null) {
+      BlobId id = BlobId.of(bucket_name, data_loc);
+      BlobInfo info = BlobInfo.newBuilder(id).build();
+      storage.create(info, arr);
+      return "File uploaded to " + data_loc;
+    }
+    return "File failed to upload to " + data_loc;
+  }
   // Aggregate root
   // tag::get-aggregate-root[]
   @GetMapping("/users")
-  public List<User> all() {
+  public List<User> all() throws IOException {
     List<User> users = repository.findAll();
+    for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
+      User element = iter.next();
+      File userDir = new File("src/main/java/com/example/springrest/databasedump/users/" + element.getId());
+      if (!userDir.exists()){
+        userDir.mkdirs();
+      }
+    }
+    for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
+      StringBuilder sb = new StringBuilder();
+      User element = iter.next();
+      File file = new File("src/main/java/com/example/springrest/databasedump/users/" + element.getId() + "/" + element.getId() + ".txt");
+      sb.append(element.getEmail());
+      sb.append(element.getFirstName());
+      sb.append(element.getLastName());
+      sb.append(element.getPassword());
+      sb.append(element.getId());
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        writer.write(sb.toString());
+      }
+    }
     return users;
   }
 
@@ -84,7 +145,6 @@ public class UserController {
     String password = user.getPassword();
     User temp = null;
     List<User> users = repository.findByEmail(email);
-
     // if (users.size() <= 0) return -1;
     for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
       User element = iter.next();

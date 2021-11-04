@@ -31,6 +31,7 @@ function LoginScreen({ navigation }) {
                 setUser(response.data);
             }
             else {
+                console.log("Data: " + response.data);
                 Alert.alert(
                     "Login Failed",
                     "Invalid email or password",

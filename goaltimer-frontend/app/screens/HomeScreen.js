@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
@@ -12,6 +12,11 @@ import Duration from '../components/Duration';
 import ColorButton from '../components/ColorButton';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer, VictoryScatter } from "victory-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import AuthContext from '../auth/context';
+import api from '../api/api';
+import endpoints from '../api/endpoints';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as yup from 'yup'
 
 const fetchFont = () => {
     return Font.loadAsync({
@@ -21,18 +26,49 @@ const fetchFont = () => {
     });
 };
 function HomeScreen({ navigation }) {
+    const authContext = useContext(AuthContext);
+    const [user, setUser] = useState();
+
+    //console.log(authContext.user);
+
+    var firstName = authContext.user.firstName;
+    var lastName = authContext.user.lastName;
+    var email = authContext.user.email;
+    var user_id = authContext.user.id;
+
     const [fontLoaded, setFontLoaded] = useState(false);
     //fect fonts
     if (!fontLoaded) {
         <AppLoading startAsync={fetchFont} onError={() => console.log('Error Font')} onFinish={() => { setFontLoaded(true) }} />
     }
+    useEffect(() => {
+
+        api.baseURL.post(apiStr, { id:user_id }).then(response => {
+
+        });
+        api.baseURL.get(endpoints.activities).then(response => {
+            console.log(response.data);
+            setArray(response.data);
+        }); 
+    }, []);
     // Filter Buttons
     const [isDaily, setIsDaily] = useState(false);
     const [isWeekly, setIsWeekly] = useState(false);
     const [isMonthly, setIsMonthly] = useState(false);
 
+    const [isActivityDaily, setIsActivityDaily] = useState(false);
+    const [isActivityWeekly, setIsActivityWeekly] = useState(false);
+    const [isActivityMonthly, setIsActivityMonthly] = useState(false);
+
+    const [is30, set30] = useState(false);
+    const [is45, set45] = useState(false);
+    const [is60, set60] = useState(false);
     //Create an Activity
     const [isModalVisible, setModalVisible] = useState(false);
+
+
+    var time = '';
+    var schedule = '';
     //Show create form
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -57,6 +93,59 @@ function HomeScreen({ navigation }) {
         setIsMonthly(true);
     };
 
+    const activityDaily = () => {
+        setIsActivityDaily(true);
+        setIsActivityWeekly(false);
+        setIsActivityMonthly(false);
+        schedule = "daily";
+    };
+    const activityWeekly = () => {
+        setIsActivityDaily(false);
+        setIsActivityWeekly(true);
+        setIsActivityMonthly(false);
+        schedule = "weekly";
+    };
+    const activityMonthly = () => {
+        setIsActivityDaily(false);
+        setIsActivityWeekly(false);
+        setIsActivityMonthly(true);
+        schedule = "montly";
+    };
+
+
+    const is30min = () => {
+        set30(true);
+        set45(false);
+        set60(false);
+        time = "30";
+    };
+    const is45min = () => {
+        set30(false);
+        set45(true);
+        set60(false);
+        time = "45";
+    };
+    const is60min = () => {
+        set30(false);
+        set45(false);
+        set60(true);
+        time = "60";
+    };
+    const loginValidationSchema = yup.object().shape({
+        activityName: yup
+            .string()
+            .required('Activity Name is Required'),
+    })
+    const handleSubmit = async (values) => {
+        //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
+        let apiStr = endpoints.addActivity;
+        api.baseURL.post(apiStr, { activityName: values.activityName, status: false, schedule: values.schedule, time: values.time, activityID: values.activityName}).then(response => {
+            if (response.data != null) {
+                console.log("Data: " + response.data);
+                setModalVisible(!isModalVisible);
+            }
+        });
+    }
     const pieData = [
         { y: 5, x: '5%' },
         { y: 90, x: '90%' },
@@ -178,58 +267,62 @@ function HomeScreen({ navigation }) {
 
             <AddButton onPress={toggleModal} />
             <Modal coverScreen={false} backdropColor='black' backdropOpacity={0.2} hideModalContentWhileAnimating={true} animationIn='slideInDown' animationOut='slideOutUp' isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)} onSwipeComplete={() => setModalVisible(false)} swipeDirection="left">
-                <View style={{
-                    width: Dimensions.get('window').width - 15,
-                    height: 380,
-                    alignSelf: 'center',
-                    borderColor: 'gray',
-                    borderRadius: 30,
-                    borderWidth: 1,
-                    backgroundColor: 'white'
-                }}>
 
-                    <View style={{ paddingTop: 15, }}>
-                        <Text style={styles.welcomeText}> Create an Activity </Text>
-                        <Text style={styles.labelText}>  {new Date().toDateString()} </Text>
-                    </View>
-                    <View style={{ width: '100%', height: '70%', alignItems: 'flex-start', paddingTop: 15, }}>
-                        <View style={{ width: '90%', flexDirection: 'row' }}>
-                            <Text style={styles.inputLabelText}> Name: </Text>
-                            <View style={{ width: '90%', borderRadius: 5, borderWidth: 1, paddingLeft: 5, borderColor: '#DBDBDB' }}>
-                                <TextInput
+                <Formik
+                    validationSchema={loginValidationSchema}
+                    initialValues={{ activityName: '', schedule: '', time: ''}}
+                    onSubmit={values => handleSubmit(values)}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched }) => (
+                        <View style={{
+                            width: Dimensions.get('window').width - 15,
+                            height: 380,
+                            alignSelf: 'center',
+                            borderColor: 'gray',
+                            borderRadius: 30,
+                            borderWidth: 1,
+                            backgroundColor: 'white'
+                        }}>
+                            <View style={{ paddingTop: 15, }}>
+                                <Text style={styles.welcomeText}> Create an Activity </Text>
+                                <Text style={styles.labelText}>  {new Date().toDateString()} </Text>
+                            </View>
+                            <View style={{ width: '100%', height: '70%', alignItems: 'flex-start', paddingTop: 15, }}>
+                                <View style={{ width: '90%', flexDirection: 'row' }}>
+                                    <Text style={styles.inputLabelText}> Name: </Text>
+                                    <TextInput
                                     style={styles.inputText}
-                                    placeholder="Meditate"
+                                    placeholder='Activity Name'
+                                    onChangeText={handleChange('activityName')}
+                                    onBlur={handleBlur('activityName')}
+                                    value={values.activityName}
+                             
                                 />
+                                {(errors.email && touched.email) && <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>}
+                               
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', paddingTop: 15, alignItems: 'center' }}>
+                                    <Text style={styles.inputLabelText}> Schedule:</Text>
+                                    <Button title="Daily" onPress={activityDaily} isPressed={isActivityDaily} />
+                                    <Button title="Weekly" onPress={activityWeekly} isPressed={isActivityWeekly} />
+                                    <Button title="Monthly" onPress={activityMonthly} isPressed={isActivityMonthly} />
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 260, paddingTop: 15, alignItems: 'center' }}>
+                                    <Text style={styles.inputLabelText}> Duration:</Text>
+                                    <Duration title="30" onPress={is30min} isPressed={is30} />
+                                    <Duration title="45" onPress={is45min} isPressed={is45} />
+                                    <Duration title="60" onPress={is60min} isPressed={is60} />
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                                <Button onPress={handleSubmit} title="Add" color='#775E5E' />
+                                <Button title="Cancel" onPress={filterHandlerWeekly} isPressed={isWeekly} />
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', paddingTop: 15, alignItems: 'center' }}>
-                            <Text style={styles.inputLabelText}> Schedule:</Text>
-                            <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
-                            <Button title="Weekly" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                            <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 260, paddingTop: 15, alignItems: 'center' }}>
-                            <Text style={styles.inputLabelText}> Duration:</Text>
-                            <Duration title="15" onPress={filterHandlerDaily} isPressed={isDaily} />
-                            <Duration title="30" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                            <Duration title="45" onPress={filterHandlerDaily} isPressed={isDaily} />
-                            <Duration title="+" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        </View>
+                    )}
+                </Formik>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 190, paddingTop: 15, alignItems: 'center' }}>
-                            <Text style={styles.inputLabelText}> Color:</Text>
-                            <ColorButton color="red" onPress={filterHandlerDaily} isPressed={isDaily} />
-                            <ColorButton color="blue" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                            <ColorButton color="orange" onPress={filterHandlerDaily} isPressed={isDaily} />
-                            <ColorButton color='#8CBAF0' title="+" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <Button title="Create" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        <Button title="Cancel" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                    </View>
-                </View>
             </Modal>
 
         </Screen>

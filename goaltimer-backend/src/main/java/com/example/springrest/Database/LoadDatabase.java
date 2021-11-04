@@ -59,12 +59,12 @@ class LoadDatabase {
       log.info("Preloading " + waterRepository.save(new Time(9, "95", "10/24/2021")));
       log.info("Preloading " + waterRepository.save(new Time(9, "105", "10/25/2021")));
 
-      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "30 min daily", "Meditation")));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Aerobic Exercise" ,true, "1 hr weekly", "Aerobic Exercise")));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "30 min daily", "Meditation" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "1 hr weekly", "Movie Night" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "30 min daily", "Cooking" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "30 Minutes Daily", "Reading")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily", "30", "Meditation")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Aerobic Exercise" ,true, "weekly", "30","Aerobic Exercise")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily","30", "Meditation" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "weekly", "30","Movie Night" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "daily", "30","Cooking" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "Daily","30", "Reading")));
 
     };
   }
