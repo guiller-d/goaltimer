@@ -2,45 +2,116 @@ package com.example.springrest.controller.activity;
 
 import java.util.Iterator;
 import java.util.List;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import java.io.IOException;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.springrest.model.Activity;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.ReadChannel;
+
 @RestController
 public class ActivityController {
+    @Autowired
+    private Storage storage = StorageOptions.getDefaultInstance().getService();
 
     private final ActivityRepository repository;
     private static String session_id;
+    private final String bucket_name = "goaltimer";
 
     ActivityController(ActivityRepository repository) {
         this.repository = repository;
     }
+    public String get_data(String data_loc) throws IOException {
+        StringBuffer sb = new StringBuffer();
+        if (storage.get(bucket_name, data_loc) == null) {
+            return "File doesn't exists: "+ data_loc;
+        }
+        else{
+            try(ReadChannel channel = storage.reader(bucket_name, data_loc)){
+                ByteBuffer bytes = ByteBuffer.allocate(64*1024);
+                while(channel.read(bytes) > 0){
+                    bytes.flip();
+                    String data = new String(bytes.array(), 0, bytes.limit());
+                    sb.append(data);
+                    bytes.clear();
+                }
+                return sb.toString();
+            }   
+        }
+    }
+    public String store_data(String data_loc){
+        if (storage.get(bucket_name, data_loc) == null) {
+            BlobId id = BlobId.of(bucket_name, data_loc);
+            BlobInfo info = BlobInfo.newBuilder(id).build();
+            List<Activity> activities = repository.findAll();
+            byte[] arr =  activities.toString().getBytes();
+            storage.create(info, arr);
+            return "File uploaded to "+ data_loc;
+        }
+        return "File failed to upload to " + data_loc;
+    }
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/activities")
-    public List<Activity> all() {
+    public List<Activity> all() throws IOException{
         List<Activity> activities = repository.findAll();
+        StringBuilder sb = new StringBuilder(); 
+        sb.append(activities.toString());  
+        File file = new File("src/main/java/com/example/springrest/databasedump/activities/activities.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(sb.toString());
+        }
         return activities;
     }
+
+    @GetMapping("/get-user-activity")
+    public String getActivities() throws IOException {
+        StringBuffer sb = new StringBuffer();
+        String data_name = "testing";
+        if (storage.get(bucket_name, data_name) == null) {
+            BlobId id = BlobId.of(bucket_name, data_name);
+            BlobInfo info = BlobInfo.newBuilder(id).build();
+            List<Activity> activities = repository.findAll();
+            byte[] arr =  activities.toString().getBytes();
+            storage.create(info, arr);
+            return "File doesn't exists: "+ data_name;
+        }else{
+            System.out.println("File exists: "+ data_name);
+            try(ReadChannel channel = storage.reader(bucket_name, data_name)){
+                ByteBuffer bytes = ByteBuffer.allocate(64*1024);
+                while(channel.read(bytes) > 0){
+                    bytes.flip();
+                    String data = new String(bytes.array(), 0, bytes.limit());
+                    sb.append(data);
+                    bytes.clear();
+                }
+                return sb.toString();
+            }   
+        }
+    }
+
+
     @PostMapping(value = "/getActivity/")
     public Activity getEmployee(@RequestBody Activity activity, HttpSession session) throws Exception {
         // return session.getAttribute("email") + ", " + session.getAttribute("pwd");
