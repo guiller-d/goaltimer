@@ -6,7 +6,9 @@ const settings = '/settings/';
 const accountRemoval = '/accountRemoval/';
 const challenges = '/challenges/'
 const activities = '/activities/'
+const addActivity = '/addActivity/'
+const getUserActivity = '/getUserActivity/'
 
 export default {
-    getAllUsers, login, register, settings, accountRemoval, challenges, activities
+    getAllUsers, login, register, settings, accountRemoval, challenges, activities, addActivity, getUserActivity
 }

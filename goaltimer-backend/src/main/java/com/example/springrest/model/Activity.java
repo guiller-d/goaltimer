@@ -16,15 +16,18 @@ public class Activity {
     @Column(nullable = false)
     private String schedule;
     @Column(nullable = false)
+    private String time;
+    @Column(nullable = false)
     private String activityID;
 
     public Activity() {
     }
 
-    public Activity(String activityName, Boolean status, String schedule, String activityID) {
+    public Activity(String activityName, Boolean status, String schedule, String time, String activityID) {
         this.activityName = activityName;
         this.schedule = schedule;
         this.status = status;
+        this.time = time;
         this.activityID = activityID;
     }
     public String getActivityName() {
@@ -38,7 +41,9 @@ public class Activity {
     public String getSchedule() {
         return this.schedule;
     }
-
+    public String getTime(){
+        return this.time;
+    }
     public Long getID() {
         return this.id;
     }
@@ -55,6 +60,9 @@ public class Activity {
 
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+    public void setTime(String time) {
+        this.time = time;
     }
     public void setActivityID(String activityID){
         this.activityID = activityID;

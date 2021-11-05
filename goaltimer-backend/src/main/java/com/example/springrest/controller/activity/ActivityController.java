@@ -30,10 +30,14 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.ReadChannel;
 
+import com.example.springrest.model.User;
+
 @RestController
 public class ActivityController {
     @Autowired
-    private Storage storage = StorageOptions.getDefaultInstance().getService();
+    private Storage storage = StorageOptions.getDefaultInstance().getService(); 
+
+ 
 
     private final ActivityRepository repository;
     private static String session_id;
@@ -84,7 +88,26 @@ public class ActivityController {
         }
         return activities;
     }
+   
+    @GetMapping("/getUserActivity")
+    public List<Activity> getUserActivity() throws IOException{
+        List<Activity> activities = repository.findAll();
+        StringBuilder sb = new StringBuilder(); 
+        sb.append(activities.toString());  
+        File file = new File("src/main/java/com/example/springrest/databasedump/activities/activities.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(sb.toString());
+        }
+        return activities;
+    }
+    
 
+    @PostMapping(value = "/addActivity")
+    public String newEmployee(@RequestBody Activity newActivity) {
+      System.out.println(newActivity);
+      repository.save(newActivity);
+      return "new user successfully added";
+    }
     @GetMapping("/get-user-activity")
     public String getActivities() throws IOException {
         StringBuffer sb = new StringBuffer();
