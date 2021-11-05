@@ -47,12 +47,10 @@ class AvailabilityController {
     return "availability successfully updated";
   }
 
-  @PostMapping(value = "/remove availability")
+  @DeleteMapping(value = "/removeavailability")
   public String deleteTime(@RequestBody Availability availability) {
-
     System.out.println(availability);
-    repository.save(availability);
-
+    repository.delete(availability);
     return "availability successfully deleted";
   }
 
