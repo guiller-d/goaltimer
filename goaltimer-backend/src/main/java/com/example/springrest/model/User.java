@@ -4,48 +4,88 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.security.MessageDigest;
+import java.util.Random;
+import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;
 
 @Entity
 public class User {
 
   private @Id @GeneratedValue Long id;
-  
-  @Column(nullable = false) private String firstName;
-  @Column(nullable = false) private String lastName;
-  @Column(nullable = false) private String email;
-  @Column(nullable = false) private String password;
+  @Column(nullable = true)
+  private String hash_id;
+  @Column(nullable = false)
+  private String firstName;
+  @Column(nullable = false)
+  private String lastName;
+  @Column(nullable = false)
+  private String email;
+  @Column(nullable = false)
+  private String password;
 
-  public User() {}
+  public User() {
+  }
 
-  public User(String firstName, String lastName, String email, String password) {
+  private String convertByteArrayToHexString(byte[] arrayBytes) {
+    StringBuffer stringBuffer = new StringBuffer();
+    for (int i = 0; i < arrayBytes.length; i++) {
+      stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16).substring(1));
+    }
+    return stringBuffer.toString();
+  }
+
+  private String hash(String email, String first_name, String last_name) throws Exception {
+    try {
+      String userInfo = email + first_name + last_name;
+      byte[] hashedBytes = userInfo.getBytes("UTF-8");
+      return convertByteArrayToHexString(hashedBytes);
+    } catch (UnsupportedEncodingException ex) {
+      throw new Exception("Could not generate hash from String");
+
+    }
+  }
+
+  public User(String firstName, String lastName, String email, String password) throws Exception {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
+    this.hash_id = hash(email, firstName, lastName);
   }
+
   public String getName() {
     return this.firstName + " " + this.lastName;
   }
+
   public Long getId() {
     return this.id;
   }
+
   public String getFirstName() {
     return this.firstName;
   }
+
   public String getLastName() {
     return this.lastName;
   }
-  public String getEmail(){
+
+  public String getEmail() {
     return this.email;
   }
+
   public String getPassword() {
     return this.password;
   }
 
+  public String getHashID() {
+    return this.hash_id;
+  }
 
   public void setId(Long id) {
     this.id = id;
   }
+
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
@@ -57,16 +97,18 @@ public class User {
   public void setEmail(String email) {
     this.email = email;
   }
+
   public void setPassword(String password) {
     this.password = password;
   }
 
+  public void setHashID(String hash_id) {
+    this.hash_id = hash_id;
+  }
+
   @Override
   public String toString() {
-    return "User{" + "id=" + this.id + 
-                        ", firstName='" + this.firstName + '\'' + 
-                        ", lastName='" + this.lastName + '\'' + 
-                        ", email='" + this.email + '\'' + 
-                        ", password='" + this.password + '\'' + '}';
+    return "User{" + "id=" + this.id + ", firstName='" + this.firstName + '\'' + ", lastName='" + this.lastName + '\''
+        + ", email='" + this.email + '\'' + ", password='" + this.password + '\'' + '}';
   }
 }

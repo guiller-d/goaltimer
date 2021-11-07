@@ -23,7 +23,6 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
@@ -35,9 +34,7 @@ import com.example.springrest.model.User;
 @RestController
 public class ActivityController {
     @Autowired
-    private Storage storage = StorageOptions.getDefaultInstance().getService(); 
-
- 
+    private Storage storage = StorageOptions.getDefaultInstance().getService();
 
     private final ActivityRepository repository;
     private static String session_id;
@@ -46,68 +43,94 @@ public class ActivityController {
     ActivityController(ActivityRepository repository) {
         this.repository = repository;
     }
+
     public String get_data(String data_loc) throws IOException {
         StringBuffer sb = new StringBuffer();
         if (storage.get(bucket_name, data_loc) == null) {
-            return "File doesn't exists: "+ data_loc;
-        }
-        else{
-            try(ReadChannel channel = storage.reader(bucket_name, data_loc)){
-                ByteBuffer bytes = ByteBuffer.allocate(64*1024);
-                while(channel.read(bytes) > 0){
+            return "File doesn't exists: " + data_loc;
+        } else {
+            try (ReadChannel channel = storage.reader(bucket_name, data_loc)) {
+                ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+                while (channel.read(bytes) > 0) {
                     bytes.flip();
                     String data = new String(bytes.array(), 0, bytes.limit());
                     sb.append(data);
                     bytes.clear();
                 }
                 return sb.toString();
-            }   
+            }
         }
     }
-    public String store_data(String data_loc){
+
+    public String store_data(String data_loc) {
         if (storage.get(bucket_name, data_loc) == null) {
             BlobId id = BlobId.of(bucket_name, data_loc);
             BlobInfo info = BlobInfo.newBuilder(id).build();
             List<Activity> activities = repository.findAll();
-            byte[] arr =  activities.toString().getBytes();
+            byte[] arr = activities.toString().getBytes();
             storage.create(info, arr);
-            return "File uploaded to "+ data_loc;
+            return "File uploaded to " + data_loc;
         }
         return "File failed to upload to " + data_loc;
     }
+
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/activities")
-    public List<Activity> all() throws IOException{
+    public List<Activity> all() throws IOException {
         List<Activity> activities = repository.findAll();
-        StringBuilder sb = new StringBuilder(); 
-        sb.append(activities.toString());  
+        StringBuilder sb = new StringBuilder();
+        sb.append(activities.toString());
         File file = new File("src/main/java/com/example/springrest/databasedump/activities/activities.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(sb.toString());
         }
         return activities;
     }
-   
+
     @GetMapping("/getUserActivity")
-    public List<Activity> getUserActivity() throws IOException{
+    public List<Activity> getUserActivity() throws IOException {
         List<Activity> activities = repository.findAll();
-        StringBuilder sb = new StringBuilder(); 
-        sb.append(activities.toString());  
+        StringBuilder sb = new StringBuilder();
+        sb.append(activities.toString());
         File file = new File("src/main/java/com/example/springrest/databasedump/activities/activities.txt");
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(sb.toString());
         }
+
         return activities;
     }
-    
+
+    /* Store date to cloud */
+    public String store_data(String data_loc, byte[] arr) throws IOException {
+        if (storage.get(bucket_name, data_loc) == null) {
+            BlobId id = BlobId.of(bucket_name, data_loc);
+            BlobInfo info = BlobInfo.newBuilder(id).build();
+            storage.create(info, arr);
+            return "File uploaded to " + data_loc;
+        }
+        return "File failed to upload to " + data_loc;
+    } /* Create Folder */
+
+    public String create_folder(String data_loc) throws IOException {
+        if (storage.get(bucket_name, data_loc) == null) {
+            BlobId id = BlobId.of(bucket_name, data_loc);
+            BlobInfo info = BlobInfo.newBuilder(id).build();
+            storage.create(info);
+            return "File uploaded to " + data_loc;
+        }
+        return "File failed to upload to " + data_loc;
+    }
 
     @PostMapping(value = "/addActivity")
-    public String newEmployee(@RequestBody Activity newActivity) {
-      System.out.println(newActivity);
-      repository.save(newActivity);
-      return "new user successfully added";
+    public String newEmployee(@RequestBody Activity newActivity) throws IOException {
+        String user_folder = "testing_folder/user/";
+        create_folder(user_folder + newActivity.getUserHashId() + "/activity/" + newActivity );
+        repository.save(newActivity);
+        return "new user successfully added";
     }
+
     @GetMapping("/get-user-activity")
     public String getActivities() throws IOException {
         StringBuffer sb = new StringBuffer();
@@ -116,24 +139,23 @@ public class ActivityController {
             BlobId id = BlobId.of(bucket_name, data_name);
             BlobInfo info = BlobInfo.newBuilder(id).build();
             List<Activity> activities = repository.findAll();
-            byte[] arr =  activities.toString().getBytes();
+            byte[] arr = activities.toString().getBytes();
             storage.create(info, arr);
-            return "File doesn't exists: "+ data_name;
-        }else{
-            System.out.println("File exists: "+ data_name);
-            try(ReadChannel channel = storage.reader(bucket_name, data_name)){
-                ByteBuffer bytes = ByteBuffer.allocate(64*1024);
-                while(channel.read(bytes) > 0){
+            return "File doesn't exists: " + data_name;
+        } else {
+            System.out.println("File exists: " + data_name);
+            try (ReadChannel channel = storage.reader(bucket_name, data_name)) {
+                ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+                while (channel.read(bytes) > 0) {
                     bytes.flip();
                     String data = new String(bytes.array(), 0, bytes.limit());
                     sb.append(data);
                     bytes.clear();
                 }
                 return sb.toString();
-            }   
+            }
         }
     }
-
 
     @PostMapping(value = "/getActivity/")
     public Activity getEmployee(@RequestBody Activity activity, HttpSession session) throws Exception {
@@ -172,28 +194,28 @@ public class ActivityController {
     }
 
     @PostMapping(value = "/updateActivity/")
-  public Activity updateActivity(@RequestBody Activity activity, HttpSession session) {
-    //return "Testing, was in updateEmployee from Controller here";
+    public Activity updateActivity(@RequestBody Activity activity, HttpSession session) {
+        // return "Testing, was in updateEmployee from Controller here";
 
-    //User original = (User)session.getAttribute(session_id);
-    String activityid = activity.getActivityID();
-    String newActivityName = activity.getActivityName();
-    Boolean newActivityStatus = activity.getStatus();
-    String newActivitySchedule = activity.getSchedule();
-    Activity original = (Activity) session.getAttribute(session_id);
+        // User original = (User)session.getAttribute(session_id);
+        String activityid = activity.getActivityID();
+        String newActivityName = activity.getActivityName();
+        Boolean newActivityStatus = activity.getStatus();
+        String newActivitySchedule = activity.getSchedule();
+        Activity original = (Activity) session.getAttribute(session_id);
 
-    List<Activity> activities = repository.findByActivityID(activityid);
-    for (Iterator<Activity> iter = activities.iterator(); iter.hasNext();) {
-        Activity element = iter.next();
-      if(element.getActivityName().equals(original.getActivityName())){
-        
-        element.setActivityName(newActivityName);
-        element.setStatus(newActivityStatus);
-        element.setSchedule(newActivitySchedule);
-        repository.save(element);
-        return element;
-      }
+        List<Activity> activities = repository.findByActivityID(activityid);
+        for (Iterator<Activity> iter = activities.iterator(); iter.hasNext();) {
+            Activity element = iter.next();
+            if (element.getActivityName().equals(original.getActivityName())) {
+
+                element.setActivityName(newActivityName);
+                element.setStatus(newActivityStatus);
+                element.setSchedule(newActivitySchedule);
+                repository.save(element);
+                return element;
+            }
+        }
+        return null;
     }
-    return null;
-}
 }

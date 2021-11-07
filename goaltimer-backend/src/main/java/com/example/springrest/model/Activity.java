@@ -19,6 +19,8 @@ public class Activity {
     private String time;
     @Column(nullable = false)
     private String activityID;
+    @Column(nullable = true)
+    private String user_hash_id;
 
     public Activity() {
     }
@@ -50,6 +52,9 @@ public class Activity {
     public String getActivityID(){
         return this.activityID;
     }
+    public String getUserHashId(){
+        return this.user_hash_id;
+    }
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
@@ -66,5 +71,8 @@ public class Activity {
     }
     public void setActivityID(String activityID){
         this.activityID = activityID;
+    }
+    public void setUserHashId(String user_hash_id){
+        this.user_hash_id = user_hash_id;
     }
 }
