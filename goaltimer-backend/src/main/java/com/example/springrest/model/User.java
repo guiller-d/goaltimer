@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import com.google.cloud.storage.BlobId;
 
 @Entity
 public class User {
@@ -15,6 +16,8 @@ public class User {
   private @Id @GeneratedValue Long id;
   @Column(nullable = true)
   private String hash_id;
+  @Column(nullable = true)
+  private BlobId blob_id;
   @Column(nullable = false)
   private String firstName;
   @Column(nullable = false)
@@ -35,9 +38,9 @@ public class User {
     return stringBuffer.toString();
   }
 
-  private String hash(String email, String first_name, String last_name) throws Exception {
+  public String hash(String email) throws Exception {
     try {
-      String userInfo = email + first_name + last_name;
+      String userInfo = email;
       byte[] hashedBytes = userInfo.getBytes("UTF-8");
       return convertByteArrayToHexString(hashedBytes);
     } catch (UnsupportedEncodingException ex) {
@@ -51,7 +54,7 @@ public class User {
     this.lastName = lastName;
     this.email = email;
     this.password = password;
-    this.hash_id = hash(email, firstName, lastName);
+    this.hash_id = hash(email);
   }
 
   public String getName() {
@@ -81,6 +84,9 @@ public class User {
   public String getHashID() {
     return this.hash_id;
   }
+  public BlobId getBlobID() {
+    return this.blob_id;
+  }
 
   public void setId(Long id) {
     this.id = id;
@@ -104,6 +110,9 @@ public class User {
 
   public void setHashID(String hash_id) {
     this.hash_id = hash_id;
+  }
+  public void setBlobId(BlobId blob_id) {
+    this.blob_id = blob_id;
   }
 
   @Override

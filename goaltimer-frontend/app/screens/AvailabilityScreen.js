@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, Button, Switch, Dimensions, Picker } from 'react-native';
 // import {Picker} from 'react-native-community/picker'
 import Screen from '../components/Screen';
 import Modal from 'react-native-modal';
-
+import AuthContext from '../auth/context';
 function AvailabilityScreen(props) {
+
+  /*const authContext = useContext(AuthContext);
+  var firstName = authContext.user.firstName;
+  var lastName = authContext.user.lastName;
+  var email = authContext.user.email;
+  var user_id = authContext.user.id;*/
+
   const [isEnabled0, setIsEnabled0] = useState(false);
   const [isEnabled1, setIsEnabled1] = useState(false);
   const [isEnabled2, setIsEnabled2] = useState(false);

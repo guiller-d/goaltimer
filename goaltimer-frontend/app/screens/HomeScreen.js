@@ -27,10 +27,7 @@ const fetchFont = () => {
 };
 function HomeScreen({ navigation }) {
     const authContext = useContext(AuthContext);
-    const [user, setUser] = useState();
-
     //console.log(authContext.user);
-
     var firstName = authContext.user.firstName;
     var lastName = authContext.user.lastName;
     var email = authContext.user.email;
@@ -41,7 +38,7 @@ function HomeScreen({ navigation }) {
     if (!fontLoaded) {
         <AppLoading startAsync={fetchFont} onError={() => console.log('Error Font')} onFinish={() => { setFontLoaded(true) }} />
     }
-    useEffect(() => {
+    /*useEffect(() => {
 
         api.baseURL.post(apiStr, { id:user_id }).then(response => {
 
@@ -50,7 +47,7 @@ function HomeScreen({ navigation }) {
             console.log(response.data);
             setArray(response.data);
         }); 
-    }, []);
+    }, []);*/
     // Filter Buttons
     const [isDaily, setIsDaily] = useState(false);
     const [isWeekly, setIsWeekly] = useState(false);
@@ -136,7 +133,7 @@ function HomeScreen({ navigation }) {
             .string()
             .required('Activity Name is Required'),
     })
-    const handleSubmit = async (values) => {
+    /*const handleSubmit = async (values) => {
         //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
         let apiStr = endpoints.addActivity;
         api.baseURL.post(apiStr, { activityName: values.activityName, status: false, schedule: values.schedule, time: values.time, activityID: values.activityName}).then(response => {
@@ -145,7 +142,7 @@ function HomeScreen({ navigation }) {
                 setModalVisible(!isModalVisible);
             }
         });
-    }
+    }*/
     const pieData = [
         { y: 5, x: '5%' },
         { y: 90, x: '90%' },
