@@ -22,30 +22,32 @@ function LoginScreen({ navigation }) {
             .min(5, ({ min }) => `Password must be at least ${min} characters`)
             .required('Password is required'),
     })
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values) => { 
         //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
         let apiStr = endpoints.login
-        api.baseURL.post(apiStr, { email: values.email, password: values.password }).then(response => {
-            if (response.data != null) {
-                console.log("Data: " + response.data);
-                setUser(response.data);
-            }
-            else {
-                console.log("Data: " + response.data);
-                Alert.alert(
-                    "Login Failed",
-                    "Invalid email or password",
-                    [
-                        {
+            api.baseURL.post(apiStr, {email: values.email, password: values.password}).then(response => {
+                if(response.data != null){
+                    console.log("Data: " + response.data);
+                    setUser(response.data);
+                    console.log("==========Cojson ntext====================");
+                    console.log(response.data);
+                }
+                else{
+                    Alert.alert(
+                        "Login Failed",
+                        "Invalid email or password",
+                        [
+                          {
                             text: "Cancel",
                             onPress: () => console.log("Cancel Pressed"),
                             style: "cancel"
-                        },
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
-                    ]
-                );
-            }
-        });
+                          },
+                          { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ]
+                      );
+                }
+    
+            }); 
     }
     useEffect(() => {
         console.log("==========Context====================");

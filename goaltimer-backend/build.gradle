@@ -10,6 +10,7 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	 jcenter()
 }
 ext {
 	set('springCloudGcpVersion', "2.0.4")
@@ -30,6 +31,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
+	compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 dependencyManagement {
 	imports {

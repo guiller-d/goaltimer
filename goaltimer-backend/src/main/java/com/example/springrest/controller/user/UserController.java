@@ -8,18 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.springrest.model.User;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.util.Random;
 
+import com.example.springrest.model.User;
 import com.google.cloud.storage.Storage;
-
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -33,6 +26,9 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 @RestController
 public class UserController {
 
@@ -43,23 +39,18 @@ public class UserController {
   private Storage storage = StorageOptions.getDefaultInstance().getService();
 
   /**
-   * 
-   * @param arrayBytes
-   * @return
+   * @param repository
    */
+  public UserController(UserRepository repository) {
+    this.repository = repository;
+  }
+
   private String convertByteArrayToHexString(byte[] arrayBytes) {
     StringBuffer stringBuffer = new StringBuffer();
     for (int i = 0; i < arrayBytes.length; i++) {
       stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16).substring(1));
     }
     return stringBuffer.toString();
-  }
-
-  /**
-   * @param repository
-   */
-  public UserController(UserRepository repository) {
-    this.repository = repository;
   }
 
   /**
@@ -79,8 +70,8 @@ public class UserController {
         bytes.clear();
       }
       System.out.println(sb.toString());
-      return sb.toString();
     }
+    return sb.toString();
   }
 
   /**
@@ -92,33 +83,20 @@ public class UserController {
   public String store_data(String data_loc) throws IOException {
     File file = new File(data_loc);
     if (storage.get(bucket_name, data_loc) == null) {
-      BlobId id = BlobId.of(bucket_name, data_loc);
-      BlobInfo info = BlobInfo.newBuilder(id).build();
+      BlobId blob_id = BlobId.of(bucket_name, data_loc);
+      BlobInfo info = BlobInfo.newBuilder(blob_id).build();
       byte[] arr = Files.readAllBytes(Paths.get(file.toURI()));
       storage.create(info, arr);
       return "File uploaded to " + data_loc;
     }
-
     return "File failed to upload to " + data_loc;
   }
 
   /**
    * 
-   * @param data_loc
    * @return
-   * @throws IOException
+   * @throws Exception
    */
-  public String create(String data_loc) throws IOException {
-    if (storage.get(bucket_name, data_loc) == null) {
-      BlobId id = BlobId.of(bucket_name, data_loc);
-      BlobInfo info = BlobInfo.newBuilder(id).build();
-      storage.create(info);
-      return "File uploaded to " + data_loc;
-    }
-    return "File failed to upload to " + data_loc;
-  }
-
-  /* Add account to cloud for testing */
   @GetMapping("/getall")
   public String getAll() throws Exception {
     StringBuffer sb = new StringBuffer();
@@ -131,6 +109,18 @@ public class UserController {
   }
 
   /* Add account to cloud for testing */
+  @GetMapping("/getUser")
+  public String getUser() throws Exception {
+    StringBuffer sb = new StringBuffer();
+    return sb.toString();
+  }
+
+  /**
+   * 
+   * @return
+   * @throws Exception
+   */
+  /* Add account to cloud for testing */
   @GetMapping("/sendall")
   public String sendAll() throws Exception {
     List<User> users = repository.findAll();
@@ -141,69 +131,119 @@ public class UserController {
     return "Uploaded Successfuly";
   }
 
-  /* Add account to cloud for testing */
+  /**
+   * 
+   * @return
+   * @throws Exception
+   */
   @GetMapping("/dumpusers")
   public String all() throws Exception {
     List<User> users = repository.findAll();
-    StringBuffer sb = new StringBuffer();
-    StringBuffer sb_out = new StringBuffer();
     for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
       User element = iter.next();
-      File userDir = new File("goaltimer-dbdump/" + element.getHashID());
-      if (!userDir.exists()) {
-        userDir.mkdirs();
-        File user = new File("goaltimer-dbdump/" + element.getHashID() + "/userinfo.json");
-        if (!user.exists()) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(user))) {
-            sb.append(element);
-            writer.write(sb.toString());
-            writer.flush();
-            writer.close();
-          }
+      addUser(element);
+    }
+    return users.toString();
+  }
+
+  /**
+   * 
+   * @param newUser
+   * @return
+   * @throws Exception
+   */
+  /* Add account to cloud for testing */
+  @SuppressWarnings("unchecked")
+  private String addUser(User newUser) throws Exception {
+    newUser.setHashID(newUser.hash(newUser.getEmail()));
+    File userDir = new File("goaltimer-dbdump/" + newUser.getHashID());
+    if (!userDir.exists()) {
+      userDir.mkdirs();
+      JSONObject user_details = new JSONObject();
+      JSONObject user_object = new JSONObject();
+      user_details.put("blobID", newUser.getBlobID());
+      user_details.put("email", newUser.getEmail());
+      user_details.put("firstName", newUser.getFirstName());
+      user_details.put("hashID", newUser.getHashID());
+      user_details.put("id", newUser.getId());
+      user_details.put("lastName", newUser.getLastName());
+      user_details.put("name", newUser.getFirstName() + " " + newUser.getLastName());
+      user_details.put("password", newUser.getPassword());
+      user_object.put("user", user_details);
+      String data_loc = "goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json";
+      File user = new File(data_loc);
+      StringBuffer sb = new StringBuffer();
+      if (!user.exists()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(user))) {
+          sb.append(user_details);
+          writer.write(sb.toString());
         }
       }
     }
-    return sb_out.toString();
+    return "User is added to the database";
   }
-  
+
+  /**
+   * 
+   * @param newUser
+   * @return
+   * @throws Exception
+   */
   @PostMapping(value = "/users/register/")
   public String addEmployee(@RequestBody User newUser) throws Exception {
-    String user_folder = "testing_folder/users/" + newUser.getHashID() + "/userInfo/" + newUser;
-    create(user_folder);
+    StringBuffer sb = new StringBuffer();
+    File userDir = new File("goaltimer-dbdump/" + newUser.getHashID());
+    if (!userDir.exists()) {
+      userDir.mkdirs();
+      String data_loc = "goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json";
+      File user = new File(data_loc);
+      BlobId blob_id = BlobId.of(bucket_name, data_loc);
+      newUser.setBlobId(blob_id);
+      if (!user.exists()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(user))) {
+          sb.append(newUser);
+          writer.write(sb.toString());
+          writer.flush();
+          writer.close();
+        }
+        store_data("goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json");
+      }
+    }
     repository.save(newUser);
     return "User is added to the database.";
   }
 
+  /**
+   * 
+   * @param user
+   * @param session
+   * @return
+   * @throws Exception
+   */
   @PostMapping(value = "/login/")
   public User getEmployee(@RequestBody User user, HttpSession session) throws Exception {
-    // return session.getAttribute("email") + ", " + session.getAttribute("pwd");
-    String email = user.getEmail();
-    String password = user.getPassword();
-    User temp = null;
-    List<User> users = repository.findByEmail(email);
-    // if (users.size() <= 0) return -1;
-    for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
-      User element = iter.next();
-      if (element.getPassword().equals(password)) {
-        temp = element;
 
-        // assign specific session_id to that user
-        try {
-          String dateAndTime = LocalDateTime.now() + "";
-          MessageDigest digest = MessageDigest.getInstance("MD5");
-          Random rand = new Random();
-          byte[] hashedBytes = digest.digest(dateAndTime.getBytes("UTF-8"));
-          session_id = convertByteArrayToHexString(hashedBytes);
-          session.setAttribute(session_id, temp);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-          throw new Exception("Could not generate hash from String");
-        }
-        break;
-      }
-    }
+    final String JSON_DATA = get_data("goaltimer-dbdump/" + user.hash(user.getEmail()) + "/userinfo.json").toString();
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject) parser.parse(JSON_DATA);
+    User temp = new User();
+    temp.setFirstName(json.get("firstName").toString());
+    temp.setLastName(json.get("lastName").toString());
+    temp.setEmail(json.get("email").toString());
+    temp.setPassword(json.get("password").toString());
+    temp.setId(Long.parseLong(json.get("id").toString()));
+    temp.setBlobId((BlobId) json.get("blobID"));
+    temp.setHashID(json.get("hashID").toString());
     return temp;
+
   }
 
+  /**
+   * 
+   * @param user
+   * @param session
+   * @return
+   */
   @PostMapping(value = "/settings/")
   public User updateEmployee(@RequestBody User user, HttpSession session) {
     // return "Testing, was in updateEmployee from Controller here";
@@ -228,6 +268,11 @@ public class UserController {
     return null;
   }
 
+  /**
+   * 
+   * @param request
+   * @return
+   */
   @PostMapping("/invalidate/session")
   public String destroySession(HttpServletRequest request) {
     request.getSession().invalidate();
