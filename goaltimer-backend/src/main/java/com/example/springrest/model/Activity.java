@@ -18,7 +18,7 @@ public class Activity {
     private String schedule;
     @Column(nullable = false)
     private String time;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String user_hash_id;
 
     public Activity() {
