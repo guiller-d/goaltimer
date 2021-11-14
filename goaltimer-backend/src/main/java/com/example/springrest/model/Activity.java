@@ -1,3 +1,4 @@
+
 package com.example.springrest.model;
 
 import javax.persistence.Column;
