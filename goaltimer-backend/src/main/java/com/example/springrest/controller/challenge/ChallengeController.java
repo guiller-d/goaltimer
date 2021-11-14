@@ -38,7 +38,7 @@ class ChallengeController {
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
- 
+
     return null;
   }
 
