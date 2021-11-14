@@ -16,6 +16,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.api.client.http.HttpResponseException;
 import com.google.cloud.ReadChannel;
 
 import java.io.IOException;
@@ -43,14 +44,6 @@ public class UserController {
    */
   public UserController(UserRepository repository) {
     this.repository = repository;
-  }
-
-  private String convertByteArrayToHexString(byte[] arrayBytes) {
-    StringBuffer stringBuffer = new StringBuffer();
-    for (int i = 0; i < arrayBytes.length; i++) {
-      stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16).substring(1));
-    }
-    return stringBuffer.toString();
   }
 
   /**
@@ -161,11 +154,9 @@ public class UserController {
       userDir.mkdirs();
       JSONObject user_details = new JSONObject();
       JSONObject user_object = new JSONObject();
-      user_details.put("blobID", newUser.getBlobID());
       user_details.put("email", newUser.getEmail());
       user_details.put("firstName", newUser.getFirstName());
       user_details.put("hashID", newUser.getHashID());
-      user_details.put("id", newUser.getId());
       user_details.put("lastName", newUser.getLastName());
       user_details.put("name", newUser.getFirstName() + " " + newUser.getLastName());
       user_details.put("password", newUser.getPassword());
@@ -182,7 +173,6 @@ public class UserController {
     }
     return "User is added to the database";
   }
-
   /**
    * 
    * @param newUser
@@ -191,25 +181,9 @@ public class UserController {
    */
   @PostMapping(value = "/users/register/")
   public String addEmployee(@RequestBody User newUser) throws Exception {
-    StringBuffer sb = new StringBuffer();
-    File userDir = new File("goaltimer-dbdump/" + newUser.getHashID());
-    if (!userDir.exists()) {
-      userDir.mkdirs();
-      String data_loc = "goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json";
-      File user = new File(data_loc);
-      BlobId blob_id = BlobId.of(bucket_name, data_loc);
-      newUser.setBlobId(blob_id);
-      if (!user.exists()) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(user))) {
-          sb.append(newUser);
-          writer.write(sb.toString());
-          writer.flush();
-          writer.close();
-        }
-        store_data("goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json");
-      }
-    }
+    addUser(newUser);
     repository.save(newUser);
+    store_data("goaltimer-dbdump/" + newUser.getHashID() + "/userinfo.json");
     return "User is added to the database.";
   }
 
@@ -222,22 +196,21 @@ public class UserController {
    */
   @PostMapping(value = "/login/")
   public User getEmployee(@RequestBody User user, HttpSession session) throws Exception {
-
-    final String JSON_DATA = get_data("goaltimer-dbdump/" + user.hash(user.getEmail()) + "/userinfo.json").toString();
-    JSONParser parser = new JSONParser();
-    JSONObject json = (JSONObject) parser.parse(JSON_DATA);
     User temp = new User();
-    temp.setFirstName(json.get("firstName").toString());
-    temp.setLastName(json.get("lastName").toString());
-    temp.setEmail(json.get("email").toString());
-    temp.setPassword(json.get("password").toString());
-    temp.setId(Long.parseLong(json.get("id").toString()));
-    temp.setBlobId((BlobId) json.get("blobID"));
-    temp.setHashID(json.get("hashID").toString());
-    return temp;
-
+    try {
+      final String JSON_DATA = get_data("goaltimer-dbdump/" + user.hash(user.getEmail()) + "/userinfo.json").toString();
+      JSONParser parser = new JSONParser();
+      JSONObject json = (JSONObject) parser.parse(JSON_DATA);
+      temp.setFirstName(json.get("firstName").toString());
+      temp.setLastName(json.get("lastName").toString());
+      temp.setEmail(json.get("email").toString());
+      temp.setPassword(json.get("password").toString());
+      temp.setHashID(json.get("hashID").toString());
+      return temp;
+    } catch (Exception hre) {
+      return null;
+    }
   }
-
   /**
    * 
    * @param user
@@ -246,9 +219,6 @@ public class UserController {
    */
   @PostMapping(value = "/settings/")
   public User updateEmployee(@RequestBody User user, HttpSession session) {
-    // return "Testing, was in updateEmployee from Controller here";
-
-    // User original = (User)session.getAttribute(session_id);
     String email = user.getEmail();
     String newFirstName = user.getFirstName();
     String newLastName = user.getLastName();

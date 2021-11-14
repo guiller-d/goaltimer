@@ -9,7 +9,6 @@ import AddButton from '../components/AddButton';
 import Button from '../components/Button';
 import Modal from 'react-native-modal';
 import Duration from '../components/Duration';
-import ColorButton from '../components/ColorButton';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer, VictoryScatter } from "victory-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import AuthContext from '../auth/context';
@@ -31,24 +30,16 @@ function HomeScreen({ navigation }) {
     var firstName = authContext.user.firstName;
     var lastName = authContext.user.lastName;
     var email = authContext.user.email;
+    var user_hash_id = authContext.user.hashID;
     var user_id = authContext.user.id;
+
 
     const [fontLoaded, setFontLoaded] = useState(false);
     //fect fonts
     if (!fontLoaded) {
         <AppLoading startAsync={fetchFont} onError={() => console.log('Error Font')} onFinish={() => { setFontLoaded(true) }} />
     }
-    /*useEffect(() => {
 
-        api.baseURL.post(apiStr, { id:user_id }).then(response => {
-
-        });
-        api.baseURL.get(endpoints.activities).then(response => {
-            console.log(response.data);
-            setArray(response.data);
-        }); 
-    }, []);*/
-    // Filter Buttons
     const [isDaily, setIsDaily] = useState(false);
     const [isWeekly, setIsWeekly] = useState(false);
     const [isMonthly, setIsMonthly] = useState(false);
@@ -62,7 +53,6 @@ function HomeScreen({ navigation }) {
     const [is60, set60] = useState(false);
     //Create an Activity
     const [isModalVisible, setModalVisible] = useState(false);
-
 
     var time = '';
     var schedule = '';
@@ -90,59 +80,60 @@ function HomeScreen({ navigation }) {
         setIsMonthly(true);
     };
 
-    const activityDaily = () => {
+    const activityDaily = async (setFieldValue, field) => {
         setIsActivityDaily(true);
         setIsActivityWeekly(false);
         setIsActivityMonthly(false);
-        schedule = "daily";
+        setFieldValue(field, "daily")
     };
-    const activityWeekly = () => {
+    const activityWeekly = async (setFieldValue, field) => {
         setIsActivityDaily(false);
         setIsActivityWeekly(true);
         setIsActivityMonthly(false);
-        schedule = "weekly";
+        setFieldValue(field, "weekly")
     };
-    const activityMonthly = () => {
+    const activityMonthly = async (setFieldValue, field) => {
         setIsActivityDaily(false);
         setIsActivityWeekly(false);
         setIsActivityMonthly(true);
-        schedule = "montly";
+        setFieldValue(field, "montly")
     };
 
 
-    const is30min = () => {
+    const is30min = async (setFieldValue, field) => {
         set30(true);
         set45(false);
         set60(false);
-        time = "30";
+        setFieldValue(field, "30")
+   
     };
-    const is45min = () => {
+    const is45min = async (setFieldValue, field) => {
         set30(false);
         set45(true);
         set60(false);
-        time = "45";
+        setFieldValue(field, "45")
     };
-    const is60min = () => {
+    const is60min = async (setFieldValue, field) => {
         set30(false);
         set45(false);
         set60(true);
-        time = "60";
+        setFieldValue(field, "60")
     };
+  
     const loginValidationSchema = yup.object().shape({
         activityName: yup
             .string()
             .required('Activity Name is Required'),
     })
-    /*const handleSubmit = async (values) => {
+    const handleSubmit = async (values) => {
         //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
         let apiStr = endpoints.addActivity;
-        api.baseURL.post(apiStr, { activityName: values.activityName, status: false, schedule: values.schedule, time: values.time, activityID: values.activityName}).then(response => {
+        api.baseURL.post(apiStr, { activityID: values.activityName, activityName: values.activityName, schedule: values.schedule, status: false, time: values.time, user_hash_id: values.user_hash_id}).then(response => {
             if (response.data != null) {
-                console.log("Data: " + response.data);
                 setModalVisible(!isModalVisible);
             }
         });
-    }*/
+    }
     const pieData = [
         { y: 5, x: '5%' },
         { y: 90, x: '90%' },
@@ -267,10 +258,10 @@ function HomeScreen({ navigation }) {
 
                 <Formik
                     validationSchema={loginValidationSchema}
-                    initialValues={{ activityName: '', schedule: '', time: ''}}
+                    initialValues={{ activityName: '', schedule: '', time: '', user_hash_id: user_hash_id }}
                     onSubmit={values => handleSubmit(values)}
                 >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched }) => (
+                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched, setFieldValue }) => (
                         <View style={{
                             width: Dimensions.get('window').width - 15,
                             height: 380,
@@ -279,7 +270,7 @@ function HomeScreen({ navigation }) {
                             borderRadius: 30,
                             borderWidth: 1,
                             backgroundColor: 'white'
-                        }}>
+                        }} >
                             <View style={{ paddingTop: 15, }}>
                                 <Text style={styles.welcomeText}> Create an Activity </Text>
                                 <Text style={styles.labelText}>  {new Date().toDateString()} </Text>
@@ -293,22 +284,22 @@ function HomeScreen({ navigation }) {
                                     onChangeText={handleChange('activityName')}
                                     onBlur={handleBlur('activityName')}
                                     value={values.activityName}
-                             
+                                 
                                 />
-                                {(errors.email && touched.email) && <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>}
+                                {(errors.activityName && touched.activityName) && <Text style={{ fontSize: 10, color: 'red' }}>{errors.activityName}</Text>}
                                
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', paddingTop: 15, alignItems: 'center' }}>
                                     <Text style={styles.inputLabelText}> Schedule:</Text>
-                                    <Button title="Daily" onPress={activityDaily} isPressed={isActivityDaily} />
-                                    <Button title="Weekly" onPress={activityWeekly} isPressed={isActivityWeekly} />
-                                    <Button title="Monthly" onPress={activityMonthly} isPressed={isActivityMonthly} />
+                                    <Button title="Daily"  onPress={() => activityDaily(setFieldValue, 'schedule')} isPressed={isActivityDaily}/>
+                                    <Button title="Weekly" onPress={() => activityWeekly(setFieldValue, 'schedule')} isPressed={isActivityWeekly} />
+                                    <Button title="Monthly" onPress={() => activityMonthly(setFieldValue, 'schedule')} isPressed={isActivityMonthly} />
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 260, paddingTop: 15, alignItems: 'center' }}>
                                     <Text style={styles.inputLabelText}> Duration:</Text>
-                                    <Duration title="30" onPress={is30min} isPressed={is30} />
-                                    <Duration title="45" onPress={is45min} isPressed={is45} />
-                                    <Duration title="60" onPress={is60min} isPressed={is60} />
+                                    <Duration title="30" onPress={() =>is30min(setFieldValue, 'time')} isPressed={is30} />
+                                    <Duration title="45" onPress={() =>is45min(setFieldValue, 'time')} isPressed={is45} />
+                                    <Duration title="60" onPress={() =>is60min(setFieldValue, 'time')} isPressed={is60} />
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>

@@ -4,19 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.security.MessageDigest;
-import java.util.Random;
-import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
-import com.google.cloud.storage.BlobId;
 
 @Entity
 public class User {
   private @Id @GeneratedValue Long id;
   @Column(nullable = true)
   private String hash_id;
-  @Column(nullable = true)
-  private BlobId blob_id;
   @Column(nullable = false)
   private String firstName;
   @Column(nullable = false)
@@ -84,9 +78,6 @@ public class User {
   public String getHashID() {
     return this.hash_id;
   }
-  public BlobId getBlobID() {
-    return this.blob_id;
-  }
 
   public void setId(Long id) {
     this.id = id;
@@ -110,9 +101,6 @@ public class User {
 
   public void setHashID(String hash_id) {
     this.hash_id = hash_id;
-  }
-  public void setBlobId(BlobId blob_id) {
-    this.blob_id = blob_id;
   }
 
   @Override

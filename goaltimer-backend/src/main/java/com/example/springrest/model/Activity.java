@@ -18,24 +18,21 @@ public class Activity {
     @Column(nullable = false)
     private String time;
     @Column(nullable = false)
-    private String activityID;
-    @Column(nullable = true)
     private String user_hash_id;
 
     public Activity() {
     }
 
-    public Activity(String activityName, Boolean status, String schedule, String time, String activityID) {
+    public Activity(String activityName, Boolean status, String schedule, String time) {
         this.activityName = activityName;
         this.schedule = schedule;
         this.status = status;
         this.time = time;
-        this.activityID = activityID;
     }
     public String getActivityName() {
         return this.activityName;
     }
-
+    
     public Boolean getStatus() {
         return this.status;
     }
@@ -49,9 +46,7 @@ public class Activity {
     public Long getID() {
         return this.id;
     }
-    public String getActivityID(){
-        return this.activityID;
-    }
+
     public String getUserHashId(){
         return this.user_hash_id;
     }
@@ -69,10 +64,9 @@ public class Activity {
     public void setTime(String time) {
         this.time = time;
     }
-    public void setActivityID(String activityID){
-        this.activityID = activityID;
-    }
+
     public void setUserHashId(String user_hash_id){
         this.user_hash_id = user_hash_id;
     }
+
 }

@@ -60,12 +60,12 @@ class LoadDatabase {
       log.info("Preloading " + waterRepository.save(new Time(9, "95", "10/24/2021")));
       log.info("Preloading " + waterRepository.save(new Time(9, "105", "10/25/2021")));
 
-      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily", "30", "Meditation")));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Aerobic Exercise" ,true, "weekly", "30","Aerobic Exercise")));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily","30", "Meditation" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "weekly", "30","Movie Night" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "daily", "30","Cooking" )));
-      log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "Daily","30", "Reading")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily", "30")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Aerobic Exercise" ,true, "weekly", "30")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Meditation" ,true, "daily","30" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Movie Night" ,true, "weekly", "30")));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "daily", "30" )));
+      log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "Daily","30")));
 
       log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am", "monday", "Allis.Wyn@gmail.com")));
       log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am", "monday", "Marti.Tengdin@gmail.com")));
