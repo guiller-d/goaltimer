@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import com.example.springrest.model.User;
 
 @Entity
 public class Availability {
@@ -16,17 +17,18 @@ public class Availability {
     @Column(nullable = true) private String min;
     @Column(nullable = true) private String amPm;
     @Column(nullable = true) private String day;
-
+    @Column(nullable = true) private String email;
 public Availability(){
 }
 
-public Availability(String hour, String min, String amPm, String day) throws Exception{
+public Availability(String hour, String min, String amPm, String day, String email) throws Exception{
         super();
         this.hour = hour;
         this.min = min;
         this.amPm = amPm;
         this.day = day;
-        this.hash_id = hash(hour, min, amPm, day);
+        this.email = email;
+        this.hash_id = hash(email) ;
     }
 
     private String convertByteArrayToHexString(byte[] arrayBytes) {
@@ -37,13 +39,14 @@ public Availability(String hour, String min, String amPm, String day) throws Exc
     return stringBuffer.toString();
   }
 
-    private String hash(String hour, String min, String amPm, String day) throws Exception {
+  public String hash(String email) throws Exception {
     try {
-      String availabilityInfo = hour + min + amPm + day;
-      byte[] hashedBytes = availabilityInfo.getBytes("UTF-8");
+      String userInfo = email;
+      byte[] hashedBytes = userInfo.getBytes("UTF-8");
       return convertByteArrayToHexString(hashedBytes);
     } catch (UnsupportedEncodingException ex) {
       throw new Exception("Could not generate hash from String");
+
     }
   }
 
@@ -66,6 +69,9 @@ public Availability(String hour, String min, String amPm, String day) throws Exc
   public String getHashID() {
     return this.hash_id;
   }
+  public String getEmail() {
+    return this.email;
+  }
   public void setId(Long id) {
     this.id = id;
   }
@@ -81,6 +87,9 @@ public Availability(String hour, String min, String amPm, String day) throws Exc
     public String setDay(){
     return this.day;
     }
+    public String setEmail() {
+    return this.email;
+  }
     public void setHashID(String hash_id) {
     this.hash_id = hash_id;
   }
@@ -88,7 +97,7 @@ public Availability(String hour, String min, String amPm, String day) throws Exc
   @Override
     public String toString() {
     return "Availability{" + "id=" + this.id + ", Hour='" + this.hour + '\'' + ", Min='" + this.min + '\''
-        + ", am or pm='" + this.amPm + '\'' + ", Day='" + this.day + '\'' + '}';
+        + ", am or pm='" + this.amPm + '\'' + ", Day='" + this.day + '\'' + ", email='" + this.email + '}';
     }
 
 }

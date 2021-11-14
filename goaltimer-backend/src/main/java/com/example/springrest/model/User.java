@@ -12,7 +12,6 @@ import com.google.cloud.storage.BlobId;
 
 @Entity
 public class User {
-
   private @Id @GeneratedValue Long id;
   @Column(nullable = true)
   private String hash_id;
@@ -76,6 +75,7 @@ public class User {
   public String getEmail() {
     return this.email;
   }
+
 
   public String getPassword() {
     return this.password;

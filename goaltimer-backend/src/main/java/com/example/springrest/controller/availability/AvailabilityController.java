@@ -37,6 +37,9 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 
 @RestController
 class AvailabilityController {
@@ -148,29 +151,39 @@ class AvailabilityController {
     return "Uploaded Successfuly";
   }
 
-  /* Add account to cloud for testing */
+  /* Add availability to cloud for testing */
   @GetMapping("/dumpAvailability")
   public String all() throws Exception {
     List<Availability> available = repository.findAll();
-    StringBuffer sb = new StringBuffer();
-    StringBuffer sb_out = new StringBuffer();
     for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
       Availability element = iter.next();
-      File availableDir = new File("goaltimer-dbdump/" + element.getHashID());
-      if (!availableDir.exists()) {
-        availableDir.mkdirs();
-        File file = new File("goaltimer-dbdump/" + element.getHashID() + "/AvailabilityInfo.json");
-        if (!file.exists()) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            sb.append(element);
-            writer.write(sb.toString());
-            writer.flush();
-            writer.close();
-          }
-        }
-      }
+      addAvailability(element);
     }
-    return sb_out.toString();
+    return available.toString();
+  }
+
+    @SuppressWarnings("unchecked")
+  private String addAvailability(Availability newAvailability) throws Exception {
+    newAvailability.setHashID(newAvailability.hash(newAvailability.getEmail()));
+    File AvailabilityDir = new File("goaltimer-dbdump/" + newAvailability.getHashID());
+      AvailabilityDir.mkdirs();
+      JSONObject Availability_details = new JSONObject();
+      JSONObject Availability_object = new JSONObject();
+      Availability_details.put("email", newAvailability.getEmail());
+      Availability_details.put("hour", newAvailability.getHour());
+      Availability_details.put("hashID", newAvailability.getHashID());
+      Availability_details.put("min", newAvailability.getMin());
+      Availability_details.put("day", newAvailability.getDay());
+      Availability_details.put("amPm", newAvailability.getAmPm());
+      Availability_object.put("Available", Availability_details);
+      String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/Availabilityinfo.json";
+      File Available = new File(data_loc);
+      StringBuffer sb = new StringBuffer();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Available))) {
+          sb.append(Availability_details);
+          writer.write(sb.toString());
+    }
+    return "Availability is added to the database";
   }
 
 }
