@@ -68,6 +68,16 @@ class ChallengeController {
     }
     return sb.toString();
   }
+  /* Send data to cloud for testing */
+  @GetMapping("/sendallchallenges")
+  public String sendAll() throws Exception {
+    List<Challenge> challenges = repository.findAll();
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge new_challenge = iter.next();
+      store_data("goaltimer-dbdump/" + new_challenge.getHashID() + "/challengeinfo.json");
+    }
+    return "Uploaded Successfuly";
+  }
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
