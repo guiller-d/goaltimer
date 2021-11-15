@@ -29,6 +29,46 @@ class ChallengeController {
   }
   // Aggregate root
   // tag::get-aggregate-root[]
+
+  /**
+   *
+   * @param data_loc
+   * @return
+   * @throws Exception
+   */
+  public String get_data(String data_loc) throws Exception {
+    StringBuffer sb = new StringBuffer();
+    try (ReadChannel channel = storage.reader(bucket_name, data_loc)) {
+      ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+      while (channel.read(bytes) > 0) {
+        bytes.flip();
+        String data = new String(bytes.array(), 0, bytes.limit());
+        sb.append(data);
+        bytes.clear();
+      }
+      System.out.println(sb.toString());
+    }
+    return sb.toString();
+  }
+
+  /**
+   *
+   * @param data_loc
+   * @return
+   * @throws IOException
+   */
+  public String store_data(String data_loc) throws IOException {
+    File file = new File(data_loc);
+    if (storage.get(bucket_name, data_loc) == null) {
+      BlobId blob_id = BlobId.of(bucket_name, data_loc);
+      BlobInfo info = BlobInfo.newBuilder(blob_id).build();
+      byte[] arr = Files.readAllBytes(Paths.get(file.toURI()));
+      storage.create(info, arr);
+      return "File uploaded to " + data_loc;
+    }
+    return "File failed to upload to " + data_loc;
+  }
+
   //read
   @GetMapping("/challenges")
   public List<Challenge> all() {
