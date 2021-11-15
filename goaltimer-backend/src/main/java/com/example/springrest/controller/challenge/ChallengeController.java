@@ -30,12 +30,6 @@ class ChallengeController {
   // Aggregate root
   // tag::get-aggregate-root[]
 
-  /**
-   *
-   * @param data_loc
-   * @return
-   * @throws Exception
-   */
   public String get_data(String data_loc) throws Exception {
     StringBuffer sb = new StringBuffer();
     try (ReadChannel channel = storage.reader(bucket_name, data_loc)) {
@@ -51,12 +45,6 @@ class ChallengeController {
     return sb.toString();
   }
 
-  /**
-   *
-   * @param data_loc
-   * @return
-   * @throws IOException
-   */
   public String store_data(String data_loc) throws IOException {
     File file = new File(data_loc);
     if (storage.get(bucket_name, data_loc) == null) {
@@ -72,8 +60,13 @@ class ChallengeController {
   //read
   @GetMapping("/challenges")
   public List<Challenge> all() {
+    StringBuffer sb = new StringBuffer();
     List<Challenge> challenges = repository.findAll();
-    return challenges;
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge new_challenge = iter.next();
+      sb.append(get_data("goaltimer-dbdump/" + new_challenge.getHashID() + "/challengeinfo.json"));
+    }
+    return sb.toString();
   }
   //update
   @PostMapping(value = "/updateChallenge/")
