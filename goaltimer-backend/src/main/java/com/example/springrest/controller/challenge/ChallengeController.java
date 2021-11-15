@@ -3,6 +3,13 @@ package com.example.springrest.controller.challenge;
 import java.util.Iterator;
 import java.util.List;
 
+import com.example.springrest.model.Challenge;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.ReadChannel;
+
 import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import org.springframework.util.MultiValueMap;
@@ -17,12 +24,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 
+import java.io.IOException;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import com.example.springrest.model.Challenge;
 
 @RestController
 class ChallengeController {
 
   private final ChallengeRepository repository;
+  private final String bucket_name = "goaltimer-challenges";
+  private Storage storage = StorageOptions.getDefaultInstance().getService();
 
   ChallengeController(ChallengeRepository repository) {
     this.repository = repository;
@@ -59,14 +76,14 @@ class ChallengeController {
 
   //read
   @GetMapping("/challenges")
-  public List<Challenge> all() {
+  public List<Challenge> all() throws Exception {
     StringBuffer sb = new StringBuffer();
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      sb.append(get_data("goaltimer-dbdump/" + new_challenge.getHashID() + "/challengeinfo.json"));
+      sb.append(get_data("goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json"));
     }
-    return sb.toString();
+    return challenges;
   }
   /* Send data to cloud for testing */
   @GetMapping("/sendallchallenges")
@@ -74,7 +91,7 @@ class ChallengeController {
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      store_data("goaltimer-dbdump/" + new_challenge.getHashID() + "/challengeinfo.json");
+      store_data("goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json");
     }
     return "Uploaded Successfuly";
   }
