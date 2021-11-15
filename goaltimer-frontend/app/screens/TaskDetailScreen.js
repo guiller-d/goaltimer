@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LoadingBar from '../components/LoadingBar';
 import Screen from '../components/Screen';
 import WaterIntakeDetail from '../components/WaterIntakeDetail';
 import waterstatistics from '../database/waterstatistics.json';
+import CountDown from 'react-native-countdown-component';
+import Button from '../components/Button';
+import StartButton from '../components/StartButton';
+ 
 function TaskDetailScreen({ route }) {
 
     const { activityName } = route.params;
+    
+    const [timer, setTimer] = useState(false);
+    const [time, setTime] = useState(0);
     var weekly_intake = [];
     var water_count = 0;
     var points = [];
     var days = [];
     var sum = 0;
     var average = 0;
+
+    useEffect(() => {
+        let timer = setInterval(() => console.log('fire!'), 1000);
+        return () => clearInterval(timer)
+    }, [])
     if (waterstatistics != undefined) {
         waterstatistics.map((stats, index) => {
             stats.weekly_percentage.map((data, key) => {
@@ -33,11 +45,35 @@ function TaskDetailScreen({ route }) {
             })
         })
     }
+    const startStopTimer = () =>{
+        setTimer(!timer);
+    }
     return (
         <Screen>
-            <View style={styles.loadingBarContainer}>
-                <LoadingBar color='orange' activityName={activityName} activityDuration="30 minutes" dateToday={new Date().toDateString()} timer="00:35:34" />
+
+            <View style={{alignItems: 'center', margin: 20}}>
+            <StartButton title="Start Timer" onPress={startStopTimer} isPressed={timer}/>
             </View>
+         
+            <CountDown
+                size={30}
+                until={1000}
+                onFinish={() => alert('Finished')}
+                digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#3B97ED'}}
+                digitTxtStyle={{color: '#1CC625'}}
+                timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
+                separatorStyle={{color: '#1CC625'}}
+                timeToShow={['H', 'M', 'S']}
+                timeLabels={{m: null, s: null}}
+                showSeparator
+                running={timer}
+                onChange={(time)=>{
+                    setTime(time);
+                }}
+            >
+          
+            </CountDown>
+       
 
             <ScrollView>
                 <View style={styles.dataContainer}>

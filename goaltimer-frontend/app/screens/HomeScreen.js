@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import Screen from '../components/Screen';
@@ -48,6 +48,8 @@ function HomeScreen({ navigation }) {
     const [isActivityWeekly, setIsActivityWeekly] = useState(false);
     const [isActivityMonthly, setIsActivityMonthly] = useState(false);
 
+    const [activities, setActivities] = useState([]);
+
     const [is30, set30] = useState(false);
     const [is45, set45] = useState(false);
     const [is60, set60] = useState(false);
@@ -56,6 +58,7 @@ function HomeScreen({ navigation }) {
 
     var time = '';
     var schedule = '';
+
     //Show create form
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -91,14 +94,15 @@ function HomeScreen({ navigation }) {
         setIsActivityWeekly(true);
         setIsActivityMonthly(false);
         setFieldValue(field, "weekly")
+
     };
     const activityMonthly = async (setFieldValue, field) => {
         setIsActivityDaily(false);
         setIsActivityWeekly(false);
         setIsActivityMonthly(true);
         setFieldValue(field, "montly")
-    };
 
+    };
 
     const is30min = async (setFieldValue, field) => {
         set30(true);
@@ -125,15 +129,28 @@ function HomeScreen({ navigation }) {
             .string()
             .required('Activity Name is Required'),
     })
+    useEffect(() => {
+        let apiStr = endpoints.getallactivities;
+        api.baseURL.post(apiStr, { email: authContext.user.email}).then(response => {
+            if (response.data != null) {
+                setActivities(response.data);
+            }
+        });
+    },[activities]);
+
     const handleSubmit = async (values) => {
+     
         //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
         let apiStr = endpoints.addActivity;
-        api.baseURL.post(apiStr, { activityID: values.activityName, activityName: values.activityName, schedule: values.schedule, status: false, time: values.time, user_hash_id: values.user_hash_id}).then(response => {
+        api.baseURL.post(apiStr, { activityName: values.activityName + "," + authContext.user.hashID, schedule: values.schedule, status: false, time: values.time, hashID:authContext.user.hashID}).then(response => {
             if (response.data != null) {
                 setModalVisible(!isModalVisible);
             }
         });
     }
+    const [internetCheck, setInternetCheck] = useState(0);
+ 
+  
     const pieData = [
         { y: 5, x: '5%' },
         { y: 90, x: '90%' },
@@ -232,33 +249,23 @@ function HomeScreen({ navigation }) {
                 </View>
 
             </View>
-
-            {/*all activity container */}
-            <ScrollView ref={scrollView} decelerationRate={0} contentContainerStyle={{ flexGrow: 1, justifyContent: 'baseliine', alignItems: 'center', }}>
-                <View style={styles.activityContainer}>
-                    {/*<ScrollView bouncesZoom={true} contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}> */}
-                    <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='orange'
-                        onPress={() => navigation.navigate('TaskDetailScreen', {
-                            activityName: 'Aerobic Exercise',
-                            activityDuration: "30 minutes",
-                            activitySchedule: "Daily Task",
-                            color: 'orange'
-                        })} />
-                    <Activity activityName="Sleep" activityDuration="30 minutes" activitySchedule="Daily Task" color='red' />
-                    <Activity activityName="Studying" activityDuration="30 minutes" activitySchedule="Daily Task" color='blue' />
-                    <Activity activityName="Meditation" activityDuration="30 minutes" activitySchedule="Daily Task" color='pink' />
-                    <Activity activityName="Aerobic Exercise" activityDuration="30 minutes" activitySchedule="Daily Task" color='brown' />
-                    {/*</ScrollView>*/}
-                </View>
-            </ScrollView>
-
-
+       
+            <View style={styles.activityContainer}>
+            <FlatList data={activities} keyExtractor={activities => activities.id.toString()} renderItem ={({item}) => 
+                <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.schedule} color='red' 
+                onPress={() => navigation.navigate('TaskDetailScreen', {
+                    activityName: item.activityName,
+                    activityDuration: item.time,
+                    activitySchedule: item.schedule,
+                    color: 'orange'
+                })} /> } />
+            </View>       
+           
             <AddButton onPress={toggleModal} />
             <Modal coverScreen={false} backdropColor='black' backdropOpacity={0.2} hideModalContentWhileAnimating={true} animationIn='slideInDown' animationOut='slideOutUp' isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)} onSwipeComplete={() => setModalVisible(false)} swipeDirection="left">
-
                 <Formik
                     validationSchema={loginValidationSchema}
-                    initialValues={{ activityName: '', schedule: '', time: '', user_hash_id: user_hash_id }}
+                    initialValues={{ activityName: '', schedule: '', time: '', user_hash_id: '' }}
                     onSubmit={values => handleSubmit(values)}
                 >
                     {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched, setFieldValue }) => (
@@ -303,7 +310,7 @@ function HomeScreen({ navigation }) {
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                                <Button onPress={handleSubmit} title="Add" color='#775E5E' />
+                                <Button  onPress={handleSubmit} title="Add" color='#775E5E'/>
                                 <Button title="Cancel" onPress={filterHandlerWeekly} isPressed={isWeekly} />
                             </View>
                         </View>
@@ -355,7 +362,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     activityContainer: {
-        width: '97%',
+        height:'35%',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
