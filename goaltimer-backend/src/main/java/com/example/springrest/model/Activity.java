@@ -19,7 +19,7 @@ public class Activity {
     @Column(nullable = false)
     private String time;
     @Column(nullable = true)
-    private String user_hash_id;
+    private String hashID;
 
     public Activity() {
     }
@@ -48,8 +48,11 @@ public class Activity {
         return this.id;
     }
 
+    public void setUserHashId(String hashID){
+        this.hashID = hashID;
+    }
     public String getUserHashId(){
-        return this.user_hash_id;
+        return this.hashID;
     }
     public void setActivityName(String activityName) {
         this.activityName = activityName;
@@ -66,8 +69,6 @@ public class Activity {
         this.time = time;
     }
 
-    public void setUserHashId(String user_hash_id){
-        this.user_hash_id = user_hash_id;
-    }
+   
 
 }

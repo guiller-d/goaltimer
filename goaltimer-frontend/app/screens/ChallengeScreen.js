@@ -20,6 +20,7 @@ function ChallengeScreen(props) {
       
         });
     }, []);
+    console.log(array);
 
     return (
         <Screen>
