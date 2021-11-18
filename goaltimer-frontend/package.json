@@ -24,6 +24,7 @@
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
     "react-native-chart-kit": "^6.11.0",
+    "react-native-countdown-component": "^2.7.1",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-modal": "^11.10.0",
     "react-native-pie": "^1.1.2",
