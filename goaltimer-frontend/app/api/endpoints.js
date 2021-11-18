@@ -10,7 +10,9 @@ const addActivity = '/addActivity/'
 const getallactivities = '/getallactivities/'
 const availabilities = '/availabilities/'
 const addAvailability = '/availabilities/'
+const addTime = '/addTime/'
+const getAllActivityTime = "/getAllActivityTime/"
 
 export default {
-    getAllUsers, login, register, settings, accountRemoval, challenges, activities, addActivity, getallactivities, availabilities, addAvailability
+    getAllUsers, getAllActivityTime, login, register, settings, accountRemoval, challenges, activities, addActivity, getallactivities, availabilities, addAvailability, addTime
 }

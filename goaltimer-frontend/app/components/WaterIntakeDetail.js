@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function WaterIntakeDetail({ date, percentage, onPress }) {
-    console.log("here");
     percentage = percentage + '%';
 
     return (
