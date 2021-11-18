@@ -67,9 +67,9 @@ class LoadDatabase {
       log.info("Preloading " + acitivityRepository.save(new Activity("Cooking" ,true, "daily", "30" )));
       log.info("Preloading " + acitivityRepository.save(new Activity("Reading" ,true, "Daily","30")));
 
-      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am", "monday", "Allis.Wyn@gmail.com")));
-      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am", "monday", "Marti.Tengdin@gmail.com")));
-      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am", "monday", "frodobaggins@gmail.com")));
+      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am","9","15","pm", "monday", "ahmad.abuzaina@sjsu.edu")));
+      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am","9","15","am", "monday", "ahmad.abuzaina@sjsu.edu")));
+      log.info("Preloading " + availabilityRepository.save(new Availability("9","15","am","9","15","am", "monday", "ahmad.abuzaina@sjsu.edu")));
 
     };
   }

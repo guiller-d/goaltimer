@@ -64,14 +64,14 @@ class AvailabilityController {
 
   @PostMapping(value = "/addAvailability")
   public String newAvailability(@RequestBody Availability available) {
-
+    available.setHashID(available.getEmail());
     System.out.println(available);
     repository.save(available);
 
-    return "new available successfully added";
+    return "new availablity successfully added";
   }
 
-  @PostMapping(value = "/updateAvailability")
+  /*@PostMapping(value = "/updateAvailability")
   public String updateAvailability(@RequestBody Availability available) {
 
     System.out.println(available);
@@ -85,7 +85,8 @@ class AvailabilityController {
     System.out.println(available);
     repository.delete(available);
     return "available successfully deleted";
-  }
+  }*/
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
     public String create(String data_loc) throws IOException {
     if (storage.get(bucket_name, data_loc) == null) {
@@ -170,11 +171,14 @@ class AvailabilityController {
       JSONObject Availability_details = new JSONObject();
       JSONObject Availability_object = new JSONObject();
       Availability_details.put("email", newAvailability.getEmail());
-      Availability_details.put("hour", newAvailability.getHour());
+      Availability_details.put("fromHour", newAvailability.getFromHour());
+      Availability_details.put("fromMin", newAvailability.getFromMin());
+      Availability_details.put("fromAmPm", newAvailability.getFromAmPm());
       Availability_details.put("hashID", newAvailability.getHashID());
-      Availability_details.put("min", newAvailability.getMin());
       Availability_details.put("day", newAvailability.getDay());
-      Availability_details.put("amPm", newAvailability.getAmPm());
+      Availability_details.put("toHour", newAvailability.getToHour());
+      Availability_details.put("toMin", newAvailability.getToMin());
+      Availability_details.put("toAmPm", newAvailability.getToAmPm());
       Availability_object.put("Available", Availability_details);
       String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/Availabilityinfo.json";
       File Available = new File(data_loc);

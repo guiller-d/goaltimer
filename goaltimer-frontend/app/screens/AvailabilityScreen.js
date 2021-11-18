@@ -1,32 +1,17 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View, Button, Switch, Dimensions, Picker } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Dimensions, Picker } from 'react-native';
 // import {Picker} from 'react-native-community/picker'
 import Screen from '../components/Screen';
 import Modal from 'react-native-modal';
 import AuthContext from '../auth/context';
+import api from '../api/api';
+import endpoints from '../api/endpoints';
 function AvailabilityScreen(props) {
 
-  /*const authContext = useContext(AuthContext);
-  var firstName = authContext.user.firstName;
-  var lastName = authContext.user.lastName;
+  const authContext = useContext(AuthContext);
   var email = authContext.user.email;
-  var user_id = authContext.user.id;*/
-
-  const [isEnabled0, setIsEnabled0] = useState(false);
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const [isEnabled2, setIsEnabled2] = useState(false);
-  const [isEnabled3, setIsEnabled3] = useState(false);
-  const [isEnabled4, setIsEnabled4] = useState(false);
-  const [isEnabled5, setIsEnabled5] = useState(false);
-  const [isEnabled6, setIsEnabled6] = useState(false);
-
-  const Monday = () => setIsEnabled0(previousState => !previousState);
-  const Tuesday = () => setIsEnabled1(previousState => !previousState);
-  const Wednesday = () => setIsEnabled2(previousState => !previousState);
-  const Thursday = () => setIsEnabled3(previousState => !previousState);
-  const Friday = () => setIsEnabled4(previousState => !previousState);
-  const Saturday = () => setIsEnabled5(previousState => !previousState);
-  const Sunday = () => setIsEnabled6(previousState => !previousState);
+  var user_id = authContext.user.id;
+  var availabilityList = [];
 
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
@@ -40,6 +25,10 @@ function AvailabilityScreen(props) {
   const [selectedValue4, setToHour] = useState("1");
   const [selectedValue5, setToMin] = useState("00");
   const [selectedValue6, setToAmPm] = useState("am");
+  
+  const [selectedValue7, setDay] = useState("Monday");
+
+ console.log(selectedValue1)
 
   const getAvailabilities = async (values) => { 
     let apiStr = endpoints.availabilities
@@ -49,13 +38,12 @@ function AvailabilityScreen(props) {
     );
 }
 
-const addAvailability = async (values) => { 
+const handleSubmit = async (values) => {
   let apiStr = endpoints.availabilities
-  api.baseURL.post(apiStr, {firstName: values.first_name, lastName: values.last_name, email: values.email, password: values.password1}).then(response => {
+  api.baseURL.post(apiStr, {fromHour: selectedValue1, fromMin: selectedValue2, fromAmPm: selectedValue3 ,toHour: selectedValue4, toMin: selectedValue5, toAmPm: selectedValue6 ,email: email, day: selectedValue7}).then(response => {
       console.log(response.data);
       Alert.alert(
-          "Sign up Succesfully",
-          "You can now log in",
+          "Availability added",
           [
             { text: "OK", onPress: () => console.log("OK Pressed") }
           ]
@@ -69,97 +57,8 @@ const addAvailability = async (values) => {
       <Text style={styles.titleContainer}>Availability</Text>
       <Text style={styles.introLabel}>Manage Your Availability</Text>
       <View style={styles.container}>
-        <Text style={styles.text}>Monday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Monday}
-            value={isEnabled0}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-
-        </View>
+          <Button title="Add Availability" color='green' borderColor='red' onPress={toggleModal} />
       </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Tuesday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "#black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Tuesday}
-            value={isEnabled1}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Wednesday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Wednesday}
-            value={isEnabled2}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Thursday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Thursday}
-            value={isEnabled3}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Friday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Friday}
-            value={isEnabled4}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Saturday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Saturday}
-            value={isEnabled5}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.text}>Sunday</Text>
-        <View style={styles.container}>
-          <Switch
-            trackColor={{ false: "black", true: "green" }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={Sunday}
-            value={isEnabled6}
-          />
-          <Button title="Edit" color='#775E5E' borderColor='#0062FF' onPress={toggleModal} />
-        </View>
-      </View>
-
       <Modal isVisible={isModalVisible} animationIn="bounceIn" animationOut="bounceOut" backdropOpacity={0} onBackdropPress={() => setModalVisible(false)}>
         <View style={{
           height: 420,
@@ -170,21 +69,41 @@ const addAvailability = async (values) => {
           borderWidth: 1,
           borderColor: "#DBDBDB",
           justifyContent: 'flex-start',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           padding: 15
         }}>
           <View style={{ alignSelf: 'center', alignContent: 'center' }}>
             <Text style={styles.text}>Set Availability Time </Text>
-          </View>
-          <View />
-          <View style={styles.container2}>
-            <Text style={styles.text2}>From:</Text>
-            <Text style={styles.text2}>To:</Text>
-          </View>
+
+
           <View style={styles.container3}>
+          <Text style={styles.text2}>Day:</Text>
+          <Picker
+              selectedValue={selectedValue7}
+              style={styles.picker1}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
+              onValueChange={(itemValue, itemIndex) => setDay(itemValue)}
+            >
+              <Picker.Item label="Monday" value="Monday" />
+              <Picker.Item label="Tuesday" value="Tuesday" />
+              <Picker.Item label="Wednesday" value="Wednesday" />
+              <Picker.Item label="Thursday" value="Thursday" />
+              <Picker.Item label="Friday" value="Friday" />
+              <Picker.Item label="Saturday" value="Saturday" />
+              <Picker.Item label="Sunday" value="Sunday" />
+            </Picker>
+          </View>
+
+
+          <View />
+          <View style={styles.container3}>
+          <Text style={styles.text2}>From: </Text>
             <Picker
-              selectedValue={selectedValue1}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue1}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setFromHour(itemValue)}
             >
               <Picker.Item label="1" value="1" />
@@ -203,8 +122,10 @@ const addAvailability = async (values) => {
             </Picker>
             <Text style={styles.text1}>:</Text>
             <Picker
-              selectedValue={selectedValue2}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue2}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setFromMin(itemValue)}
             >
 
@@ -221,18 +142,24 @@ const addAvailability = async (values) => {
               <Picker.Item label="55" value="55" />
             </Picker>
             <Picker
-              selectedValue={selectedValue3}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue3}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setFromAmPm(itemValue)}
             >
               <Picker.Item label="am" value="am" />
               <Picker.Item label="pm" value="pm" />
             </Picker>
+          </View>
 
-            <Text>            </Text>
+          <View style={styles.container3}>
+            <Text style={styles.text2}>To: </Text>
             <Picker
-              selectedValue={selectedValue4}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue4}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setToHour(itemValue)}
             >
               <Picker.Item label="1" value="1" />
@@ -250,8 +177,10 @@ const addAvailability = async (values) => {
             </Picker>
             <Text style={styles.text1}>:</Text>
             <Picker
-              selectedValue={selectedValue5}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue5}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setToMin(itemValue)}
             >
               <Picker.Item label="00" value="00" />
@@ -267,40 +196,52 @@ const addAvailability = async (values) => {
               <Picker.Item label="55" value="55" />
             </Picker>
             <Picker
-              selectedValue={selectedValue6}
-              style={{ height: 50, width: 50 }}
+            selectedValue={selectedValue6}
+              style={styles.picker}
+              mode="dropdown"
+              itemStyle={styles.itemStyle}
               onValueChange={(itemValue, itemIndex) => setToAmPm(itemValue)}
             >
               <Picker.Item label="am" value="am" />
               <Picker.Item label="pm" value="pm" />
             </Picker>
           </View>
-          <Text />
-          <Text />
-          <Text />
-          <Text />
-          <Text />
-          <Text />
-          <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'space-around', padding: 20 }}>
+
+          <View style={{ flexDirection: 'row', width: '80%', justifyContent: 'space-around', padding: 20, alignSelf: 'center' }}>
             <Button title="Cancel" onPress={toggleModal} />
-            <Button title="Save" />
+            <Button title="Save" onPress ={handleSubmit}/>
+          </View>
+
           </View>
         </View>
       </Modal>
-
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    height: 50,
     flexDirection: 'row',
     paddingBottom: 15,
     fontSize: 35,
     marginLeft: 12,
     marginRight: 12,
     color: "#775E5E",
-    justifyContent: "space-between",
+    justifyContent: 'center',
+  },
+  itemStyle: {
+    fontSize: 15,
+    height: 75,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  picker: {
+    width: 50
+  },
+  picker1: {
+    width: 100
   },
   container1: {
     flexDirection: 'row',
@@ -314,10 +255,10 @@ const styles = StyleSheet.create({
   container3: {
     flexDirection: 'row',
     fontSize: 35,
-    marginLeft: 12,
+    marginLeft: 24,
     marginRight: 12,
     color: "#775E5E",
-    justifyContent: 'space-around'
+    justifyContent: 'flex-start'
   },
   container2: {
     flexDirection: 'row',
@@ -350,7 +291,7 @@ const styles = StyleSheet.create({
   },
   text1: {
     flexDirection: 'row',
-    paddingTop: 90,
+    paddingTop: 20,
     fontSize: 25,
     color: "#775E5E",
     justifyContent: 'center'
@@ -359,8 +300,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     fontSize: 25,
     color: "#775E5E",
-    justifyContent: 'space-around',
-    paddingHorizontal: 70
+    justifyContent: 'flex-start',
+    padding: 20
   }
 
 });
