@@ -90,29 +90,29 @@ public Availability(String fromHour, String fromMin, String fromAmPm, String toH
   public void setId(Long id) {
     this.id = id;
   }
-    public String setFromHour(){
-        return this.fromHour;
+    public String setFromHour(String fromHour){
+        return this.fromHour = fromHour;
     }
-    public String setFromMin(){
-        return this.fromMin;
+    public String setFromMin(String fromMin){
+        return this.fromMin = fromMin;
     }
-    public String setFromAmPm(){
-    return this.fromAmPm;
+    public String setFromAmPm(String fromAmPm){
+    return this.fromAmPm =fromAmPm;
     }
-    public String setToHour(){
-        return this.toHour;
+    public String setToHour(String toHour){
+        return this.toHour = toHour;
     }
-    public String setToMin(){
-        return this.toMin;
+    public String setToMin(String toMin){
+        return this.toMin =toMin;
     }
-    public String setToAmPm(){
-    return this.toAmPm;
+    public String setToAmPm(String toAmPm){
+    return this.toAmPm = toAmPm;
     }
-    public String setDay(){
-    return this.day;
+    public String setDay(String day){
+    return this.day = day;
     }
-    public String setEmail() {
-    return this.email;
+    public String setEmail(String email) {
+    return this.email = email;
   }
     public void setHashID(String hash_id) {
     this.hashID = hash_id;
