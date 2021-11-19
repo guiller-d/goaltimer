@@ -195,6 +195,8 @@ public class UserController {
    */
   @PostMapping(value = "/login/")
   public User getEmployee(@RequestBody User user, HttpSession session) throws Exception {
+    System.out.println(user.getEmail());
+    System.out.println(user.getPassword());
     User temp = new User();
     try {
       final String JSON_DATA = get_data("goaltimer-dbdump/" + user.hash(user.getEmail()) + "/userinfo.json").toString();

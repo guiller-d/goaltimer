@@ -1,6 +1,7 @@
 import { create } from 'apisauce';
-
-const baseURL = create({ baseURL: 'http://192.168.0.102:8080/' });
+//192.168.1.94
+//192.168.1.33
+const baseURL = create({ baseURL: 'http://:8080/' });
 
 export default {
     baseURL

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, Alert, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LoadingBar from '../components/LoadingBar';
 import Screen from '../components/Screen';
@@ -8,13 +8,21 @@ import waterstatistics from '../database/waterstatistics.json';
 import CountDown from 'react-native-countdown-component';
 import Button from '../components/Button';
 import StartButton from '../components/StartButton';
- 
+import api from '../api/api';
+import endpoints from '../api/endpoints';
+import AuthContext from '../auth/context';
+
 function TaskDetailScreen({ route }) {
 
-    const { activityName } = route.params;
-    
+    const authContext = useContext(AuthContext);
+    var user_hash_id = authContext.user.hashID;
+    const { activityName, activityDuration, activitySchedule  } = route.params;
     const [timer, setTimer] = useState(false);
+    const [hmsFormatTime, setHmsFormatTime] = useState("");
     const [time, setTime] = useState(0);
+
+    const [activityTimes, setActivityTimes] = useState([]);
+   
     var weekly_intake = [];
     var water_count = 0;
     var points = [];
@@ -22,10 +30,6 @@ function TaskDetailScreen({ route }) {
     var sum = 0;
     var average = 0;
 
-    useEffect(() => {
-        let timer = setInterval(() => console.log('fire!'), 1000);
-        return () => clearInterval(timer)
-    }, [])
     if (waterstatistics != undefined) {
         waterstatistics.map((stats, index) => {
             stats.weekly_percentage.map((data, key) => {
@@ -38,59 +42,97 @@ function TaskDetailScreen({ route }) {
                     oz: data.oz,
                 }
                 );
-
                 days.push(data.date.toString().substring(0, 5));
                 points.push(data.day_percentage);
                 sum += data.day_percentage;
             })
         })
     }
-    const startStopTimer = () =>{
+    const getAllActivities = async () => {
+        let apiStr = endpoints.getAllActivityTime;
+        api.baseURL.post(apiStr, { email : authContext.user.email }).then(response => {
+            if (response.data != null) {
+               
+            }
+            else{
+                console.log("testing");
+                console.log(response.data);
+            }
+        });
+    }
+    const handleTimerSubmit = async () => {
+        let apiStr = endpoints.addTime;
+        api.baseURL.post(apiStr, { activityName: activityName, userHashID: authContext.user.hashID, time: hmsFormatTime, date: new Date().toDateString(),  }).then(response => {
+            if (response.data != null) {
+               
+            }
+        });
+    }
+    //seconds to hms
+    function secondsToHms(d) {
+        d = Number(d);
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+        var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+        var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+        setHmsFormatTime(hDisplay + mDisplay + sDisplay);
+        console.log(hmsFormatTime);
+        return hDisplay + mDisplay + sDisplay; 
+    }
+    //minute to seconds
+    function convert(value) {
+        return Math.floor(value / 60) + ":" + (value % 60 ? value % 60 : '00')
+    }
+
+    const startStopTimer = () => {
         setTimer(!timer);
+        if (timer){
+            Alert.alert(
+                "Activity Time:" + setTime(secondsToHms(time)),
+                "Activity Time" + new Date().toDateString(),
+                [
+                  {
+                    text: "Save",
+                    onPress: handleTimerSubmit,
+                    style: "cancel"
+                  },
+                  { text: "Delete", onPress: getAllActivities }
+                ]
+              );
+        }
+      
     }
     return (
         <Screen>
 
-            <View style={{alignItems: 'center', margin: 20}}>
-            <StartButton title="Start Timer" onPress={startStopTimer} isPressed={timer}/>
+            <View style={{ alignItems: 'center', margin: 20 }}>
+                <StartButton title="Start Timer" onPress={startStopTimer} isPressed={timer} />
             </View>
-         
+
             <CountDown
                 size={30}
-                until={1000}
+                until={activityDuration * 60}
                 onFinish={() => alert('Finished')}
-                digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#3B97ED'}}
-                digitTxtStyle={{color: '#1CC625'}}
-                timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
-                separatorStyle={{color: '#1CC625'}}
+                digitStyle={{ backgroundColor: '#FFF', borderWidth: 2, borderColor: '#3B97ED' }}
+                digitTxtStyle={{ color: '#1CC625' }}
+                timeLabelStyle={{ color: 'red', fontWeight: 'bold' }}
+                separatorStyle={{ color: '#1CC625' }}
                 timeToShow={['H', 'M', 'S']}
-                timeLabels={{m: null, s: null}}
+                timeLabels={{ m: null, s: null }}
                 showSeparator
                 running={timer}
-                onChange={(time)=>{
+                onChange={(time) => {
                     setTime(time);
                 }}
             >
-          
             </CountDown>
-       
-
-            <ScrollView>
-                <View style={styles.dataContainer}>
-                    <View style={{ marginLeft: 5, flexDirection: 'row', alignItems: 'center' }}>
-                        <View>
-                            <Text style={styles.text}> Time Data </Text>
-                            <Text style={styles.text4}> See your water intake in details </Text>
-                        </View>
-                    </View>
-                    {
-                        weekly_intake.map((data, key) => {
-                            return < WaterIntakeDetail key={key} date={data.date} percentage={data.day_percentage} />
-                        })
-                    }
-                </View>
-
-            </ScrollView>
+        
+            <View style={styles.dataContainer}>
+            <FlatList data={activityTimes} keyExtractor={activityTimes => activityTimes.id.toString()} renderItem ={({item}) => 
+                <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.date} color='red'/> } />
+            </View>   
 
         </Screen>
     );
