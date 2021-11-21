@@ -38,10 +38,7 @@ public class ChallengeTime {
     public String getChallengeHashID() {
         return this.challengeHashID;
     }
-
-    public String getUserHashID() {
-        return this.userHashID;
-    }
+    
     public String getChallengeName() {
         return this.challengeName;
     }
