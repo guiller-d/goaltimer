@@ -120,9 +120,9 @@ public Availability(String fromHour, String fromMin, String fromAmPm, String toH
 
   @Override
     public String toString() {
-    return "Availability{" + "id= " + this.id + ", From='" + this.fromHour   + ":" + this.fromMin
+    return "Availability{" + ", From='" + this.fromHour   + ":" + this.fromMin
         + " " + this.fromAmPm  + ", To= " + this.toHour  + ":" + this.toMin 
-        + " " + this.toAmPm  + ", Day='" + this.day   + ", email='" + this.email + '}';
+        + " " + this.toAmPm  + ", Day= " + this.day   + ", email= " + this.email + "}";
     }
 
 }

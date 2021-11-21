@@ -64,10 +64,9 @@ class AvailabilityController {
 
 
   @PostMapping(value = "/addAvailability")
-  public Availability newAvailability(@RequestBody Availability available) throws Exception {
-    Availability availablity = new Availability();
+  public String newAvailability(@RequestBody Availability available) throws Exception {
     checkPath(available);
-    return available;
+    return "Added successfully";
   }
 
     
@@ -101,86 +100,30 @@ class AvailabilityController {
     return sb.toString();
   }
 
-  // /* Add account to cloud for testing */
-  // @GetMapping("/getAllAvailability")
-  // public String getAll() throws Exception {
-  //   StringBuffer sb = new StringBuffer();
-  //   List<Availability> available = repository.findAll();
-  //   for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
-  //     Availability element = iter.next();
-  //     sb.append(get_data("goaltimer-dbdump/" + element.getHashID() + "/AvailabilityInfo.json"));
-  //   }
-  //   return sb.toString();
-  // }
+  /* Add account to cloud for testing */
+  @GetMapping("/getAllAvailability")
+  public String getAll() throws Exception {
+    StringBuffer sb = new StringBuffer();
+    List<Availability> available = repository.findAll();
+    for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
+      Availability element = iter.next();
+      sb.append(get_data("goaltimer-dbdump/" + element.getHashID() + "/availability/" + element.getFromHour() + element.getFromMin() + element.getToHour() + element.getToMin() + element.getDay() + "_Availability.json"));
+    }
+    return sb.toString();
+  }
 
-  //   @GetMapping("/getUserAvailability")
-  // public String getUserAvailability(String email) throws Exception {
-  //   StringBuffer sb = new StringBuffer();
-  //   List<Availability> available = repository.findAll();
-  //   for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
-  //     Availability element = iter.next();
-  //       if (email.equals(element.getEmail())){
-  //         sb.append(get_data("goaltimer-dbdump/" + element.getHashID() + "/AvailabilityInfo.json"));
-  //       }
-  //   }
-  //   return sb.toString();
-  // }
-
-  // /**
-  //  * 
-  //  * @return
-  //  * @throws Exception
-  //  */
-  // /* Add account to cloud for testing */
-  // @GetMapping("/sendAllAvailability")
-  // public String sendAll() throws Exception {
-  //     List<Availability> available = repository.findAll();
-  //     for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
-  //       Availability element = iter.next();
-  //       store_data("goaltimer-dbdump/" + element.getHashID() + "/AvailabilityInfo.json");
-  //     }
-  //   return "Uploaded Successfuly";
-  // }
-
-  // /* Add availability to cloud for testing */
-  // @GetMapping("/dumpAvailability")
-  // public String all() throws Exception {
-  //   List<Availability> available = repository.findAll();
-  //   for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
-  //     Availability element = iter.next();
-  //     addAvailability(element);
-  //   }
-  //   return available.toString();
-  // }
-
-  //   @SuppressWarnings("unchecked")
-  // private String addAvailability(Availability newAvailability) throws Exception {
-  //   newAvailability.setHashID(newAvailability.hash(newAvailability.getEmail()));
-  //   File AvailabilityDir = new File("goaltimer-dbdump/" + newAvailability.getHashID());
-  //       if (!AvailabilityDir.exists()) {
-  //     AvailabilityDir.mkdirs();
-  //       }
-  //     JSONObject availability_details = new JSONObject();
-  //     JSONObject Availability_object = new JSONObject();
-  //     availability_details.put("email", newAvailability.getEmail());
-  //     availability_details.put("fromHour", newAvailability.getFromHour());
-  //     availability_details.put("fromMin", newAvailability.getFromMin());
-  //     availability_details.put("fromAmPm", newAvailability.getFromAmPm());
-  //     availability_details.put("hashID", newAvailability.getHashID());
-  //     availability_details.put("day", newAvailability.getDay());
-  //     availability_details.put("toHour", newAvailability.getToHour());
-  //     availability_details.put("toMin", newAvailability.getToMin());
-  //     availability_details.put("toAmPm", newAvailability.getToAmPm());
-  //     Availability_object.put("Available", availability_details);
-  //     String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/Availabilityinfo.json";
-  //     File Available = new File(data_loc);
-  //     StringBuffer sb = new StringBuffer();
-  //         try (BufferedWriter writer = new BufferedWriter(new FileWriter(Available))) {
-  //         sb.append(availability_details);
-  //         writer.write(sb.toString());
-  //         }
-  //   return "Availability is added to the database";
-  // }
+    @GetMapping("/getUserAvailability")
+  public String getUserAvailability(String email) throws Exception {
+    StringBuffer sb = new StringBuffer();
+    List<Availability> available = repository.findAll();
+    for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
+      Availability element = iter.next();
+        if (email.equals(element.getEmail())){
+          sb.append(get_data("goaltimer-dbdump/" + element.getHashID() + "/availability/" + element.getFromHour() + element.getFromMin() + element.getToHour() + element.getToMin() + element.getDay() + "_Availability.json"));
+        }
+    }
+    return sb.toString();
+  }
 
 
 
@@ -197,8 +140,9 @@ class AvailabilityController {
       availability_details.put("toHour", newAvailability.getToHour());
       availability_details.put("toMin", newAvailability.getToMin());
       availability_details.put("toAmPm", newAvailability.getToAmPm());
+      availability_details.put("id", newAvailability.getId());
     user_object.put("Available", availability_details);
-    String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getId() + "_availability.json";
+    String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json";
     File availabilityFile = new File(data_loc);
     StringBuffer sb = new StringBuffer();
     if (!availabilityFile.exists()) {
@@ -227,6 +171,7 @@ class AvailabilityController {
     availability.setToMin(toMin);
     availability.setToAmPm(toAmPm);
     availability.setDay(day);
+    availability.setId(Long.parseLong(Id));
     return availability;
   }
 
@@ -237,7 +182,7 @@ class AvailabilityController {
     try{
         List<Availability> availabilityList = new ArrayList<>();
         availabilityList.add(newAvailability);
-        final String JSON_DATA = get_data("goaltimer-dbdump/" + newAvailability.getHashID() +  "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + "_Availability.json").toString();
+        final String JSON_DATA = get_data("goaltimer-dbdump/" + newAvailability.getHashID() +  "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json").toString();
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(JSON_DATA);
         Iterator<JSONObject> iterator = json.values().iterator();
@@ -246,7 +191,7 @@ class AvailabilityController {
          }
          for( Iterator<Availability> iter = availabilityList.iterator(); iter.hasNext();){
             writeJSON(iter.next());
-            get_data("goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getId() + "_Availability.json");
+            get_data("goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json");
          }
     }
     catch (Exception hre) {
@@ -265,8 +210,9 @@ class AvailabilityController {
       availability_details.put("toHour", newAvailability.getToHour());
       availability_details.put("toMin", newAvailability.getToMin());
       availability_details.put("toAmPm", newAvailability.getToAmPm());
+      availability_details.put("id", newAvailability.getId());
       user_object.put("availability", availability_details);
-      String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getId() + "_Availability.json";
+      String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json";
       File AvailabilityFile = new File(data_loc);
       StringBuffer sb = new StringBuffer();
       if (!AvailabilityFile.exists()) {
@@ -276,7 +222,7 @@ class AvailabilityController {
         }
       }
       repository.save(newAvailability);
-      store_data("goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getId() + "_Availability.json");
+      store_data("goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json");
     }
   }
 

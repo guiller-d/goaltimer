@@ -1,22 +1,22 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View, Button, Alert, Dimensions, Picker } from 'react-native';
-// import {Picker} from 'react-native-community/picker'
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { StyleSheet, Text, View, Button, Alert, Dimensions, Picker, FlatList } from 'react-native';
 import Screen from '../components/Screen';
 import Modal from 'react-native-modal';
 import AuthContext from '../auth/context';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
+import Availability from '../components/Availability';
+
 function AvailabilityScreen(props) {
 
   const authContext = useContext(AuthContext);
   var email = authContext.user.email;
-  var user_id = authContext.user.id;
-  var availabilityList = [];
 
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
   //for time picker to default pick time 
   const [selectedValue1, setFromHour] = useState("1");
   const [selectedValue2, setFromMin] = useState("00");
@@ -28,26 +28,24 @@ function AvailabilityScreen(props) {
   
   const [selectedValue7, setDay] = useState("Monday");
 
- console.log(selectedValue1)
+  const scrollView = useRef();
 
-  const getAvailabilities = async (values) => { 
-    let apiStr = endpoints.availabilities
-    api.baseURL.get(apiStr).then(response => {
-    console.log(response.data);
-    }
-    );
-}
+ const [array, setArray] = useState([]);
+
+useEffect(() => {
+  let apiStr = endpoints.getUserAvailability;
+  api.baseURL.get(apiStr, { email:email}).then(response => {
+      if (response.data != null) {
+          setArray(response.data);
+      }
+  });
+},[array]);
+console.log(array)
 
 const handleSubmit = async (values) => {
-  let apiStr = endpoints.availabilities
+  let apiStr = endpoints.addAvailability
   api.baseURL.post(apiStr, {fromHour: selectedValue1, fromMin: selectedValue2, fromAmPm: selectedValue3 ,toHour: selectedValue4, toMin: selectedValue5, toAmPm: selectedValue6 ,email: email, day: selectedValue7}).then(response => {
       console.log(response.data);
-      Alert.alert(
-          "Availability added",
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ]
-        );
   }
   );
 }
@@ -215,6 +213,13 @@ const handleSubmit = async (values) => {
           </View>
         </View>
       </Modal>
+
+      <View>
+          <FlatList keyExtractor={Availability => Availability.id.toString()} data={array} renderItem ={({item}) =>
+          <Availability day={item.day} fromHour={item.fromHour} fromMin={item.fromMin} fromAmPm={item.fromAmPm} toHour={item.toHour} toMin={item.toMin} toAmPm={item.toAmPm}/>
+        } />
+      </View>
+
     </Screen>
   );
 }

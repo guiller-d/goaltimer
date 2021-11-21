@@ -7,11 +7,10 @@ const accountRemoval = '/accountRemoval/';
 const challenges = '/challenges/'
 const activities = '/activities/'
 const addActivity = '/addActivity/'
-const getallactivities = '/getallactivities/'
-const availabilities = '/availabilities/'
+const getUserActivity = '/getUserActivity/'
 const addAvailability = '/addAvailability/'
 const getUserAvailability = '/getUserAvailability/'
 
 export default {
-    getAllUsers, login, register, settings, accountRemoval, challenges, activities, addActivity, getallactivities, availabilities, addAvailability
+    getAllUsers, login, register, settings, accountRemoval, challenges, activities, addActivity, getUserActivity, addAvailability, getUserAvailability
 }
