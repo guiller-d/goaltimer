@@ -11,6 +11,7 @@ public class Challenge {
     private @Id @GeneratedValue Long id;
     @Column(nullable = false) private String name;
     @Column(nullable = true) private String description;
+    @Column(nullable = false) private String time;
     @Column(nullable = true) private boolean isActive;
     @Column(nullable = true) private boolean isComplete;
     @Column(nullable = true) private boolean onStreak;
@@ -19,15 +20,17 @@ public class Challenge {
 
     public Challenge() {}
 
-    public Challenge(String name, String description, boolean isActive, boolean isComplete) {
+    public Challenge(String name, String description, boolean isActive, boolean isComplete, String time) {
         super();
         Random rand = new Random();
-        this.id = rand.nextLong(); // random number from 0-49
+        this.id = rand.nextLong();
         this.name = name;
         this.description = description;
         this.isActive = isActive;
         this.isComplete = isComplete;
+        this.time = time;
     }
+
     public void setId(Long id) {
         this.id = id;
       }
@@ -40,6 +43,9 @@ public class Challenge {
     public void setActive(boolean isActive){
         this.isActive = isActive;
     }
+    public void setTime(String time) {
+        this.time = time;
+    }
     public void setComplete(boolean isComplete){
         this.isComplete = isComplete;
     }
@@ -51,6 +57,9 @@ public class Challenge {
     }
     public String getdescription(){
         return this.description;
+    }
+    public String getTime(){
+        return this.time;
     }
     public boolean isActive(){
         return this.isActive;

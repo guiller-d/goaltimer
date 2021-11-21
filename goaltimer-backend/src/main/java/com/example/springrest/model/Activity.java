@@ -95,7 +95,4 @@ public class Activity {
     public void setActivityHashID(String activityHashID){
         this.activityHashID = activityHashID;
     }
-
-   
-
 }

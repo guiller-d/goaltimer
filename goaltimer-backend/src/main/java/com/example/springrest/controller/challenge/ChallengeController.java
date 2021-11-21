@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.example.springrest.model.Challenge;
+import com.example.springrest.model.ChallengeTime;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
@@ -40,11 +41,13 @@ import com.example.springrest.model.Challenge;
 class ChallengeController {
 
   private final ChallengeRepository repository;
+  private final ChallengeTimeRepository repository_time;
   private final String bucket_name = "goaltimer-challenges";
   private Storage storage = StorageOptions.getDefaultInstance().getService();
 
-  ChallengeController(ChallengeRepository repository) {
+  ChallengeController(ChallengeRepository repository, ChallengeTimeRepository repository_time) {
     this.repository = repository;
+    this.repository_time = repository_time;
   }
   // Aggregate root
   // tag::get-aggregate-root[]
@@ -92,27 +95,36 @@ class ChallengeController {
   @GetMapping("/sendallchallenges/")
   public String sendAll() throws Exception {
     List<Challenge> challenges = repository.findAll();
-    List<JSONObject> challengesList = new ArrayList<>();
+    // List<JSONObject> challengesList = new ArrayList<>();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
+      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
       // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
       JSONObject challenge_details = new JSONObject();
       challenge_details.put("id", new_challenge.getId());
       challenge_details.put("name", new_challenge.getName());
       challenge_details.put("description", new_challenge.getdescription());
+      challenge_details.put("time", new_challenge.getTime());
       challenge_details.put("isActive", new_challenge.isActive());
       challenge_details.put("isComplete", new_challenge.isComplete());
-      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
       store_data(data_loc);
-      challengesList.add(challenge_details);
+      // challengesList.add(challenge_details);
     }
     return "Uploaded Successfuly";
   }
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
-
-    return null;
+    // route for 'start challenge' button, starts timer for a challenge
+    // ex. 'drink 8 glasses of water for 5 days' should start a 5-day timer
+    ChallengeTime challengeTime = new ChallengeTime();
+    String challengeName = challenge.getName();
+    String time = challenge.getTime();
+    String challengeHashID = challenge.getChallengeHashID();
+    challengeTime.setChallengeName(challengeName);
+    challengeTime.setTime(time);
+    challengeTime.setChallengeHashID(challengeHashID);
+    return challenge;
   }
 
 }
