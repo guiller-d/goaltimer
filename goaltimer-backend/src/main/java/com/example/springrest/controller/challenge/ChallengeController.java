@@ -62,6 +62,7 @@ class ChallengeController {
     return sb.toString();
   }
 
+
   public String store_data(String data_loc) throws IOException {
     File file = new File(data_loc);
     if (storage.get(bucket_name, data_loc) == null) {
@@ -75,23 +76,25 @@ class ChallengeController {
   }
 
   //read
-  @GetMapping("/challenges")
+  @GetMapping("/challenges/")
   public List<Challenge> all() throws Exception {
     StringBuffer sb = new StringBuffer();
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      sb.append(get_data("goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json"));
+      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
+      sb.append(get_data(data_loc));
     }
     return challenges;
   }
   /* Send data to cloud for testing */
-  @GetMapping("/sendallchallenges")
+  @GetMapping("/sendallchallenges/")
   public String sendAll() throws Exception {
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      store_data("goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json");
+      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
+      store_data(data_loc);
     }
     return "Uploaded Successfuly";
   }
