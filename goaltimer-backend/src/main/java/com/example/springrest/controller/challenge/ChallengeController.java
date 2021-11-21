@@ -62,7 +62,6 @@ class ChallengeController {
     return sb.toString();
   }
 
-
   public String store_data(String data_loc) throws IOException {
     File file = new File(data_loc);
     if (storage.get(bucket_name, data_loc) == null) {
@@ -91,10 +90,18 @@ class ChallengeController {
   @GetMapping("/sendallchallenges/")
   public String sendAll() throws Exception {
     List<Challenge> challenges = repository.findAll();
+    List<JSONObject> challengesList = new ArrayList<>();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
+      // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
+      JSONObject challenge_details = new JSONObject();
+      challenge_details.put("name", new_challenge.getName());
+      challenge_details.put("description", new_challenge.getdescription());
+      challenge_details.put("isActive", new_challenge.isActive());
+      challenge_details.put("isComplete", new_challenge.isComplete());
       String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
       store_data(data_loc);
+      challengesList.add(challenge_details);
     }
     return "Uploaded Successfuly";
   }
