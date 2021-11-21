@@ -2,6 +2,7 @@ package com.example.springrest.controller.challenge;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.example.springrest.model.Challenge;
 import com.google.cloud.storage.Storage;
@@ -9,6 +10,7 @@ import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.ReadChannel;
+import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpSession;
 import java.util.Iterator;
@@ -95,6 +97,7 @@ class ChallengeController {
       Challenge new_challenge = iter.next();
       // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
       JSONObject challenge_details = new JSONObject();
+      challenge_details.put("id", new_challenge.getId());
       challenge_details.put("name", new_challenge.getName());
       challenge_details.put("description", new_challenge.getdescription());
       challenge_details.put("isActive", new_challenge.isActive());

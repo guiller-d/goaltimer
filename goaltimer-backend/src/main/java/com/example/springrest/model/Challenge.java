@@ -3,6 +3,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import java.util.Random;
 
 @Entity
 public class Challenge {
@@ -20,6 +21,8 @@ public class Challenge {
 
     public Challenge(String name, String description, boolean isActive, boolean isComplete) {
         super();
+        Random rand = new Random();
+        this.id = rand.nextLong(); // random number from 0-49
         this.name = name;
         this.description = description;
         this.isActive = isActive;

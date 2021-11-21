@@ -14,13 +14,14 @@ function ChallengeScreen(props) {
     var challenges = [];
     var count = 0;
     useEffect(() => {
-        console.log(api.baseURL.getBaseURL());
-        api.baseURL.get(endpoints.challenges).then(response => {
-            setArray(response.data);
+        api.baseURL.get(api.baseURL.getBaseURL() + 'challenges').then(response => {
+            setArray(response.data._embedded.challenges);
       
         });
-    }, []);
+    }, [array]);
+
     console.log(array);
+
 
     return (
         <Screen>
