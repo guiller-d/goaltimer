@@ -16,7 +16,7 @@ function Button({ title, color, onPress, isPressed, type }) {
                 isPressed ?
                     <View style={{alignItems: 'center', width: '100%', marginTop: 10}}>
                         <Text style={{
-                            fontSize: 34 ,
+                            fontSize: 20 ,
                             color: '#85AAE6',
                             fontFamily: 'Avenir-Medium'
                         }}>{title}</Text>

@@ -19,6 +19,8 @@ public class User {
   private String email;
   @Column(nullable = false)
   private String password;
+  @Column(nullable = true)
+  private String activityName;
 
   public User() {
   }
@@ -69,6 +71,9 @@ public class User {
   public String getEmail() {
     return this.email;
   }
+  public String getActivityName(){
+    return this.activityName;
+  }
 
 
   public String getPassword() {
@@ -82,6 +87,10 @@ public class User {
   public void setId(Long id) {
     this.id = id;
   }
+  public void setActivityName(String activityName){
+    this.activityName = activityName;
+  }
+
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
