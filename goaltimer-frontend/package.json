@@ -20,6 +20,8 @@
     "expo-status-bar": "^1.0.4",
     "expo-updates": "~0.4.0",
     "formik": "^2.2.9",
+    "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",

@@ -4,7 +4,7 @@ function StartButton({ title, onPress, isPressed }) {
 
     return (
         <TouchableOpacity style={{
-            height:90,
+            height: 50,
             width: 90,
             borderRadius: 100,
             backgroundColor: '#fff',
@@ -18,14 +18,14 @@ function StartButton({ title, onPress, isPressed }) {
                 isPressed ?
                     <View style={{alignItems: 'center', width: '100%', marginTop: 10}}>
                         <Text style={{
-                            fontSize: 34 ,
+                            fontSize: 25 ,
                             color: '#85AAE6',
                             fontFamily: 'Avenir-Medium'
                         }}>Stop</Text>
                     </View> :
                     <View>
                         <Text style={{
-                            fontSize: 34 ,
+                            fontSize: 25 ,
                             color: '#85AAE6',
                             fontFamily: 'Avenir-Medium'
                         }}>Start</Text>

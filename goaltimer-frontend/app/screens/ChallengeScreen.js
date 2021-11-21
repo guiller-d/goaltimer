@@ -16,11 +16,10 @@ function ChallengeScreen(props) {
     useEffect(() => {
         api.baseURL.get(api.baseURL.getBaseURL() + 'challenges').then(response => {
             setArray(response.data._embedded.challenges);
-      
         });
     }, [array]);
 
-    console.log(array);
+    console.log("array: ", array);
 
 
     return (
@@ -51,7 +50,7 @@ function ChallengeScreen(props) {
                             <Text style={styles.text1}>   Start Challenge </Text>
                         </View>
                         <View>
-                            <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.id.toString()}
+                             <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.name.toString()}
                                 renderItem={({ item }) =>
                                     <Challenge challengeName={item.name} challengeDescription={item.description} />
                                 }

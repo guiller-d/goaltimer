@@ -1,44 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import AppLoading from 'expo-app-loading';
-import * as Font from 'expo-font';
+import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView, FlatList } from 'react-native';  
 import Screen from '../components/Screen';
 import Activity from '../components/Activity';
 import AddButton from '../components/AddButton';
 import Button from '../components/Button';
 import Modal from 'react-native-modal';
 import Duration from '../components/Duration';
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel, VictoryCursorContainer, VictoryScatter } from "victory-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import AuthContext from '../auth/context';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup'
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import BarGraph from '../components/BarGraph';
 
-const fetchFont = () => {
-    return Font.loadAsync({
-        'Avenir-Book': require('../assets/fonts/AvenirLTStd-Book.otf'),
-        'Avenir-Medium': require('../assets/fonts/AvenirLTStd-Medium.otf'),
-        'Avenir-Roman': require('../assets/fonts/AvenirLTStd-Roman.otf'),
-    });
-};
 function HomeScreen({ navigation }) {
+   
     const authContext = useContext(AuthContext);
-    //console.log(authContext.user);
     var firstName = authContext.user.firstName;
     var lastName = authContext.user.lastName;
     var email = authContext.user.email;
     var user_hash_id = authContext.user.hashID;
     var user_id = authContext.user.id;
-
-
-    const [fontLoaded, setFontLoaded] = useState(false);
-    //fect fonts
-    if (!fontLoaded) {
-        <AppLoading startAsync={fetchFont} onError={() => console.log('Error Font')} onFinish={() => { setFontLoaded(true) }} />
-    }
 
     const [isDaily, setIsDaily] = useState(false);
     const [isWeekly, setIsWeekly] = useState(false);
@@ -49,6 +33,7 @@ function HomeScreen({ navigation }) {
     const [isActivityMonthly, setIsActivityMonthly] = useState(false);
 
     const [activities, setActivities] = useState([]);
+    const [activitiesTime, setActivitiesTime] = useState([]);
 
     const [is30, set30] = useState(false);
     const [is45, set45] = useState(false);
@@ -103,7 +88,6 @@ function HomeScreen({ navigation }) {
         setFieldValue(field, "montly")
 
     };
-
     const is30min = async (setFieldValue, field) => {
         set30(true);
         set45(false);
@@ -134,13 +118,22 @@ function HomeScreen({ navigation }) {
         api.baseURL.post(apiStr, { email: authContext.user.email}).then(response => {
             if (response.data != null) {
                 setActivities(response.data);
+                
             }
         });
     },[activities]);
 
+    useEffect(() => {
+        let apiStr = endpoints.getAllTime;
+        api.baseURL.post(apiStr, { }).then(response => {
+            if (response.data != null) {
+                setActivitiesTime(response.data);
+            }
+        });
+    },[activitiesTime]);
+
     const handleSubmit = async (values) => {
-     
-        //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
+
         let apiStr = endpoints.addActivity;
         api.baseURL.post(apiStr, { activityName: values.activityName + "," + authContext.user.hashID, schedule: values.schedule, status: false, time: values.time, hashID:authContext.user.hashID}).then(response => {
             if (response.data != null) {
@@ -148,30 +141,42 @@ function HomeScreen({ navigation }) {
             }
         });
     }
-    const [internetCheck, setInternetCheck] = useState(0);
- 
-  
-    const pieData = [
-        { y: 5, x: '5%' },
-        { y: 90, x: '90%' },
-        { y: 50, x: '50%' },
-        { y: 20, x: '20%' },
-        { y: 70, x: '70%' },
-    ]
-    const barData = [
-        { x: 5, y: 20, color: 'orange' },
-        { x: 17, y: 30, color: 'red' },
-        { x: 2, y: 20, color: 'blue' },
-        { x: 31, y: 20, color: 'pink' },
-        { x: 25, y: 40, color: 'brown' }
-    ]
-    const graphicColor = ['orange', 'red', 'blue', 'pink', 'brown',]
-    const scrollView = useRef();
-    var color_index = 0;
+   
+    var weekly_time = [];
+    var time_count = 0;
+    var points = [];
+    var days = [];
+    var sum = 0;
+    var average = 0;
+    if (activitiesTime != undefined) {
+        activitiesTime.map((data, index) => {
+            time_count += 1;
+            weekly_time.push({
+                activityName: data.activityName,
+                time: data.time,
+                date: data.date,
+            }
+            );
+            days.push(data.date.toString().substring(0, 5));
+            points.push(data.time);
+            sum += parseInt(data.time);
+        })
+      
+        average = sum / time_count;
+        average = average.toFixed(1);
+    }
+    //stats data
+    const data = {
+        labels: days,
+        datasets: [
+            {
+                data: points
+            }
+        ]
+    };
 
     return (
         <Screen>
-
             {/*intro and labels */}
             <View style={{ justifyContent: 'center' }}>
                 <Text style={styles.titleLabel}>Overview of all of your time</Text>
@@ -180,68 +185,40 @@ function HomeScreen({ navigation }) {
             {/*home containter */}
             <View style={styles.homeContainer}>
                 <View style={styles.graphContainer}>
-                    <ScrollView ref={scrollView} horizontal={true} decelerationRate={0} snapToInterval={Dimensions.get('window').width} snapToAlignment={"center"} showsHorizontalScrollIndicator={false} bounces={false} style={{ alignSelf: 'center', }}>
-
-                        <VictoryChart
-
-                            theme={VictoryTheme.material}
-                            domainPadding={{ x: 15 }}
-                            height={Dimensions.get('window').height / 3}
-
-                        >
-                            <VictoryBar
-                                style={{
-                                    data: {
-                                        fill: ({ datum }) => datum.color,
-
-                                    }
-                                }}
-                                data={barData}
-                                cornerRadius={5}
-
-                            />
-
-                            <VictoryAxis
-                                axisLabelComponent={<VictoryLabel dy={20} />}
-                                label={"Dependent axis"}
-                            />
-                            <VictoryAxis
-                                dependentAxis
-                                label="Time (min)"
-                                axisLabelComponent={<VictoryLabel dy={-21} />}
-                            />
-
-                        </VictoryChart>
-                        <VictoryPie
-                            data={barData}
-                            innerRadius={60}
-                            radius={({ datum }) => 50 + datum.y * 1}
-                            innerRadius={50}
-                            labels={({ datum }) => `${datum.y} min `}
-                            colorScale={graphicColor}
-                            width={Dimensions.get('window').width}
-                            height={Dimensions.get('window').height / 3}
-                        >
-                        </VictoryPie>
-                    </ScrollView>
-                </View>
-                <View style={styles.statsContainer}>
-                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 55, borderRadius: 10, }} colors={['white', 'white']}>
-                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
-                            <Text style={styles.text2}>Total</Text>
-                            <Text style={styles.text5}> 5 </Text>
+                    <View style={styles.barGraph}>
+                        <View style={styles.filterButtonContainer}>
+                            <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
+                            <Button title="Weekly" onPress={filterHandlerWeekly} isPressed={isWeekly} />
                         </View>
-
-                    </LinearGradient>
-                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 55, borderRadius: 10, }} colors={['white', 'white']}>
-                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
-                            <Text style={styles.text2}>Average</Text>
-                            <Text style={styles.text5}> 23 min </Text>
+                        <View>
+                            {
+                                data.labels.length != 0 ? 
+                                <View style={styles.graphContainerStyle}>
+                                    <BarGraph data={data} dataCount={time_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
+                                </View>
+                                :
+                                <View style={styles.graphContainerStyle}>
+                                    <Text style={styles.titleLabel}> No Data Available</Text>
+                                </View>
+                            }
+                          
                         </View>
-                    </LinearGradient>
+                        <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 5, }}>
+                            <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
+                                <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                                    <Text style={styles.text2}>Total</Text>
+                                    <Text style={styles.text5}> {time_count}</Text>
+                                </View>
+                            </LinearGradient>
+                            <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
+                                <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                                    <Text style={styles.text2}>Average</Text>
+                                    <Text style={styles.text5}> {average} </Text>
+                                </View>
+                            </LinearGradient>
+                        </View>
                 </View>
-
-                {/*activity box container */}
+            </View>
                 {/*activity intro and label */}
                 <View style={{ justifyContent: 'center', alignSelf: 'flex-start' }}>
                     <Text style={styles.titleLabel}> Your Activities </Text>
@@ -251,14 +228,23 @@ function HomeScreen({ navigation }) {
             </View>
        
             <View style={styles.activityContainer}>
-            <FlatList data={activities} keyExtractor={activities => activities.id.toString()} renderItem ={({item}) => 
-                <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.schedule} color='red' 
-                onPress={() => navigation.navigate('TaskDetailScreen', {
-                    activityName: item.activityName,
-                    activityDuration: item.time,
-                    activitySchedule: item.schedule,
-                    color: 'orange'
-                })} /> } />
+                {
+                    activities.length > 0 ?
+                    <FlatList data={activities} keyExtractor={activities => activities.id.toString()} renderItem ={({item}) => 
+                    <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.schedule} color='#3B97ED' 
+                    onPress={() => navigation.navigate('TaskDetailScreen', {
+                        activityName: item.activityName,
+                        activityDuration: item.time,
+                        activitySchedule: item.schedule,
+                        color: 'orange'
+                    })} /> } />
+                    : 
+                    <View style={{width: '95%', alignItems: 'center'}}>
+                        <Text style={styles.titleLabel}> No Data Available</Text>
+                    </View>
+                  
+                }
+               
             </View>       
            
             <AddButton onPress={toggleModal} />
@@ -339,6 +325,21 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         borderColor: '#A7A7A7',
     },
+    filterButtonContainer: {
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    barGraph: {
+        width: '95%',
+        backgroundColor: 'white',
+        alignSelf: 'center',
+        borderRadius: 20,
+        marginTop: 10,
+    },
     statsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -360,6 +361,16 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         margin: 5,
         backgroundColor: 'white'
+    },
+    graphContainerStyle: {
+        width: '99%', 
+        height: 220, 
+        alignItems: 'center',
+        alignSelf: 'center', 
+        justifyContent: 'center', 
+        borderWidth: 0.5,
+        borderRadius: 10,
+
     },
     activityContainer: {
         height:'35%',
@@ -419,36 +430,3 @@ const styles = StyleSheet.create({
     }
 });
 export default HomeScreen;
-
-/*
-
-<View style={styles.filterButtonContainer}>
-                        <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        <Button title="Weekly" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                        <Button title="Monthly" onPress={filterHandlerMonthly} isPressed={isMonthly} />
-                    </View>
-                    <View style={styles.searchContainer}>
-                        <View>
-                            <Text style={styles.welcomeText}> 5 Results</Text>
-                            <Text style={styles.labelText}> Activities</Text>
-                        </View>
-                        <View style={{
-                            height: 45,
-                            width: 250,
-                            borderWidth: 1,
-                            borderColor: '#DBDBDB',
-                            borderRadius: 80,
-                            justifyContent: 'space-around',
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                        }}>
-                            <Image style={styles.searchIconSize} source={require('../assets/images/search.png')} />
-                            <View style={{ width: '80%', justifyContent: 'center' }}>
-                                <TextInput
-                                    style={styles.searchText}
-                                    placeholder="Search"
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    */

@@ -36,7 +36,7 @@ function BarGraph({ data, dataCount, daily, weekly, monthly, backgroundColor }) 
     }
 
     return (
-        <ScrollView style={{ borderRadius: 20, alignSelf: 'center', backgroundColor: (backgroundColor != null) ? backgroundColor : 'white' }} horizontal={true}>
+        <ScrollView style={{ borderRadius: 20, alignSelf: 'flex-start', backgroundColor: (backgroundColor != null) ? backgroundColor : 'white' }} horizontal={true}>
             <BarChart
                 data={data}
                 width={BAR_WIDTH}
