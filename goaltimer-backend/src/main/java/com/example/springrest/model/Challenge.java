@@ -11,7 +11,7 @@ public class Challenge {
     private @Id @GeneratedValue Long id;
     @Column(nullable = false) private String name;
     @Column(nullable = true) private String description;
-    @Column(nullable = false) private String time;
+    @Column(nullable = false) private int time; // # of days for a challenge
     @Column(nullable = true) private boolean isActive;
     @Column(nullable = true) private boolean isComplete;
     @Column(nullable = true) private boolean onStreak;
@@ -20,7 +20,7 @@ public class Challenge {
 
     public Challenge() {}
 
-    public Challenge(String name, String description, boolean isActive, boolean isComplete, String time) {
+    public Challenge(String name, String description, boolean isActive, boolean isComplete, int time) {
         super();
         Random rand = new Random();
         this.id = rand.nextLong();
@@ -43,7 +43,7 @@ public class Challenge {
     public void setActive(boolean isActive){
         this.isActive = isActive;
     }
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
     public void setComplete(boolean isComplete){
@@ -58,7 +58,7 @@ public class Challenge {
     public String getdescription(){
         return this.description;
     }
-    public String getTime(){
+    public int getTime(){
         return this.time;
     }
     public boolean isActive(){

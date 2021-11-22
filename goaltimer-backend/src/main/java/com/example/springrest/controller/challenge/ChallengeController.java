@@ -115,16 +115,13 @@ class ChallengeController {
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
-    // route for 'start challenge' button, starts timer for a challenge
-    // ex. 'drink 8 glasses of water for 5 days' should start a 5-day timer
-    ChallengeTime challengeTime = new ChallengeTime();
-    String challengeName = challenge.getName();
-    String time = challenge.getTime();
-    String challengeHashID = challenge.getChallengeHashID();
-    challengeTime.setChallengeName(challengeName);
-    challengeTime.setTime(time);
-    challengeTime.setChallengeHashID(challengeHashID);
-    return challenge;
+    // route for 'start challenge' button, starts a streak for length of challenge
+    // a flag for each day -> 0 if incomplete that day, 1 if complete that day
+    boolean flag = 0;
+    for (int i = 0; i < challenge.getTime(); i++) {
+      if () flag = 1;
+      else flag = 0;
+    }
   }
 
 }

@@ -10,13 +10,11 @@ import javax.persistence.Id;
 public class ChallengeTime {
     private @Id @GeneratedValue Long id;
     @Column(nullable = true)
-    private String time;
+    private int time; // # of days for a challenge
     @Column(nullable = true)
     private String date;
     @Column(nullable = true)
     private String challengeHashID;
-    @Column(nullable = true)
-    private String userHashID;
     @Column(nullable = true)
     private String challengeName;
 
@@ -27,7 +25,7 @@ public class ChallengeTime {
         return this.id;
     }
 
-    public String getTime() {
+    public int getTime() {
         return this.time;
     }
 
@@ -47,7 +45,7 @@ public class ChallengeTime {
         this.id = id;
     }
 
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
 
