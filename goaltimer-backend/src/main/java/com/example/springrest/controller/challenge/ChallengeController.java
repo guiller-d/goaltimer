@@ -47,6 +47,7 @@ import com.example.springrest.model.Challenge;
 class ChallengeController {
 
   private final ChallengeRepository repository;
+  private static String session_id;
   private final ChallengeTimeRepository repository_time;
   private final String bucket_name = "goaltimer-challenges";
   private Storage storage = StorageOptions.getDefaultInstance().getService();
@@ -94,7 +95,7 @@ class ChallengeController {
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      if (hash_id.equals(element.getUserHashId())) {
+      if (hash_id.equals(new_challenge.getUserHashID())) {
         String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
         File challengeFile = new File(data_loc);
         // StringBuffer sb = new StringBuffer();
@@ -146,7 +147,7 @@ class ChallengeController {
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
     String challengeName = challenge.getName();
     boolean active = challenge.isActive();
-    boolean time = challenge.getTime();
+    int time = challenge.getTime();
     boolean complete = challenge.isComplete();
     Challenge original = (Challenge) session.getAttribute(session_id);
     List<Challenge> challenges = repository.findByName(challengeName);
@@ -155,11 +156,12 @@ class ChallengeController {
       if (challenge.getName().equals(original.getName())) {
         new_challenge.setActive(active);
         new_challenge.setComplete(complete);
-        newChallenge.setTime(time);
+        new_challenge.setTime(time);
         repository.save(new_challenge);
         return challenge;
       }
     }
+    return challenge;
     /*
     challenge.setActive(true);
     challenge.setComplete(false);

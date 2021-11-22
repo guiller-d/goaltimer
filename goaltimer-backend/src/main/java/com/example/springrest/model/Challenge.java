@@ -73,10 +73,10 @@ public class Challenge {
     public boolean isComplete(){
         return this.isComplete;
     }
-    public void setUserHashId(String userHashID){
+    public void setUserHashID(String userHashID){
         this.userHashID = userHashID;
     }
-    public String getUserHashId(){
+    public String getUserHashID(){
         return this.userHashID;
     }
 }
