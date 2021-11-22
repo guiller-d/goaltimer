@@ -137,9 +137,26 @@ class ChallengeController {
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
+    String challengeName = challenge.getName();
+    boolean active = challenge.isActive();
+    boolean time = challenge.getTime();
+    boolean complete = challenge.isComplete();
+    Challenge original = (Challenge) session.getAttribute(session_id);
+    List<Challenge> challenges = repository.findByName(challengeName);
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge new_challenge = iter.next();
+      if (challenge.getName().equals(original.getName())) {
+        new_challenge.setActive(active);
+        new_challenge.setComplete(complete);
+        newChallenge.setTime(time);
+        repository.save(new_challenge);
+        return challenge;
+      }
+    }
+    /*
     challenge.setActive(true);
     challenge.setComplete(false);
-    /* CODE */
+    -- CODE --
     LocalDateTime start = LocalDateTime.now();
     while (true) {
       // logic
@@ -149,5 +166,6 @@ class ChallengeController {
     challenge.setComplete(true);
     challenge.setActive(false);
     return challenge;
+    */
   }
 }
