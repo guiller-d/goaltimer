@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.example.springrest.model.Challenge;
 import com.example.springrest.model.ChallengeTime;
+import com.example.springrest.model.User;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobId;
@@ -87,49 +88,55 @@ class ChallengeController {
 
   //read
   @GetMapping("/challenges/")
-  public List<Challenge> all() throws Exception {
-    // StringBuffer sb = new StringBuffer();
+  public List<Challenge> all(User user) throws Exception {
+    StringBuffer sb = new StringBuffer();
+    String hash_id = user.hash(user.getEmail());
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      String data_loc = "goaltimer-dbdump/" + "challenges/" + new_challenge.getName() + "/challengeinfo.json";
-      File challengeFile = new File(data_loc);
-      StringBuffer sb = new StringBuffer();
-      if (!challengeFile.exists()) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
-          get_data(data_loc);
-          writer.write(sb.toString());
+      if (hash_id.equals(element.getUserHashId())) {
+        String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
+        File challengeFile = new File(data_loc);
+        // StringBuffer sb = new StringBuffer();
+        if (!challengeFile.exists()) {
+          try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
+            get_data(data_loc);
+            writer.write(sb.toString());
+          }
         }
+        get_data(data_loc);
       }
-      get_data(data_loc);
     }
     return challenges;
   }
   /* Send data to cloud for testing */
   @GetMapping("/sendallchallenges/")
-  public String sendAll() throws Exception {
+  public String sendAll(User user) throws Exception {
     List<Challenge> challenges = repository.findAll();
+    String hash_id = user.hash(user.getEmail());
     // List<JSONObject> challengesList = new ArrayList<>();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      String data_loc = "goaltimer-dbdump/" + "challenges/" + new_challenge.getName() + "/challengeinfo.json";
+      String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
       // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
-      JSONObject challenge_details = new JSONObject();
-      challenge_details.put("id", new_challenge.getId());
-      challenge_details.put("name", new_challenge.getName());
-      challenge_details.put("description", new_challenge.getdescription());
-      challenge_details.put("time", new_challenge.getTime());
-      challenge_details.put("isActive", new_challenge.isActive());
-      challenge_details.put("isComplete", new_challenge.isComplete());
-      File challengeFile = new File(data_loc);
-      StringBuffer sb = new StringBuffer();
-      if (!challengeFile.exists()) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
-          store_data(data_loc);
-          writer.write(sb.toString());
+      if (hash_id.equals(new_challenge.getUserHashID())) {
+        JSONObject challenge_details = new JSONObject();
+        challenge_details.put("id", new_challenge.getId());
+        challenge_details.put("name", new_challenge.getName());
+        challenge_details.put("description", new_challenge.getdescription());
+        challenge_details.put("time", new_challenge.getTime());
+        challenge_details.put("isActive", new_challenge.isActive());
+        challenge_details.put("isComplete", new_challenge.isComplete());
+        File challengeFile = new File(data_loc);
+        StringBuffer sb = new StringBuffer();
+        if (!challengeFile.exists()) {
+          try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
+            store_data(data_loc);
+            writer.write(sb.toString());
+          }
         }
+        store_data(data_loc);
       }
-      store_data(data_loc);
       // challengesList.add(challenge_details);
     }
     return "Uploaded Successfuly";
