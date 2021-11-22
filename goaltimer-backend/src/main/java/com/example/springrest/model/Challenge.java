@@ -23,6 +23,7 @@ public class Challenge {
     @Column(nullable = true) private boolean onStreak;
     @Column(nullable = true) private int numOfDays;
     @Column(nullable = true) private int daysCompleted;
+    @Column(nullable = true) private String user;
     @Column(nullable = true) private String userHashID;
 
     public Challenge() {}

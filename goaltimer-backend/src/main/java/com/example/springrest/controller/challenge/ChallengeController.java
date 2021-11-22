@@ -57,8 +57,6 @@ class ChallengeController {
     this.repository = repository;
     this.repository_time = repository_time;
   }
-  // Aggregate root
-  // tag::get-aggregate-root[]
 
   public String get_data(String data_loc) throws Exception {
     StringBuffer sb = new StringBuffer();
@@ -87,94 +85,15 @@ class ChallengeController {
     return "File failed to upload to " + data_loc;
   }
 
-  //read
-  @GetMapping("/challenges/")
-  public List<Challenge> all(User user) throws Exception {
-    StringBuffer sb = new StringBuffer();
-    String hash_id = user.hash(user.getEmail());
-    List<Challenge> challenges = repository.findAll();
-    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
-      Challenge new_challenge = iter.next();
-      if (hash_id.equals(new_challenge.getUserHashID())) {
-        String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
-        File challengeFile = new File(data_loc);
-        // StringBuffer sb = new StringBuffer();
-        if (!challengeFile.exists()) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
-            get_data(data_loc);
-            writer.write(sb.toString());
-          }
-        }
-        get_data(data_loc);
-      }
-    }
-    return challenges;
-  }
-  /* Send data to cloud for testing */
-  @GetMapping("/sendallchallenges/")
-  public String sendAll(User user) throws Exception {
-    List<Challenge> challenges = repository.findAll();
-    String hash_id = user.hash(user.getEmail());
-    // List<JSONObject> challengesList = new ArrayList<>();
-    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
-      Challenge new_challenge = iter.next();
-      String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
-      // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
-      if (hash_id.equals(new_challenge.getUserHashID())) {
-        JSONObject challenge_details = new JSONObject();
-        challenge_details.put("id", new_challenge.getId());
-        challenge_details.put("name", new_challenge.getName());
-        challenge_details.put("description", new_challenge.getdescription());
-        challenge_details.put("time", new_challenge.getTime());
-        challenge_details.put("isActive", new_challenge.isActive());
-        challenge_details.put("isComplete", new_challenge.isComplete());
-        File challengeFile = new File(data_loc);
-        StringBuffer sb = new StringBuffer();
-        if (!challengeFile.exists()) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
-            store_data(data_loc);
-            writer.write(sb.toString());
-          }
-        }
-        store_data(data_loc);
-      }
-      // challengesList.add(challenge_details);
-    }
-    return "Uploaded Successfuly";
-  }
-  //update
-  @PostMapping(value = "/updateChallenge/")
-  public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
-    String challengeName = challenge.getName();
-    boolean active = challenge.isActive();
-    int time = challenge.getTime();
-    boolean complete = challenge.isComplete();
-    Challenge original = (Challenge) session.getAttribute(session_id);
-    List<Challenge> challenges = repository.findByName(challengeName);
-    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
-      Challenge new_challenge = iter.next();
-      if (challenge.getName().equals(original.getName())) {
-        new_challenge.setActive(active);
-        new_challenge.setComplete(complete);
-        new_challenge.setTime(time);
-        repository.save(new_challenge);
-        return challenge;
-      }
-    }
-    return challenge;
-    /*
-    challenge.setActive(true);
-    challenge.setComplete(false);
-    -- CODE --
-    LocalDateTime start = LocalDateTime.now();
-    while (true) {
-      // logic
-      if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 20) break;
-    }
-    System.out.println("out of the loop");
-    challenge.setComplete(true);
-    challenge.setActive(false);
-    return challenge;
-    */
+  @PostMapping(value = "/updateChallenge")
+  public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session, User user) {
+//    String data_loc = "goaltimer-dbdump/" + user.getHashID() + "/challenges/";
+//    File challengeFile = new File(data_loc);
+//    if (!challengeFile.exists()) {
+//      challengeFile.mkdirs();
+//    }
+
+    return null;
   }
 }
+

@@ -6,6 +6,14 @@ import Challenge from '../components/Challenge';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
 
+function updateChallenge() {
+    // Invoke the api route
+    api.baseURL.get(api.baseURL.getBaseURL() + 'updateChallenge').then(response => {
+        console.log(response.data);
+    });
+
+}
+
 function ChallengeScreen(props) {
     const quote = "“Own your Time”"
     const author = " — Goal Timer"
@@ -17,10 +25,7 @@ function ChallengeScreen(props) {
         api.baseURL.get(api.baseURL.getBaseURL() + 'challenges').then(response => {
             setArray(response.data._embedded.challenges);
         });
-    }, [array]);
-
-    console.log("array: ", array);
-
+    }, []);
 
     return (
         <Screen>
@@ -52,7 +57,7 @@ function ChallengeScreen(props) {
                         <View>
                              <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.name.toString()}
                                 renderItem={({ item }) =>
-                                    <Challenge challengeName={item.name} challengeDescription={item.description} />
+                                    <Challenge challengeName={item.name} onPress={updateChallenge} challengeDescription={item.description} />
                                 }
                             />
                         </View>
