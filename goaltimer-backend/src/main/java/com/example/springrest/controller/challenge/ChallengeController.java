@@ -35,6 +35,11 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 import com.example.springrest.model.Challenge;
 
 @RestController
@@ -44,6 +49,7 @@ class ChallengeController {
   private final ChallengeTimeRepository repository_time;
   private final String bucket_name = "goaltimer-challenges";
   private Storage storage = StorageOptions.getDefaultInstance().getService();
+  private Challenge cha;
 
   ChallengeController(ChallengeRepository repository, ChallengeTimeRepository repository_time) {
     this.repository = repository;
@@ -82,12 +88,20 @@ class ChallengeController {
   //read
   @GetMapping("/challenges/")
   public List<Challenge> all() throws Exception {
-    StringBuffer sb = new StringBuffer();
+    // StringBuffer sb = new StringBuffer();
     List<Challenge> challenges = repository.findAll();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
-      sb.append(get_data(data_loc));
+      String data_loc = "goaltimer-dbdump/" + "challenges/" + new_challenge.getName() + "/challengeinfo.json";
+      File challengeFile = new File(data_loc);
+      StringBuffer sb = new StringBuffer();
+      if (!challengeFile.exists()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
+          get_data(data_loc);
+          writer.write(sb.toString());
+        }
+      }
+      get_data(data_loc);
     }
     return challenges;
   }
@@ -98,7 +112,7 @@ class ChallengeController {
     // List<JSONObject> challengesList = new ArrayList<>();
     for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
       Challenge new_challenge = iter.next();
-      String data_loc = "goaltimer-dbdump/" + new_challenge.getId() + "/challengeinfo.json";
+      String data_loc = "goaltimer-dbdump/" + "challenges/" + new_challenge.getName() + "/challengeinfo.json";
       // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
       JSONObject challenge_details = new JSONObject();
       challenge_details.put("id", new_challenge.getId());
@@ -107,6 +121,14 @@ class ChallengeController {
       challenge_details.put("time", new_challenge.getTime());
       challenge_details.put("isActive", new_challenge.isActive());
       challenge_details.put("isComplete", new_challenge.isComplete());
+      File challengeFile = new File(data_loc);
+      StringBuffer sb = new StringBuffer();
+      if (!challengeFile.exists()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(challengeFile))) {
+          store_data(data_loc);
+          writer.write(sb.toString());
+        }
+      }
       store_data(data_loc);
       // challengesList.add(challenge_details);
     }
@@ -115,13 +137,17 @@ class ChallengeController {
   //update
   @PostMapping(value = "/updateChallenge/")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session) {
-    // route for 'start challenge' button, starts a streak for length of challenge
-    // a flag for each day -> 0 if incomplete that day, 1 if complete that day
-    boolean flag = 0;
-    for (int i = 0; i < challenge.getTime(); i++) {
-      if () flag = 1;
-      else flag = 0;
+    challenge.setActive(true);
+    challenge.setComplete(false);
+    /* CODE */
+    LocalDateTime start = LocalDateTime.now();
+    while (true) {
+      // logic
+      if (ChronoUnit.SECONDS.between(start, LocalDateTime.now()) >= 20) break;
     }
+    System.out.println("out of the loop");
+    challenge.setComplete(true);
+    challenge.setActive(false);
+    return challenge;
   }
-
 }

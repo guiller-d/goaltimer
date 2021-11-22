@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 function Challenge({ challengeName, challengeDescription, onPress }) {
     console.log(challengeName);

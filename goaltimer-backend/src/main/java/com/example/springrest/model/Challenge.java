@@ -1,9 +1,15 @@
 package com.example.springrest.model;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Column;
 import java.util.Random;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Challenge {
@@ -17,10 +23,11 @@ public class Challenge {
     @Column(nullable = true) private boolean onStreak;
     @Column(nullable = true) private int numOfDays;
     @Column(nullable = true) private int daysCompleted;
+    @Column(nullable = true) private String userHashID;
 
     public Challenge() {}
 
-    public Challenge(String name, String description, boolean isActive, boolean isComplete, int time) {
+    public Challenge(String name, String description, boolean isActive, boolean isComplete) {
         super();
         Random rand = new Random();
         this.id = rand.nextLong();
@@ -28,7 +35,6 @@ public class Challenge {
         this.description = description;
         this.isActive = isActive;
         this.isComplete = isComplete;
-        this.time = time;
     }
 
     public void setId(Long id) {
@@ -67,5 +73,10 @@ public class Challenge {
     public boolean isComplete(){
         return this.isComplete;
     }
-
+    public void setUserHashId(String userHashID){
+        this.userHashID = userHashID;
+    }
+    public String getUserHashId(){
+        return this.userHashID;
+    }
 }
