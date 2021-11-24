@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { StyleSheet, Text, View, Button, Alert, Dimensions, Picker, FlatList } from 'react-native';
+import AppLoading from 'expo-app-loading';
 import Screen from '../components/Screen';
 import Modal from 'react-native-modal';
 import AuthContext from '../auth/context';
@@ -28,9 +29,21 @@ function AvailabilityScreen(props) {
   
   const [selectedValue7, setDay] = useState("Monday");
 
-  const scrollView = useRef();
-
  const [array, setArray] = useState([]);
+
+ const [fontLoaded, setFontLoaded] = useState(false);
+ //fect fonts
+ if (!fontLoaded) {
+     <AppLoading startAsync={fetchFont} onError={() => console.log('Error Font')} onFinish={() => { setFontLoaded(true) }} />
+ }
+
+ const fetchFont = () => {
+  return Font.loadAsync({
+      'Avenir-Book': require('../assets/fonts/AvenirLTStd-Book.otf'),
+      'Avenir-Medium': require('../assets/fonts/AvenirLTStd-Medium.otf'),
+      'Avenir-Roman': require('../assets/fonts/AvenirLTStd-Roman.otf'),
+  });
+};
 
 useEffect(() => {
   let apiStr = endpoints.getUserAvailability;
@@ -40,7 +53,6 @@ useEffect(() => {
       }
   });
 },[array]);
-console.log(array)
 
 const handleSubmit = async (values) => {
   let apiStr = endpoints.addAvailability
@@ -54,9 +66,15 @@ const handleSubmit = async (values) => {
     <Screen>
       <Text style={styles.titleContainer}>Availability</Text>
       <Text style={styles.introLabel}>Manage Your Availability</Text>
+      <View>
+        <FlatList data={array} renderItem ={({item}) => 
+          <Availability keyExtractor={array => array.id.toString()} day={item.day} fromHour={item.fromHour} fromMin={item.fromMin} fromAmPm={item.fromAmPm} toHour={item.toHour} toMin={item.toMin} toAmPm={item.toAmPm}
+        /> } />
+      </View>
       <View style={styles.container}>
           <Button title="Add Availability" color='green' borderColor='red' onPress={toggleModal} />
       </View>
+      
       <Modal isVisible={isModalVisible} animationIn="bounceIn" animationOut="bounceOut" backdropOpacity={0} onBackdropPress={() => setModalVisible(false)}>
         <View style={{
           height: 420,
@@ -213,13 +231,6 @@ const handleSubmit = async (values) => {
           </View>
         </View>
       </Modal>
-
-      <View>
-          <FlatList keyExtractor={Availability => Availability.id.toString()} data={array} renderItem ={({item}) =>
-          <Availability day={item.day} fromHour={item.fromHour} fromMin={item.fromMin} fromAmPm={item.fromAmPm} toHour={item.toHour} toMin={item.toMin} toAmPm={item.toAmPm}/>
-        } />
-      </View>
-
     </Screen>
   );
 }

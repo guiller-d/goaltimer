@@ -48,13 +48,24 @@ class AvailabilityController {
   private final AvailabilityRepository repository;
   private static String session_id;
   private Storage storage = StorageOptions.getDefaultInstance().getService();
-
+  private int j = 0;
   private String convertByteArrayToHexString(byte[] arrayBytes) {
     StringBuffer stringBuffer = new StringBuffer();
     for (int i = 0; i < arrayBytes.length; i++) {
       stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16).substring(1));
     }
     return stringBuffer.toString();
+  }
+
+    public String hash(String email) throws Exception {
+    try {
+      String userInfo = email;
+      byte[] hashedBytes = userInfo.getBytes("UTF-8");
+      return convertByteArrayToHexString(hashedBytes);
+    } catch (UnsupportedEncodingException ex) {
+      throw new Exception("Could not generate hash from String");
+
+    }
   }
 
 
@@ -65,10 +76,10 @@ class AvailabilityController {
 
   @PostMapping(value = "/addAvailability")
   public String newAvailability(@RequestBody Availability available) throws Exception {
+    repository.save(available);
     checkPath(available);
     return "Added successfully";
   }
-
     
     
   public String store_data(String data_loc) throws IOException {
@@ -113,16 +124,29 @@ class AvailabilityController {
   }
 
     @GetMapping("/getUserAvailability")
-  public String getUserAvailability(String email) throws Exception {
+  public List<JSONObject> getUserAvailability(String email) throws Exception {
     StringBuffer sb = new StringBuffer();
+    String hash_id = hash(email);
     List<Availability> available = repository.findAll();
+    List<JSONObject> availabilitiesList = new ArrayList<>();
     for (Iterator<Availability> iter = available.iterator(); iter.hasNext();) {
       Availability element = iter.next();
-        if (email.equals(element.getEmail())){
-          sb.append(get_data("goaltimer-dbdump/" + element.getHashID() + "/availability/" + element.getFromHour() + element.getFromMin() + element.getToHour() + element.getToMin() + element.getDay() + "_Availability.json"));
-        }
+      if (hash_id.equals(element.getHashID())){
+        JSONObject availability_details = new JSONObject();
+      availability_details.put("email", element.getEmail());
+      availability_details.put("fromHour", element.getFromHour());
+      availability_details.put("fromMin", element.getFromMin());
+      availability_details.put("fromAmPm", element.getFromAmPm());
+      availability_details.put("hashID", element.getHashID());
+      availability_details.put("day", element.getDay());
+      availability_details.put("toHour", element.getToHour());
+      availability_details.put("toMin", element.getToMin());
+      availability_details.put("toAmPm", element.getToAmPm());
+      availability_details.put("id", element.getId());
+      availabilitiesList.add(availability_details);
+      }
     }
-    return sb.toString();
+    return availabilitiesList;
   }
 
 
@@ -210,7 +234,12 @@ class AvailabilityController {
       availability_details.put("toHour", newAvailability.getToHour());
       availability_details.put("toMin", newAvailability.getToMin());
       availability_details.put("toAmPm", newAvailability.getToAmPm());
+      if(newAvailability.getId() == null) {
+      availability_details.put("id", j);
+      j++;
+      }else{
       availability_details.put("id", newAvailability.getId());
+      }
       user_object.put("availability", availability_details);
       String data_loc = "goaltimer-dbdump/" + newAvailability.getHashID() + "/availability/" + newAvailability.getFromHour() + newAvailability.getFromMin() + newAvailability.getToHour() + newAvailability.getToMin() + newAvailability.getDay() + "_Availability.json";
       File AvailabilityFile = new File(data_loc);
