@@ -225,7 +225,6 @@ public class UserController {
     String newLastName = user.getLastName();
 
     User original = (User) session.getAttribute(session_id);
-
     List<User> users = repository.findByEmail(email);
     for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
       User element = iter.next();
