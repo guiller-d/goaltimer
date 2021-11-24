@@ -142,16 +142,32 @@ public class ActivityController {
     return newActivityTime;
   }
   @SuppressWarnings("unchecked")
+  @PostMapping(value = "/getAllTime")
+  public List<JSONObject> getAllTime() throws Exception {
+    List<ActivityTime> activityTimes = repository_time.findAll();
+    List<JSONObject> activityTimeList = new ArrayList<>();
+    for (Iterator<ActivityTime> iter = activityTimes.iterator(); iter.hasNext();) {
+      ActivityTime element = iter.next();
+      JSONObject activity_details = new JSONObject();
+      activity_details.put("activityName", element.getActivityName());
+      activity_details.put("time", element.getTime());
+      activity_details.put("date", element.getDate());
+      activity_details.put("userHashID", element.getUserHashID());
+      activity_details.put("id", element.getId());
+      activityTimeList.add(activity_details);
+    }
+    return activityTimeList;
+  }
+  @SuppressWarnings("unchecked")
   @PostMapping(value = "/getAllActivityTime")
   public List<JSONObject> getAllActivityTime(@RequestBody User user) throws Exception {
     StringBuffer sb = new StringBuffer();
-    System.out.println("Aloha");
     String hash_id = user.hash(user.getEmail());
     List<ActivityTime> activityTimes = repository_time.findAll();
     List<JSONObject> activityTimeList = new ArrayList<>();
     for (Iterator<ActivityTime> iter = activityTimes.iterator(); iter.hasNext();) {
       ActivityTime element = iter.next();
-      if (hash_id.equals(element.getUserHashID())){
+      if (hash_id.equals(element.getUserHashID()) && user.getActivityName().equals(element.getActivityName())){
         JSONObject activity_details = new JSONObject();
         activity_details.put("activityName", element.getActivityName());
         activity_details.put("time", element.getTime());
@@ -214,7 +230,7 @@ public class ActivityController {
          }
          for( Iterator<ActivityTime> iter = activityTimeList.iterator(); iter.hasNext();){
             writeActivityTimeJSON(iter.next());
-            get_data("goaltimer-dbdump/" + user_hash_id +  "/activities/" + activityName + "_" + user_hash_id + "/"+ activityName  +  "_Time.json");
+      
          }
     }
     catch (Exception hre) {
@@ -339,82 +355,3 @@ public class ActivityController {
 
 
 }
-/**
- * 
- * 
-
-    String[] tokens = newActivity.getActivityName().split(",");
-    String user_hash_id = tokens[1];
-    String activityName = tokens[0];
-    System.out.println(tokens[1]);
-    System.out.println(tokens[0]);
-    System.out.println(newActivity.getTime());
-    System.out.println(newActivity.getSchedule());
-    System.out.println(newActivity.getStatus());
-    final String JSON_DATA = get_data("goaltimer-dbdump/" + user_hash_id + "/activities.json");
-    if (JSON_DATA.length() <= 0){
-     
-        JSONObject activity_details = new JSONObject();
-        JSONObject user_object = new JSONObject();
-        activity_details.put("activityName", activityName);
-        activity_details.put("status", newActivity.getStatus());
-        activity_details.put("hash", user_hash_id);
-        activity_details.put("id", newActivity.getID());
-        activity_details.put("time", newActivity.getTime());
-        activity_details.put("schedule", newActivity.getSchedule());
-        user_object.put("activities", activity_details);
-        String data_loc = "goaltimer-dbdump/" + user_hash_id + "/activities.json";
-        File activityFile = new File(data_loc);
-        StringBuffer sb = new StringBuffer();
-        if (!activityFile.exists()) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(activityFile))) {
-            sb.append(activity_details);
-            writer.write(sb.toString());
-          }
-      }
-      store_data(data_loc);
-    }
-    else{
-
-    }
-    //JSONParser parser = new JSONParser();
-    //JSONObject json = (JSONObject) parser.parse(JSON_DATA);
-   // System.out.println(JSON_DATA.length());
-   // if (parser.parse(JSON_DATA) == null){
-    //  System.out.println("JSON_DATA.length()");
-   // }
-    //else{
-      //
-      //
-    //  System.out.println("JSON_DATA.lengtasdasdh()");
-    //}
-
-
-    
-    
-
-    /*
-    File userDir = new File("goaltimer-dbdump/" + user_hash_id);
-    if (!userDir.exists()) {
-      userDir.mkdirs();
-    } else {
-      JSONObject activity_details = new JSONObject();
-      JSONObject user_object = new JSONObject();
-      activity_details.put("activityName", activityName);
-      activity_details.put("status", newActivity.getStatus());
-      activity_details.put("hash", user_hash_id);
-      activity_details.put("id", newActivity.getID());
-      activity_details.put("time", newActivity.getTime());
-      activity_details.put("schedule", newActivity.getSchedule());
-      user_object.put("activities", activity_details);
-      String data_loc = "goaltimer-dbdump/" + user_hash_id + "/activities.json";
-      File activityFile = new File(data_loc);
-      StringBuffer sb = new StringBuffer();
-      if (!activityFile.exists()) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(activityFile))) {
-          sb.append(activity_details);
-          writer.write(sb.toString());
-        }
-      }
-    }*/
- 
