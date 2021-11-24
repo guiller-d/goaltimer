@@ -131,7 +131,6 @@ class ChallengeController {
   }
 }
 
-/*
   //read
   @GetMapping("/challenges/")
   public List<Challenge> all(User user) throws Exception {
@@ -181,4 +180,3 @@ class ChallengeController {
     }
     return "Uploaded Successfuly";
   }
-  */
