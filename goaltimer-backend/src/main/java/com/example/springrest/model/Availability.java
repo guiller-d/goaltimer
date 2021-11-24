@@ -12,23 +12,29 @@ import com.example.springrest.model.User;
 @Entity
 public class Availability {
         private @Id @GeneratedValue Long id;
-    @Column(nullable = true) private String hash_id;
-    @Column(nullable = true) private String hour;
-    @Column(nullable = true) private String min;
-    @Column(nullable = true) private String amPm;
+    @Column(nullable = true) private String hashID;
+    @Column(nullable = true) private String fromHour;
+    @Column(nullable = true) private String fromMin;
+    @Column(nullable = true) private String fromAmPm;
+    @Column(nullable = true) private String toHour;
+    @Column(nullable = true) private String toMin;
+    @Column(nullable = true) private String toAmPm;
     @Column(nullable = true) private String day;
     @Column(nullable = true) private String email;
 public Availability(){
 }
 
-public Availability(String hour, String min, String amPm, String day, String email) throws Exception{
+public Availability(String fromHour, String fromMin, String fromAmPm, String toHour, String toMin, String toAmPm, String day, String email) throws Exception{
         super();
-        this.hour = hour;
-        this.min = min;
-        this.amPm = amPm;
+        this.fromHour = fromHour;
+        this.fromMin = fromMin;
+        this.fromAmPm = fromAmPm;
+        this.toHour = toHour;
+        this.toMin = toMin;
+        this.toAmPm = toAmPm;
         this.day = day;
         this.email = email;
-        this.hash_id = hash(email) ;
+        this.hashID = hash(email) ;
     }
 
     private String convertByteArrayToHexString(byte[] arrayBytes) {
@@ -54,20 +60,29 @@ public Availability(String hour, String min, String amPm, String day, String ema
     public Long getId() {
     return this.id;
     }
-    public String getHour(){
-        return this.hour;
+    public String getFromHour(){
+        return this.fromHour;
     }
-    public String getMin(){
-        return this.min;
+    public String getFromMin(){
+        return this.fromMin;
     }
-    public String getAmPm(){
-    return this.amPm;
+    public String getFromAmPm(){
+    return this.fromAmPm;
+    }
+    public String getToHour(){
+        return this.toHour;
+    }
+    public String getToMin(){
+        return this.toMin;
+    }
+    public String getToAmPm(){
+    return this.toAmPm;
     }
     public String getDay(){
     return this.day;
     }
   public String getHashID() {
-    return this.hash_id;
+    return this.hashID;
   }
   public String getEmail() {
     return this.email;
@@ -75,29 +90,39 @@ public Availability(String hour, String min, String amPm, String day, String ema
   public void setId(Long id) {
     this.id = id;
   }
-    public String setHour(){
-        return this.hour;
+    public String setFromHour(String fromHour){
+        return this.fromHour = fromHour;
     }
-    public String setMin(){
-        return this.min;
+    public String setFromMin(String fromMin){
+        return this.fromMin = fromMin;
     }
-    public String setAmPm(){
-    return this.amPm;
+    public String setFromAmPm(String fromAmPm){
+    return this.fromAmPm =fromAmPm;
     }
-    public String setDay(){
-    return this.day;
+    public String setToHour(String toHour){
+        return this.toHour = toHour;
     }
-    public String setEmail() {
-    return this.email;
+    public String setToMin(String toMin){
+        return this.toMin =toMin;
+    }
+    public String setToAmPm(String toAmPm){
+    return this.toAmPm = toAmPm;
+    }
+    public String setDay(String day){
+    return this.day = day;
+    }
+    public String setEmail(String email) {
+    return this.email = email;
   }
     public void setHashID(String hash_id) {
-    this.hash_id = hash_id;
+    this.hashID = hash_id;
   }
 
   @Override
     public String toString() {
-    return "Availability{" + "id=" + this.id + ", Hour='" + this.hour + '\'' + ", Min='" + this.min + '\''
-        + ", am or pm='" + this.amPm + '\'' + ", Day='" + this.day + '\'' + ", email='" + this.email + '}';
+    return "Availability{" + ", From='" + this.fromHour   + ":" + this.fromMin
+        + " " + this.fromAmPm  + ", To= " + this.toHour  + ":" + this.toMin 
+        + " " + this.toAmPm  + ", Day= " + this.day   + ", email= " + this.email + "}";
     }
 
 }

@@ -299,6 +299,7 @@ public class ActivityController {
       }
     }
   }
+  
   @SuppressWarnings("unchecked")
   private void checkPath(Activity newActivity) throws Exception{
     String[] tokens = newActivity.getActivityName().split(",");

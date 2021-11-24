@@ -6,5 +6,5 @@ import java.util.List;
 import com.example.springrest.model.Availability;
 
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
-    public List<Availability> findByEmail(String email);
+
 }
