@@ -85,16 +85,6 @@ class ChallengeController {
     return "File failed to upload to " + data_loc;
   }
 
-  @GetMapping("/dumpChallenges")
-  public String dumpAll() throws Exception {
-    List<Challenge> challenges = repository.findAll();
-    for (Iterator<Challenge> iter = challenge.iterator(); iter.hasNext();) {
-      Challenge element = iter.next();
-      // addAvailability(element);
-    }
-    return challenges.toString();
-  }
-
   @PostMapping(value = "updateChallenge")
   public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session, User user) {
     challenge.setActive(true);
