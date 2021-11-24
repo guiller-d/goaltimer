@@ -85,54 +85,14 @@ class ChallengeController {
     return "File failed to upload to " + data_loc;
   }
 
-  //read
-  @GetMapping("/challenges/")
-  public List<Challenge> all(User user) throws Exception {
-    StringBuffer sb = new StringBuffer();
-    String hash_id = user.hash(user.getEmail());
+  @GetMapping("/dumpChallenges")
+  public String dumpAll() throws Exception {
     List<Challenge> challenges = repository.findAll();
-    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
-      Challenge new_challenge = iter.next();
-      if (hash_id.equals(new_challenge.getUserHashID())) {
-        String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
-        File dir = new File("goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/");
-        File challengeFile = new File(dir.getAbsolutePath() + new_challenge.getName() + "_info.json");
-        // StringBuffer sb = new StringBuffer();
-        if (!challengeFile.exists()) { Files.touch(challengeFile); }
-        sb.append(get_data(data_loc));
-      }
+    for (Iterator<Challenge> iter = challenge.iterator(); iter.hasNext();) {
+      Challenge element = iter.next();
+      // addAvailability(element);
     }
-    return challenges;
-  }
-  /* Send data to cloud for testing */
-  @GetMapping("/sendallchallenges/")
-  public String sendAll(User user) throws Exception {
-    List<Challenge> challenges = repository.findAll();
-    String hash_id = user.hash(user.getEmail());
-    // List<JSONObject> challengesList = new ArrayList<>();
-    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
-      Challenge new_challenge = iter.next();
-      new_challenge.setUserHashID(hash_id);
-      String user_challenges = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/";
-      String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
-      if (!user_challenges.exists()) { user_challenges.mkdirs(); }
-      // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
-      if (hash_id.equals(new_challenge.getUserHashID())) {
-        JSONObject challenge_details = new JSONObject();
-        challenge_details.put("id", new_challenge.getId());
-        challenge_details.put("name", new_challenge.getName());
-        challenge_details.put("description", new_challenge.getdescription());
-        challenge_details.put("time", new_challenge.getTime());
-        challenge_details.put("isActive", new_challenge.isActive());
-        challenge_details.put("isComplete", new_challenge.isComplete());
-        File dir = new File("goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/");
-        File challengeFile = new File(dir.getAbsolutePath() + new_challenge.getName() + "_info.json");
-        StringBuffer sb = new StringBuffer();
-        if (!challengeFile.exists()) { Files.touch(challengeFile); }
-        store_data(data_loc);
-      }
-    }
-    return "Uploaded Successfuly";
+    return challenges.toString();
   }
 
   @PostMapping(value = "updateChallenge")
@@ -171,3 +131,54 @@ class ChallengeController {
   }
 }
 
+/*
+  //read
+  @GetMapping("/challenges/")
+  public List<Challenge> all(User user) throws Exception {
+    StringBuffer sb = new StringBuffer();
+    String hash_id = user.hash(user.getEmail());
+    List<Challenge> challenges = repository.findAll();
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge new_challenge = iter.next();
+      if (hash_id.equals(new_challenge.getUserHashID())) {
+        String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
+        File dir = new File("goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/");
+        File challengeFile = new File(dir.getAbsolutePath() + new_challenge.getName() + "_info.json");
+        // StringBuffer sb = new StringBuffer();
+        if (!challengeFile.exists()) { Files.touch(challengeFile); }
+        sb.append(get_data(data_loc));
+      }
+    }
+    return challenges;
+  }
+  // Send data to cloud for testing
+  @GetMapping("/sendallchallenges/")
+  public String sendAll(User user) throws Exception {
+    List<Challenge> challenges = repository.findAll();
+    String hash_id = user.hash(user.getEmail());
+    // List<JSONObject> challengesList = new ArrayList<>();
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge new_challenge = iter.next();
+      new_challenge.setUserHashID(hash_id);
+      String user_challenges = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/";
+      String data_loc = "goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/" + new_challenge.getName() + "_info.json";
+      if (!user_challenges.exists()) { user_challenges.mkdirs(); }
+      // idea: make JSON object with 'new_challenge' data, store it to 'data_loc'
+      if (hash_id.equals(new_challenge.getUserHashID())) {
+        JSONObject challenge_details = new JSONObject();
+        challenge_details.put("id", new_challenge.getId());
+        challenge_details.put("name", new_challenge.getName());
+        challenge_details.put("description", new_challenge.getdescription());
+        challenge_details.put("time", new_challenge.getTime());
+        challenge_details.put("isActive", new_challenge.isActive());
+        challenge_details.put("isComplete", new_challenge.isComplete());
+        File dir = new File("goaltimer-dbdump/" + new_challenge.getUserHashID() + "/challenges/");
+        File challengeFile = new File(dir.getAbsolutePath() + new_challenge.getName() + "_info.json");
+        StringBuffer sb = new StringBuffer();
+        if (!challengeFile.exists()) { Files.touch(challengeFile); }
+        store_data(data_loc);
+      }
+    }
+    return "Uploaded Successfuly";
+  }
+  */

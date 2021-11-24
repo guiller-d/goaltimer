@@ -9,9 +9,9 @@ import endpoints from '../api/endpoints';
 function updateChallenge() {
     // Invoke the api route
     api.baseURL.get(api.baseURL.getBaseURL() + 'updateChallenge').then(response => {
+
         console.log(response.data);
     });
-
 }
 
 function ChallengeScreen(props) {
