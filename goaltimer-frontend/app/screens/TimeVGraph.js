@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, Alert } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import Screen from '../components/Screen';
 import Button from '../components/Button';
 import { useState } from 'react';
@@ -80,7 +80,7 @@ function TimeVGraph(props) {
             }
         ]
     };
-    average = sum/water_count;
+    average = sum / water_count;
     average = average.toFixed(1);
     console.log(average);
     return (
@@ -108,12 +108,12 @@ function TimeVGraph(props) {
 
                         </LinearGradient>
                         <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
-                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                            <View style={{ alignSelf: 'center', alignItems: 'center' }}>
                                 <Text style={styles.text2}>Average</Text>
                                 <Text style={styles.text5}> {average} min </Text>
                             </View>
                         </LinearGradient>
-                  
+
                     </View>
 
                 </View>
@@ -147,8 +147,8 @@ function TimeVGraph(props) {
                     borderWidth: 1,
                     borderColor: "#DBDBDB"
                 }}>
-         
-                
+
+
 
 
                 </View>

@@ -1,61 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, KeyboardAvoidingView, Alert} from 'react-native';
+import { StyleSheet, Text, View, Button, KeyboardAvoidingView, Alert } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Screen from '../components/Screen';
-import { Formik, Form, Field, ErrorMessage} from 'formik';
-import { create } from 'apisauce';
+import { Formik } from 'formik';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
 import * as yup from 'yup'
 
-
-
-function SignUpScreen({navigation}) {
-    // fetch('/users', {
-    //     method: 'post',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       name: 'Hubot',
-    //       login: 'hubot',
-    //     })
-    //   }).then(status)
-    //     .then(json)
-    //     .then(function(json) {
-    //       console.log('request succeeded with json response', json)
-    //     }).catch(function(error) {
-    //       console.log('request failed', error)
-    //     })
-
-
-    const handleSubmit = async (values) => { 
-        ///register/{firstName}/{lastName}/{email}/{password}
-        //let apiStr = "/register/{" + values.first_name + "}/{" + values.last_name + "}/{" + values.email + "}/{" + values.password1 + "}" 
+function SignUpScreen({ navigation }) {
+    const handleSubmit = async (values) => {
         let apiStr = endpoints.register
-        api.baseURL.post(apiStr, {firstName: values.first_name, lastName: values.last_name, email: values.email, password: values.password1}).then(response => {
+        api.baseURL.post(apiStr, { firstName: values.first_name, lastName: values.last_name, email: values.email, password: values.password1 }).then(response => {
             console.log(response.data);
             Alert.alert(
                 "Sign up Succesfully",
                 "You can now log in",
                 [
-                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
-              );
+            );
         }
-            
-        // const api = create({ baseURL: 'http://:8080', method: "post",});
-        // console.log(apiStr)
-        // api.post(apiStr, {}).then(response => {
-        //     console.log("==============================");
-        // console.log(response.data);}
-    
+
         );
-        //console.log(values.email, values.password)
+
     }
-    
-    {/* To validate */}
+
+    {/* To validate */ }
     const signUpValidationSchema = yup.object().shape({
         first_name: yup
             .string()
@@ -73,80 +43,75 @@ function SignUpScreen({navigation}) {
             .string()
             .min(5, ({ min }) => `Password must be at least ${min} characters`)
             .required('Password is required'),
-        // password2: yup
-        //     .string()
-        //     .min(5, ({ min }) => `Password must be at least ${min} characters`)
-        //     .required('Password is required')
-        //     .test('global-ok', 'Re-entered password does not match', (password1, password2) => password1 == password2)
     })
     return (
-        <KeyboardAvoidingView 
-            style={{flex:1}}
-            behavior= "padding"
-            enabled = {true}
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior="padding"
+            enabled={true}
         >
-        <ScrollView>
-        <Screen>
-            <View style={{ height: '100%', backgroundColor: '#E7ECF4'}}>
-                <View>
-                    {/* Section reserved for Sign up + mini instruction */}
-                    <Text style = {styles.introLabel}>Sign Up</Text>
-                    <Text style = {styles.miniInstruction}>Fill in the form to create an account</Text>
-                </View>
+            <ScrollView>
+                <Screen>
+                    <View style={{ height: '100%', backgroundColor: '#E7ECF4' }}>
+                        <View>
+                            {/* Section reserved for Sign up + mini instruction */}
+                            <Text style={styles.introLabel}>Sign Up</Text>
+                            <Text style={styles.miniInstruction}>Fill in the form to create an account</Text>
+                        </View>
 
-                <View>
-                    {/* Form To Sign up*/}
-                    <Formik
-                        initialValues={{ first_name: '', last_name: '', email: '', password1: '', password2: ''}}
-                        validationSchema={signUpValidationSchema}
-                        onSubmit={values => handleSubmit(values)}
-                   >
-                    {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched }) => (
-                    <View>
+                        <View>
+                            {/* Form To Sign up*/}
+                            <Formik
+                                initialValues={{ first_name: '', last_name: '', email: '', password1: '', password2: '' }}
+                                validationSchema={signUpValidationSchema}
+                                onSubmit={values => handleSubmit(values)}
+                            >
+                                {({ handleChange, handleBlur, handleSubmit, values, errors, isValid, touched }) => (
+                                    <View>
 
-                        {/* For First Name */}
-                        <TextInput
-                            style = {styles.textInput}
-                            placeholder = 'First name'
-                            onChangeText={handleChange('first_name')}
-                            onBlur={handleBlur('first_name')}
-                            value={values.first_name}
-                        />
-                        {(errors.first_name && touched.first_name) && <Text style ={styles.errorText}>{errors.first_name}</Text>}
+                                        {/* For First Name */}
+                                        <TextInput
+                                            style={styles.textInput}
+                                            placeholder='First name'
+                                            onChangeText={handleChange('first_name')}
+                                            onBlur={handleBlur('first_name')}
+                                            value={values.first_name}
+                                        />
+                                        {(errors.first_name && touched.first_name) && <Text style={styles.errorText}>{errors.first_name}</Text>}
 
-                        {/* For Last Name */}
-                        <TextInput
-                            style = {styles.textInput}
-                            placeholder = 'Last Name'
-                            onChangeText={handleChange('last_name')}
-                            onBlur={handleBlur('last_name')}
-                            value={values.last_name}
-                        />
-                        {(errors.last_name && touched.last_name) && <Text style ={styles.errorText}>{errors.last_name}</Text>}
+                                        {/* For Last Name */}
+                                        <TextInput
+                                            style={styles.textInput}
+                                            placeholder='Last Name'
+                                            onChangeText={handleChange('last_name')}
+                                            onBlur={handleBlur('last_name')}
+                                            value={values.last_name}
+                                        />
+                                        {(errors.last_name && touched.last_name) && <Text style={styles.errorText}>{errors.last_name}</Text>}
 
-                        {/* For email */}
-                        <TextInput
-                            style = {styles.textInput}
-                            placeholder = 'Email'
-                            onChangeText={handleChange('email')}
-                            onBlur={handleBlur('email')}
-                            value={values.email}
-                            keyboardType= "email-address"
-                        />
-                        {(errors.email && touched.email) && <Text style ={styles.errorText}>{errors.email}</Text>}
+                                        {/* For email */}
+                                        <TextInput
+                                            style={styles.textInput}
+                                            placeholder='Email'
+                                            onChangeText={handleChange('email')}
+                                            onBlur={handleBlur('email')}
+                                            value={values.email}
+                                            keyboardType="email-address"
+                                        />
+                                        {(errors.email && touched.email) && <Text style={styles.errorText}>{errors.email}</Text>}
 
-                        {/* For password */}
-                        <TextInput
-                            style = {styles.textInput}
-                            placeholder = 'Password'
-                            onChangeText={handleChange('password1')}
-                            onBlur={handleBlur('password1')}
-                            value={values.password1}
-                            secureTextEntry
-                        />
-                        {(errors.password1 && touched.password1) && <Text style ={styles.errorText}>{errors.password1}</Text>}
+                                        {/* For password */}
+                                        <TextInput
+                                            style={styles.textInput}
+                                            placeholder='Password'
+                                            onChangeText={handleChange('password1')}
+                                            onBlur={handleBlur('password1')}
+                                            value={values.password1}
+                                            secureTextEntry
+                                        />
+                                        {(errors.password1 && touched.password1) && <Text style={styles.errorText}>{errors.password1}</Text>}
 
-                        {/* For password re-entry 
+                                        {/* For password re-entry 
                         <TextInput
                             style = {styles.textInput}
                             placeholder = 'Re-enter Password'
@@ -157,16 +122,16 @@ function SignUpScreen({navigation}) {
                         /> 
                         {(errors.password2 && touched.password2) && <Text style ={styles.errorText}>{errors.password2}</Text>}
                         */}
-                        <View style = {styles.buttonContainer2}>
-                            <Button onPress={handleSubmit} title="Sign up" disabled ={!isValid} color = '#FFFFFF'/>
+                                        <View style={styles.buttonContainer2}>
+                                            <Button onPress={handleSubmit} title="Sign up" disabled={!isValid} color='#FFFFFF' />
+                                        </View>
+                                    </View>
+                                )}
+                            </Formik>
                         </View>
                     </View>
-                     )}
-                    </Formik>
-                </View>    
-            </View>  
-        </Screen>
-        </ScrollView>
+                </Screen>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 }
@@ -190,7 +155,7 @@ const styles = StyleSheet.create({
         shadowColor: '#0062FF',
         shadowRadius: 5,
         shadowOpacity: 5,
-        shadowOffset:{width: 0, height: 2}
+        shadowOffset: { width: 0, height: 2 }
     },
     buttonContainer2: {
         margin: 20,
@@ -206,7 +171,7 @@ const styles = StyleSheet.create({
         shadowColor: '#0062FF',
         shadowRadius: 5,
         shadowOpacity: 5,
-        shadowOffset:{width: 0, height: 2}
+        shadowOffset: { width: 0, height: 2 }
     },
     introLabel: {
         textAlign: "left",
@@ -248,14 +213,14 @@ const styles = StyleSheet.create({
         shadowColor: '#0062FF',
         shadowRadius: 2,
         shadowOpacity: 0.5,
-        shadowOffset:{width: 0, height: 3},
+        shadowOffset: { width: 0, height: 3 },
         fontSize: 15
     },
     errorText: {
         marginLeft: 20,
         fontSize: 10,
         color: 'red',
-      },
+    },
 });
 
 

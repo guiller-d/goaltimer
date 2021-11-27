@@ -1,12 +1,17 @@
 
-import React, { Component, useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import SettingButton from '../components/SettingButton';
 import Screen from '../components/Screen';
-import LoginScreen from '../screens/LoginScreen';
+import AuthContext from '../auth/context';
 
 function SettingScreen(props) {
-
+    const authContext = useContext(AuthContext);
+    const logout = () => {
+        authContext.setUser(null);
+        console.log("user");
+        console.log(authContext.user);
+    };
     return (
         <Screen>
             <View style={styles.setting}>
@@ -18,16 +23,15 @@ function SettingScreen(props) {
                         <Text style={styles.usernameText}> John Smith</Text>
                     </View>
 
-                    <View style={{height: '60%', marginTop: 30,justifyContent: 'flex-end'}}>
+                    <View style={{ height: '60%', marginTop: 30, justifyContent: 'flex-end' }}>
                         <SettingButton title="Export all my Data" />
                         <SettingButton title="Delete all my Data" />
                         <SettingButton title="Dark Mode" />
                         <SettingButton title="Delete Account" />
                         {/* need to be updated - just waiting for the backend to run */}
-                        <SettingButton title="Logout" />
-              
+                        <SettingButton title="Logout" onPress={logout} />
+
                     </View>
-                 
                 </View>
 
             </View>
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
         width: '98%',
         height: '100%',
         alignSelf: 'center',
-  
+
     },
     profile: {
         width: '99%',

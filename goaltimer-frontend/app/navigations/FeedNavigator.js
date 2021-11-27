@@ -3,10 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import {TouchableOpacity, View, Image, Button,StyleSheet} from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
-import TasksScreen from '../screens/TasksScreen';
 import TaskDetailScreen from '../screens/TaskDetailScreen';
-import SaveActivityScreen from '../screens/SaveActivityScreen';
-import CreateActivityScreen from '../screens/CreateActivityScreen';
 import ProgressScreen from '../screens/ProgressScreen';
 
 const Stack = createStackNavigator();
@@ -30,10 +27,7 @@ const FeedNavigator = ({navigation}) => (
             options={{ headerLeft: ()=> <DrawerButton navigation={navigation}  />, title: '', headerStyle: {backgroundColor: 'red'},headerShown: true }} component={ProgressScreen} />
         <Stack.Screen name="TaskDetailScreen" 
             options={{title: 'a', headerStyle: {backgroundColor: '#3B97ED'}}}  component={TaskDetailScreen} options={{headerShown: false}} />
-        <Stack.Screen name="SaveActivityScreen" 
-            options={{  headerLeft:null, title: '', headerStyle: {backgroundColor: '#e7305b'}}}  component={SaveActivityScreen} options={{headerShown: false}} />
-        <Stack.Screen name="CreateActivityScreen" component={CreateActivityScreen} options= { {title: 'Availability',  headerTintColor: 'white', headerStyle: { backgroundColor: '#3B97ED'}, headerTitleStyle: {fontFamily: 'Avenir-Medium', },  headerLeft: null }}/>
-    </Stack.Navigator>
+</Stack.Navigator>
 )
 const styles = StyleSheet.create({
     image: {

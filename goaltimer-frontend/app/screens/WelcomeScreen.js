@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { StyleSheet, Text, View, Button, Image} from 'react-native';
 import Screen from '../components/Screen';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-
 const fetchFont = () => {
     return Font.loadAsync({
          'Avenir-Book': require('../assets/fonts/AvenirLTStd-Book.otf'),
@@ -14,6 +13,7 @@ const fetchFont = () => {
  };
 function WelcomeScreen({navigation}) {
     const [fontLoaded, setFontLoaded] = useState(false);
+
     //fect fonts
     if (!fontLoaded) {
         <AppLoading startAsync={fetchFont} onError={()=> console.log('Error Font')} onFinish={() => {setFontLoaded(true)}} />

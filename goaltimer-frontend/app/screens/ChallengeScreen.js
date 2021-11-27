@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Screen from '../components/Screen';
@@ -15,64 +16,74 @@ function ChallengeScreen(props) {
     const authContext = useContext(AuthContext);
   
  
+
+    const [array, setArray] = useState([]);
+    const authContext = useContext(AuthContext);
+
     useEffect(() => {
-        let apiStr = endpoints.challenges;
-        api.baseURL.get(apiStr).then(response => {
-            if (response.data != null) {
-                setArray(response.data);
-            }
-        });
-    },[array]);
+        if (authContext.user != null) {
+            let apiStr = endpoints.challenges;
+            api.baseURL.get(apiStr).then(response => {
+                if (response.data != null) {
+                    setArray(response.data);
+                }
+            });
+        }
+        else {
+            return;
+        }
+
+    }, [array]);
     const updateChallenge = (id, active) => {
-        console.log("challengeId");
-        console.log(id);
-        console.log("active");
-        console.log(active);
-        console.log(!active);
-        let apiStr = endpoints.updateChallenge;
-        api.baseURL.post(apiStr, { isActive: !active, userHashID: authContext.user.hashID, id: id}).then(response => {
-           if (response.data != null) {
+        if (authContext.user != null) {
+            let apiStr = endpoints.updateChallenge;
+            api.baseURL.post(apiStr, { isActive: !active, userHashID: authContext.user.hashID, id: id }).then(response => {
+                if (response.data != null) {
 
-            }
-        });
+                }
+            });
+        }
+        else {
+            return;
+        }
+
     }
-
     return (
         <Screen>
-                <View style={{ width: '94%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 15, marginTop: 20, }}>
-                    <View style={{ width: '90%', left: 10, marginBottom: 10, }}>
-                        <Text style={styles.text1}>Qoute of the Day </Text>
-                        <Text style={styles.text4}>Words of Motivation to go up against the challenges in front of you </Text>
-                    </View>
-                    <View style={{ width: '90%', alignItems: 'center', alignSelf: 'center' }}>
-                        <Text style={styles.qoute}> {quote}</Text>
-                        <Text style={styles.author}> {author} </Text>
-                    </View>
-                    <View style={{ height: 10 }}>
-
-                    </View>
+            <View style={{ width: '94%', backgroundColor: 'white', alignSelf: 'center', borderRadius: 15, marginTop: 20, }}>
+                <View style={{ width: '90%', left: 10, marginBottom: 10, }}>
+                    <Text style={styles.text1}>Qoute of the Day </Text>
+                    <Text style={styles.text4}>Words of Motivation to go up against the challenges in front of you </Text>
                 </View>
-                <View style={{
-                    width: '94%',
-                    backgroundColor: 'white',
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    borderRadius: 15,
-                }}>
+                <View style={{ width: '90%', alignItems: 'center', alignSelf: 'center' }}>
+                    <Text style={styles.qoute}> {quote}</Text>
+                    <Text style={styles.author}> {author} </Text>
+                </View>
+                <View style={{ height: 10 }}>
 
+                </View>
+            </View>
+            <View style={{
+                width: '94%',
+                backgroundColor: 'white',
+                alignSelf: 'center',
+                marginTop: 10,
+                borderRadius: 15,
+            }}>
+
+                <View>
+                    <View style={{ width: '80%', marginBottom: 10, justifyContent: 'center', marginTop: 10, }}>
+                        <Text style={styles.text1}>   Start Challenge </Text>
+                    </View>
                     <View>
-                        <View style={{ width: '80%', marginBottom: 10, justifyContent: 'center', marginTop: 10, }}>
-                            <Text style={styles.text1}>   Start Challenge </Text>
-                        </View>
-                        <View>
-                             <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.name.toString()}
-                                renderItem={({ item }) =>
-                                    <Challenge challengeName={item.name} active={item.active} challengeDescription={item.description} onPress={() => updateChallenge(item.id, item.active)} />
-                                }
-                            />
-                        </View>
+                        <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.name.toString()}
+                            renderItem={({ item }) =>
+                                <Challenge challengeName={item.name} active={item.active} challengeDescription={item.description} onPress={() => updateChallenge(item.id, item.active)} />
+                            }
+                        />
                     </View>
                 </View>
+            </View>
 
         </Screen>
     );

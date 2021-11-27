@@ -1,10 +1,9 @@
 
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Dimensions, Alert, FlatList } from 'react-native';
 import Screen from '../components/Screen';
 import CountDown from 'react-native-countdown-component';
 import 'moment-duration-format';
-import moment from 'moment';
 import Button from '../components/Button';
 import StartButton from '../components/StartButton';
 import api from '../api/api';
@@ -17,7 +16,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 function TaskDetailScreen({ route }) {
 
     const authContext = useContext(AuthContext);
-    var user_hash_id = authContext.user.hashID;
     const { activityName, activityDuration, activitySchedule } = route.params;
     const [timer, setTimer] = useState(false);
     const [hmsFormatTime, setHmsFormatTime] = useState("");
@@ -58,13 +56,13 @@ function TaskDetailScreen({ route }) {
         console.log("here");
         // note mutable flag
         let apiStr = endpoints.getAllActivityTime;
-            api.baseURL.post(apiStr, { email: authContext.user.email, activityName: activityName }).then(response => {
-                if (response.data != null) {
-                    setActivityTimes(response.data);
-             }
+        api.baseURL.post(apiStr, { email: authContext.user.email, activityName: activityName }).then(response => {
+            if (response.data != null) {
+                setActivityTimes(response.data);
+            }
         });
     };
-  
+
 
     var weekly_time = [];
     var time_count = 0;
@@ -86,7 +84,7 @@ function TaskDetailScreen({ route }) {
             points.push(data.time);
             sum += parseInt(data.time);
         })
-      
+
         average = sum / time_count;
         average = average.toFixed(1);
     }
@@ -100,7 +98,7 @@ function TaskDetailScreen({ route }) {
         ]
     };
 
- 
+
     const handleTimerSubmit = async () => {
         let apiStr = endpoints.addTime;
         api.baseURL.post(apiStr, { activityName: activityName, userHashID: authContext.user.hashID, time: moment.duration((activityDuration * 60) - time, 'seconds').format("hh:mm:ss"), date: moment(new Date()).format('L'), }).then(response => {
@@ -129,10 +127,10 @@ function TaskDetailScreen({ route }) {
 
     return (
         <Screen>
-               <Button title="Refresh" onPress={refresh}  />
-                <View style={{ alignItems: 'center', marginTop:5,  flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-between'}}>
-                    <StartButton title="Start Timer" onPress={startStopTimer} isPressed={timer} />
-                    <CountDown
+            <Button title="Refresh" onPress={refresh} />
+            <View style={{ alignItems: 'center', marginTop: 5, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-between' }}>
+                <StartButton title="Start Timer" onPress={startStopTimer} isPressed={timer} />
+                <CountDown
                     size={25}
                     until={activityDuration * 60}
                     onFinish={() => alert('Finished')}
@@ -148,48 +146,48 @@ function TaskDetailScreen({ route }) {
                         setTime(time);
                     }}
                 />
-     
+
+            </View>
+            <View style={{ width: '95%', marginLeft: 5, alignSelf: 'center' }}>
+                <View></View>
+                <Text style={styles.text}>Your Time </Text>
+                <Text style={styles.text4}>See your how much time you spend on {activityName}  </Text>
+            </View>
+            <View style={styles.dataContainer}>
+
+                <FlatList refreshing={refresh} data={activityTimes} keyExtractor={activityTimes => activityTimes.id.toString()} renderItem={({ item }) =>
+                    <ActivityTime activityName={item.activityName} activityDuration={item.time} activitySchedule={item.date} color='#3B97ED' />
+                } />
+
+            </View>
+            <View style={{ width: '95%', marginLeft: 5, alignSelf: 'center' }}>
+                <Text style={styles.text}>Your Progress </Text>
+                <Text style={styles.text4}>Filter your spent time by weekly, month, or quarterly to see if you are managing your time.   </Text>
+            </View>
+            <View style={styles.barGraph}>
+                <View style={styles.filterButtonContainer}>
+                    <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
+                    <Button title="Weekly" onPress={filterHandlerWeekly} isPressed={isWeekly} />
                 </View>
-                <View style={{ width: '95%', marginLeft: 5, alignSelf: 'center' }}>
-                    <View></View>
-                    <Text style={styles.text}>Your Time </Text>
-                    <Text style={styles.text4}>See your how much time you spend on {activityName}  </Text>
+                <View>
+                    <BarGraph data={data} dataCount={time_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
                 </View>
-                <View style={styles.dataContainer}>
-                  
-                        <FlatList refreshing={refresh} data={activityTimes} keyExtractor={activityTimes => activityTimes.id.toString()} renderItem={({ item }) =>
-                        <ActivityTime activityName={item.activityName} activityDuration={item.time} activitySchedule={item.date} color='#3B97ED' />
-                    } />
-                   
+                <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 5, }}>
+                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
+                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                            <Text style={styles.text2}>Total</Text>
+                            <Text style={styles.text5}> {time_count}</Text>
+                        </View>
+                    </LinearGradient>
+                    <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
+                        <View style={{ alignSelf: 'center', alignItems: 'center' }}>
+                            <Text style={styles.text2}>Average</Text>
+                            <Text style={styles.text5}> {average} </Text>
+                        </View>
+                    </LinearGradient>
                 </View>
-                <View style={{ width: '95%', marginLeft: 5, alignSelf: 'center' }}>
-                    <Text style={styles.text}>Your Progress </Text>
-                    <Text style={styles.text4}>Filter your spent time by weekly, month, or quarterly to see if you are managing your time.   </Text>
-                </View>
-                <View style={styles.barGraph}>
-                    <View style={styles.filterButtonContainer}>
-                        <Button title="Daily" onPress={filterHandlerDaily} isPressed={isDaily} />
-                        <Button title="Weekly" onPress={filterHandlerWeekly} isPressed={isWeekly} />
-                    </View>
-                    <View>
-                        <BarGraph data={data} dataCount={time_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
-                    </View>
-                    <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 5, }}>
-                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
-                            <View style={{ alignSelf: 'center', alignItems: 'center' }}>
-                                <Text style={styles.text2}>Total</Text>
-                                <Text style={styles.text5}> {time_count}</Text>
-                            </View>
-                        </LinearGradient>
-                        <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
-                            <View style={{ alignSelf: 'center', alignItems: 'center' }}>
-                                <Text style={styles.text2}>Average</Text>
-                                <Text style={styles.text5}> {average} </Text>
-                            </View>
-                        </LinearGradient>
-                    </View>
-                </View>
-          
+            </View>
+
 
         </Screen>
     );

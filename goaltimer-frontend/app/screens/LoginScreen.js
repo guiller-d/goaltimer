@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Screen from '../components/Screen';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import AuthContext from '../auth/context';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
@@ -22,45 +22,43 @@ function LoginScreen({ navigation }) {
             .min(5, ({ min }) => `Password must be at least ${min} characters`)
             .required('Password is required'),
     })
-    const handleSubmit = async (values) => { 
-        //let apiStr = endpoints.login + "{" + values.email + "}/{" + values.password +"}"
+    const handleSubmit = async (values) => {
         let apiStr = endpoints.login
-            api.baseURL.post(apiStr, {email: values.email, password: values.password}).then(response => {
-                if(response.data != null){
-                    console.log("Data: " + response.data);
-                    setUser(response.data);
-                    console.log("==========Cojson ntext====================");
-                    console.log(response.data);
-                }
-                else{
-                    Alert.alert(
-                        "Login Failed",
-                        "Invalid email or password",
-                        [
-                          {
+        api.baseURL.post(apiStr, { email: values.email, password: values.password }).then(response => {
+            if (response.data != null) {
+                setUser(response.data);
+                console.log("Login Sucess - Account fetched from Google Bucket");
+                console.log(response.data);
+            }
+            else {
+                Alert.alert(
+                    "Login Failed",
+                    "Invalid email or password",
+                    [
+                        {
                             text: "Cancel",
                             onPress: () => console.log("Cancel Pressed"),
                             style: "cancel"
-                          },
-                          { text: "OK", onPress: () => console.log("OK Pressed") }
-                        ]
-                      );
-                }
-    
-            }); 
+                        },
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+            }
+
+        });
     }
     useEffect(() => {
-        console.log("==========Context====================");
-        authContext.setUser(user);
-        console.log(authContext.user);
+        if (authContext != null) {
+            authContext.setUser(user);
+        }
     });
     return (
         <Screen>
             <View style={{ height: '100%', backgroundColor: '#E7ECF4' }}>
-            <View style={{alignItems: 'center', marginTop: '5%'}}>
-                    <Image style={{width: 35, height: 35, tintColor: 'brown'}} source={require('../assets/images/clock.png')}/>
-                    <Text style = {styles.titleLabel}>Smart <Text style = {{color:'white'}}>Tracker</Text> </Text>
-                    <Text style = {styles.introLabel}>Own Your Time </Text>
+                <View style={{ alignItems: 'center', marginTop: '5%' }}>
+                    <Image style={{ width: 35, height: 35, tintColor: 'brown' }} source={require('../assets/images/clock.png')} />
+                    <Text style={styles.titleLabel}>Smart <Text style={{ color: 'white' }}>Tracker</Text> </Text>
+                    <Text style={styles.introLabel}>Own Your Time </Text>
                 </View>
                 <View style={styles.loginBlock}>
                     <Formik

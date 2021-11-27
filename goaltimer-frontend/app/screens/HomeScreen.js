@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView, FlatList } from 'react-native';  
+import { StyleSheet, Text, View, Dimensions, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import Screen from '../components/Screen';
 import Activity from '../components/Activity';
 import AddButton from '../components/AddButton';
@@ -16,14 +16,8 @@ import * as yup from 'yup';
 import BarGraph from '../components/BarGraph';
 
 function HomeScreen({ navigation }) {
-   
-    const authContext = useContext(AuthContext);
-    var firstName = authContext.user.firstName;
-    var lastName = authContext.user.lastName;
-    var email = authContext.user.email;
-    var user_hash_id = authContext.user.hashID;
-    var user_id = authContext.user.id;
 
+    const authContext = useContext(AuthContext);
     const [isDaily, setIsDaily] = useState(false);
     const [isWeekly, setIsWeekly] = useState(false);
     const [isMonthly, setIsMonthly] = useState(false);
@@ -42,9 +36,6 @@ function HomeScreen({ navigation }) {
     //Create an Activity
     const [isModalVisible, setModalVisible] = useState(false);
 
-    var time = '';
-    var schedule = '';
-
     //Show create form
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -62,11 +53,9 @@ function HomeScreen({ navigation }) {
         setIsWeekly(true);
         setIsMonthly(false);
     };
-    const filterHandlerMonthly = () => {
-        console.log("Monthly is pressed");
-        setIsDaily(false);
-        setIsWeekly(false);
-        setIsMonthly(true);
+    const filterCancel = () => {
+        console.log("Cancel is pressed");
+        setCancel(!isCancel);
     };
     const filterCancel = () => {
         console.log("Cancel is pressed");
@@ -98,7 +87,7 @@ function HomeScreen({ navigation }) {
         set45(false);
         set60(false);
         setFieldValue(field, "30")
-   
+
     };
     const is45min = async (setFieldValue, field) => {
         set30(false);
@@ -112,41 +101,56 @@ function HomeScreen({ navigation }) {
         set60(true);
         setFieldValue(field, "60")
     };
-  
+
     const loginValidationSchema = yup.object().shape({
         activityName: yup
             .string()
             .required('Activity Name is Required'),
     })
     useEffect(() => {
-        let apiStr = endpoints.getallactivities;
-        api.baseURL.post(apiStr, { email: authContext.user.email}).then(response => {
-            if (response.data != null) {
-                setActivities(response.data);
-                
-            }
-        });
-    },[activities]);
+        if (authContext != null) {
+            let apiStr = endpoints.getallactivities;
+            api.baseURL.post(apiStr, { email: authContext.user.email }).then(response => {
+                if (response.data != null) {
+                    setActivities(response.data);
+                }
+            });
+        }
+        else {
+            return;
+        }
+
+    }, [activities]);
 
     useEffect(() => {
-        let apiStr = endpoints.getAllTime;
-        api.baseURL.post(apiStr, { }).then(response => {
-            if (response.data != null) {
-                setActivitiesTime(response.data);
-            }
-        });
-    },[activitiesTime]);
+        if (authContext != null) {
+            let apiStr = endpoints.getAllTime;
+            api.baseURL.post(apiStr, {}).then(response => {
+                if (response.data != null) {
+                    setActivitiesTime(response.data);
+                }
+            });
+        }
+        else {
+            return;
+        }
+
+    }, [activitiesTime]);
 
     const handleSubmit = async (values) => {
-
-        let apiStr = endpoints.addActivity;
-        api.baseURL.post(apiStr, { activityName: values.activityName + "," + authContext.user.hashID, schedule: values.schedule, status: false, time: values.time, hashID:authContext.user.hashID}).then(response => {
-            if (response.data != null) {
-                setModalVisible(!isModalVisible);
-            }
-        });
+        if (authContext != null) {
+            let apiStr = endpoints.addActivity;
+            api.baseURL.post(apiStr, { activityName: values.activityName + "," + authContext.user.hashID, schedule: values.schedule, status: false, time: values.time, hashID: authContext.user.hashID }).then(response => {
+                if (response.data != null) {
+                    setModalVisible(!isModalVisible);
+                }
+            });
+        }
+        else {
+            return;
+        }
     }
-   
+
     var weekly_time = [];
     var time_count = 0;
     var points = [];
@@ -166,7 +170,7 @@ function HomeScreen({ navigation }) {
             points.push(data.time);
             sum += parseInt(data.time);
         })
-      
+
         average = sum / time_count;
         average = average.toFixed(1);
     }
@@ -197,16 +201,16 @@ function HomeScreen({ navigation }) {
                         </View>
                         <View>
                             {
-                                data.labels.length != 0 ? 
-                                <View style={styles.graphContainerStyle}>
-                                    <BarGraph data={data} dataCount={time_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
-                                </View>
-                                :
-                                <View style={styles.graphContainerStyle}>
-                                    <Text style={styles.titleLabel}> No Data Available</Text>
-                                </View>
+                                data.labels.length != 0 ?
+                                    <View style={styles.graphContainerStyle}>
+                                        <BarGraph data={data} dataCount={time_count} daily={isDaily} weekly={isWeekly} monthly={isMonthly} />
+                                    </View>
+                                    :
+                                    <View style={styles.graphContainerStyle}>
+                                        <Text style={styles.titleLabel}> No Data Available</Text>
+                                    </View>
                             }
-                          
+
                         </View>
                         <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 5, }}>
                             <LinearGradient style={{ width: Dimensions.get('window').width / 3 - 30, height: 70, borderRadius: 20, }} colors={['white', 'white']}>
@@ -222,8 +226,8 @@ function HomeScreen({ navigation }) {
                                 </View>
                             </LinearGradient>
                         </View>
+                    </View>
                 </View>
-            </View>
                 {/*activity intro and label */}
                 <View style={{ justifyContent: 'center', alignSelf: 'flex-start' }}>
                     <Text style={styles.titleLabel}> Your Activities </Text>
@@ -231,27 +235,27 @@ function HomeScreen({ navigation }) {
                 </View>
 
             </View>
-       
+
             <View style={styles.activityContainer}>
                 {
                     activities.length > 0 ?
-                    <FlatList data={activities} keyExtractor={activities => activities.id.toString()} renderItem ={({item}) => 
-                    <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.schedule} color='#3B97ED' 
-                    onPress={() => navigation.navigate('TaskDetailScreen', {
-                        activityName: item.activityName,
-                        activityDuration: item.time,
-                        activitySchedule: item.schedule,
-                        color: 'orange'
-                    })} /> } />
-                    : 
-                    <View style={{width: '95%', alignItems: 'center'}}>
-                        <Text style={styles.titleLabel}> No Data Available</Text>
-                    </View>
-                  
+                        <FlatList data={activities} keyExtractor={activities => activities.id.toString()} renderItem={({ item }) =>
+                            <Activity activityName={item.activityName} activityDuration={item.time} activitySchedule={item.schedule} color='#3B97ED'
+                                onPress={() => navigation.navigate('TaskDetailScreen', {
+                                    activityName: item.activityName,
+                                    activityDuration: item.time,
+                                    activitySchedule: item.schedule,
+                                    color: 'orange'
+                                })} />} />
+                        :
+                        <View style={{ width: '95%', alignItems: 'center' }}>
+                            <Text style={styles.titleLabel}> No Data Available</Text>
+                        </View>
+
                 }
-               
-            </View>       
-           
+
+            </View>
+
             <AddButton onPress={toggleModal} />
             <Modal coverScreen={false} backdropColor='black' backdropOpacity={0.2} hideModalContentWhileAnimating={true} animationIn='slideInDown' animationOut='slideOutUp' isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)} onSwipeComplete={() => setModalVisible(false)} swipeDirection="left">
                 <Formik
@@ -277,27 +281,27 @@ function HomeScreen({ navigation }) {
                                 <View style={{ width: '90%', flexDirection: 'row' }}>
                                     <Text style={styles.inputLabelText}> Name: </Text>
                                     <TextInput
-                                    style={styles.inputText}
-                                    placeholder='Activity Name'
-                                    onChangeText={handleChange('activityName')}
-                                    onBlur={handleBlur('activityName')}
-                                    value={values.activityName}
-                                 
-                                />
-                                {(errors.activityName && touched.activityName) && <Text style={{ fontSize: 10, color: 'red' }}>{errors.activityName}</Text>}
-                               
+                                        style={styles.inputText}
+                                        placeholder='Activity Name'
+                                        onChangeText={handleChange('activityName')}
+                                        onBlur={handleBlur('activityName')}
+                                        value={values.activityName}
+
+                                    />
+                                    {(errors.activityName && touched.activityName) && <Text style={{ fontSize: 10, color: 'red' }}>{errors.activityName}</Text>}
+
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%', paddingTop: 15, alignItems: 'center' }}>
                                     <Text style={styles.inputLabelText}> Schedule:</Text>
-                                    <Button title="Daily"  onPress={() => activityDaily(setFieldValue, 'schedule')} isPressed={isActivityDaily}/>
+                                    <Button title="Daily" onPress={() => activityDaily(setFieldValue, 'schedule')} isPressed={isActivityDaily} />
                                     <Button title="Weekly" onPress={() => activityWeekly(setFieldValue, 'schedule')} isPressed={isActivityWeekly} />
                                     <Button title="Monthly" onPress={() => activityMonthly(setFieldValue, 'schedule')} isPressed={isActivityMonthly} />
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: 260, paddingTop: 15, alignItems: 'center' }}>
                                     <Text style={styles.inputLabelText}> Duration:</Text>
-                                    <Duration title="30" onPress={() =>is30min(setFieldValue, 'time')} isPressed={is30} />
-                                    <Duration title="45" onPress={() =>is45min(setFieldValue, 'time')} isPressed={is45} />
-                                    <Duration title="60" onPress={() =>is60min(setFieldValue, 'time')} isPressed={is60} />
+                                    <Duration title="30" onPress={() => is30min(setFieldValue, 'time')} isPressed={is30} />
+                                    <Duration title="45" onPress={() => is45min(setFieldValue, 'time')} isPressed={is45} />
+                                    <Duration title="60" onPress={() => is60min(setFieldValue, 'time')} isPressed={is60} />
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -368,17 +372,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     graphContainerStyle: {
-        width: '99%', 
-        height: 220, 
+        width: '99%',
+        height: 220,
         alignItems: 'center',
-        alignSelf: 'center', 
-        justifyContent: 'center', 
+        alignSelf: 'center',
+        justifyContent: 'center',
         borderWidth: 0.5,
         borderRadius: 10,
 
     },
     activityContainer: {
-        height:'35%',
+        height: '35%',
         justifyContent: 'center',
         backgroundColor: 'white',
         borderTopLeftRadius: 20,
