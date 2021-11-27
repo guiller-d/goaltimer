@@ -3,6 +3,7 @@ package com.example.springrest.controller.challenge;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.example.springrest.model.Challenge;
 import com.example.springrest.model.ChallengeTime;
@@ -47,10 +48,8 @@ import com.example.springrest.model.Challenge;
 class ChallengeController {
 
   private final ChallengeRepository repository;
-  private static String session_id;
   private final String bucket_name = "goaltimer-challenges";
   private Storage storage = StorageOptions.getDefaultInstance().getService();
-  private Challenge cha;
 
   ChallengeController(ChallengeRepository repository) {
     this.repository = repository;
@@ -82,26 +81,85 @@ class ChallengeController {
     }
     return "File failed to upload to " + data_loc;
   }
+  @PostMapping(value = "/updateChallenge/")
+  public String updateChallenge(@RequestBody Challenge newChallenge, HttpSession session) throws Exception {
+  
 
-  @PostMapping(value = "updateChallenge")
-  public Challenge updateChallenge(@RequestBody Challenge challenge, HttpSession session, User user) {
+    List<Challenge> challenges = repository.findAll();
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge element = iter.next();
+      if (element.getId().equals(newChallenge.getId())){
+        System.out.println("element");
+        element.setActive(!newChallenge.isActive());
+        repository.save(element);
+      }
+    }
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge element = iter.next();
+      if (element.getId().equals(newChallenge.getId())){
+        System.out.println("element");
+        System.out.println(element.getName());
+        System.out.println(element.isActive());
 
-    return new Challenge();
+      }
+    }
+
+
+    return "Challenge is updated";
   }
 
   //read
   @GetMapping("/challenges/")
   public List<Challenge> all(User user) throws Exception {
-    StringBuffer sb = new StringBuffer();
-    String hash_id = user.hash(user.getEmail());
     List<Challenge> challenges = repository.findAll();
-   
     return challenges;
   }
-  // Send data to cloud for testing
-  @GetMapping("/sendallchallenges/")
-  public String sendAll(User user) throws Exception {
-   
-    return "Uploaded Successfuly";
+    /**
+   * 
+   * @return
+   * @throws Exception
+   */
+  @GetMapping("/dumpchallenges")
+  public String dumpchallenges(User user) throws Exception {
+    List<Challenge> challenges = repository.findAll();
+    for (Iterator<Challenge> iter = challenges.iterator(); iter.hasNext();) {
+      Challenge element = iter.next();
+      element.setUserHashID(user.hash(user.getEmail()));
+      addChallenge(element);
+    }
+    return "JSON files created for challenges";
   }
+    /**
+   * 
+   * @param newUser
+   * @return
+   * @throws Exception
+   */
+  /* Add account to cloud for testing */
+  @SuppressWarnings("unchecked")
+  private String addChallenge(Challenge challenge) throws Exception {
+    File userDir = new File("goaltimer-dbdump/" + challenge.getUserHashID());
+    if (!userDir.exists()) {
+      userDir.mkdirs();
+      JSONObject challenge_details = new JSONObject();
+      JSONObject user_object = new JSONObject();
+      challenge_details.put("name", challenge.getName());
+      challenge_details.put("description", challenge.getdescription());
+      challenge_details.put("userHashID", challenge.getUserHashID());
+      challenge_details.put("isActive", challenge.isActive());
+      challenge_details.put("isComplete", challenge.isComplete());
+      user_object.put("user", challenge_details);
+      String data_loc = "goaltimer-dbdump/" + challenge.getUserHashID() + "/userinfo.json";
+      File user = new File(data_loc);
+      StringBuffer sb = new StringBuffer();
+      if (!user.exists()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(user))) {
+          sb.append(challenge_details);
+          writer.write(sb.toString());
+        }
+      }
+    }
+    return "User is added to the database";
+  }
+  
 }

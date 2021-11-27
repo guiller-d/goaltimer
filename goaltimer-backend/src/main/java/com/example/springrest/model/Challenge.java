@@ -4,13 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Column;
-import java.util.Random;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-
+import java.io.UnsupportedEncodingException;
 @Entity
 public class Challenge {
 
@@ -18,24 +12,41 @@ public class Challenge {
     @Column(nullable = false) private String name;
     @Column(nullable = true) private String description;
     @Column(nullable = false) private int time; // # of days for a challenge
-    @Column(nullable = true) private boolean isActive;
+    @Column(nullable = false) private boolean isActive;
     @Column(nullable = true) private boolean isComplete;
     @Column(nullable = true) private boolean onStreak;
     @Column(nullable = true) private int numOfDays;
     @Column(nullable = true) private int daysCompleted;
-    @Column(nullable = true) private String user;
+    @Column(nullable = true) private String challengeHashID;
     @Column(nullable = true) private String userHashID;
-
+    
+    private String convertByteArrayToHexString(byte[] arrayBytes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < arrayBytes.length; i++) {
+          stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return stringBuffer.toString();
+      }
+    
+      public String hash(String email) throws Exception {
+        try {
+          String userInfo = email;
+          byte[] hashedBytes = userInfo.getBytes("UTF-8");
+          return convertByteArrayToHexString(hashedBytes);
+        } catch (UnsupportedEncodingException ex) {
+          throw new Exception("Could not generate hash from String");
+    
+        }
+      }
     public Challenge() {}
 
-    public Challenge(String name, String description, boolean isActive, boolean isComplete) {
+    public Challenge(String name, String description, boolean isActive, boolean isComplete) throws Exception {
         super();
-        Random rand = new Random();
-        this.id = rand.nextLong();
         this.name = name;
         this.description = description;
         this.isActive = isActive;
         this.isComplete = isComplete;
+        this.challengeHashID = hash(name + description);
     }
 
     public void setId(Long id) {
@@ -64,6 +75,9 @@ public class Challenge {
     }
     public String getdescription(){
         return this.description;
+    }
+    public String challengeHashID(){
+        return this.challengeHashID;
     }
     public int getTime(){
         return this.time;

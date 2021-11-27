@@ -31,6 +31,7 @@ function HomeScreen({ navigation }) {
     const [isActivityDaily, setIsActivityDaily] = useState(false);
     const [isActivityWeekly, setIsActivityWeekly] = useState(false);
     const [isActivityMonthly, setIsActivityMonthly] = useState(false);
+    const [isCancel, setCancel] = useState(false);
 
     const [activities, setActivities] = useState([]);
     const [activitiesTime, setActivitiesTime] = useState([]);
@@ -66,6 +67,10 @@ function HomeScreen({ navigation }) {
         setIsDaily(false);
         setIsWeekly(false);
         setIsMonthly(true);
+    };
+    const filterCancel = () => {
+        console.log("Cancel is pressed");
+        setCancel(!isCancel);
     };
 
     const activityDaily = async (setFieldValue, field) => {
@@ -297,7 +302,7 @@ function HomeScreen({ navigation }) {
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                                 <Button  onPress={handleSubmit} title="Add" color='#775E5E'/>
-                                <Button title="Cancel" onPress={filterHandlerWeekly} isPressed={isWeekly} />
+                                <Button title="Cancel" onPress={filterCancel} isPressed={isCancel} />
                             </View>
                         </View>
 

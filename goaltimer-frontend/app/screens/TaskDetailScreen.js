@@ -125,7 +125,6 @@ function TaskDetailScreen({ route }) {
                 ]
             );
         }
-
     }
 
     return (

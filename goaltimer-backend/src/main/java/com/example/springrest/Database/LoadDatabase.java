@@ -27,13 +27,13 @@ class LoadDatabase {
 
     return args -> {
       
-      log.info("Preloading " + challengeRepository.save(new Challenge("5 Day Challenge" ,"Drink at least 8 glass of water for 5 days.", false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("10 Day Challenge" ,"Drink at least 8 glass of water for 10 days.", false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("15 Day Challenge" ,"Drink at least 8 glass of water for 15 days.", false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("20 Day Challenge" ,"Drink at least 8 glass of water for 20 days.",  false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("25 Day Challenge" ,"Drink at least 8 glass of water for 25 days.",  false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("30 Day Challenge" ,"Drink at least 8 glass of water for 30 days.",  false , false)));
-      log.info("Preloading " + challengeRepository.save(new Challenge("35 Day Challenge" ,"Drink at least 8 glass of water for 35 days.",  false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("5 Day Challenge" ,"Do an activity for 5 days.", false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("10 Day Challenge" ,"Do an activity for 10 days.", false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("15 Day Challenge" ,"Do an activity for 15 days.", false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("20 Day Challenge" ,"Do an activity for 20 days.",  false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("25 Day Challenge" ,"Do an activity for 25 days.",  false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("30 Day Challenge" ,"Do an activity for 30 days.",  false , false)));
+      log.info("Preloading " + challengeRepository.save(new Challenge("35 Day Challenge" ,"Do an activity for 35 days.",  false , false)));
 
       log.info("Preloading " + userRepository.save(new User("Marti" ,"Tengdin", "Marti.Tengdin@gmail.com", "password")));
       log.info("Preloading " + userRepository.save(new User("Allis", "Wyn", "Allis.Wyn@gmail.com", "password")));

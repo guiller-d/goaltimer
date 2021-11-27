@@ -4,15 +4,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TouchableOpacity } from 'react-native';
 
-function Challenge({ challengeName, challengeDescription, onPress }) {
+function Challenge({ challengeName, challengeDescription, onPress, active }) {
     console.log(challengeName);
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderColor: '#DBDBDB', marginBottom: 10, }}>
             <LinearGradient style={{ backgroundColor: 'red', height: 60, width: 60, marginTop: 10, borderRadius: 45, alignItems: 'center', justifyContent: 'center' }} colors={['white', '#C5D7F4']}>
                 <Image style={styles.iconSize} source={require('../assets/images/star.png')} />
             </LinearGradient>
-            <View style={{ width: '50%', left: 15 }}>
-            
+            <View style={{ width: '50%', left: 15 }}>         
                 <Text style={styles.text3}>{challengeName}</Text>
                 <Text style={styles.text2}>{challengeDescription}</Text>
             </View>
@@ -24,12 +23,14 @@ function Challenge({ challengeName, challengeDescription, onPress }) {
                     alignSelf: 'center',
                     alignItems: 'center',
                     borderRadius: 20
-                }} colors={['white', '#8CE2CB',]}>
+                }} colors={['white', active ? 'red' : '#8CE2CB',]}>
                     <Text style={styles.text4}>Star Challenge</Text>
                 </LinearGradient>
             </TouchableOpacity>
         </View>
     );
+
+
 }
 
 const styles = StyleSheet.create({
