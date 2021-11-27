@@ -62,6 +62,15 @@ const handleSubmit = async (values) => {
   );
 }
 
+const handleDelete = () => {
+  let apiStr = endpoints.removeAvailability
+  api.baseURL.delete(apiStr, ).then(response => {
+      console.log(response.data);
+  }
+  );
+}
+
+
   return (
     <Screen>
       <Text style={styles.titleContainer}>Availability</Text>
@@ -73,6 +82,9 @@ const handleSubmit = async (values) => {
       </View>
       <View style={styles.container}>
           <Button title="Add Availability" color='green' borderColor='red' onPress={toggleModal} />
+      </View>
+      <View style={styles.container}>
+          <Button title="Delete Current Availability" color='red' borderColor='red' onPress={handleDelete} />
       </View>
       
       <Modal isVisible={isModalVisible} animationIn="bounceIn" animationOut="bounceOut" backdropOpacity={0} onBackdropPress={() => setModalVisible(false)}>

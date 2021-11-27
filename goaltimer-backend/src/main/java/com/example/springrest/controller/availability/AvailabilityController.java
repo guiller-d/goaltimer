@@ -48,7 +48,8 @@ class AvailabilityController {
   private final AvailabilityRepository repository;
   private static String session_id;
   private Storage storage = StorageOptions.getDefaultInstance().getService();
-  private int j = 0;
+  private long j = 36;
+  private Availability fetchedAvailability;
   private String convertByteArrayToHexString(byte[] arrayBytes) {
     StringBuffer stringBuffer = new StringBuffer();
     for (int i = 0; i < arrayBytes.length; i++) {
@@ -80,6 +81,14 @@ class AvailabilityController {
     checkPath(available);
     return "Added successfully";
   }
+
+  @DeleteMapping(value = "/removeAvailability")
+  public String removeAvailability() throws Exception {
+    repository.deleteAll();
+    System.out.println("repository " + repository.findAll());
+    return "removed successfully";
+  }
+
     
     
   public String store_data(String data_loc) throws IOException {
