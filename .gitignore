@@ -48,10 +48,13 @@ goaltimer-frontend/ios/Pods/boost-for-react-native/boost/.DS_Store
 goaltimer-frontend/.DS_Store
 .gitignore
 .DS_Store
+<<<<<<< HEAD
 >>>>>>> fb54be5c (front-end clean up and logout)
 .DS_Store
 .gitignore
 goaltimer-frontend/ios/.DS_Store
 goaltimer-frontend/ios/Pods/.DS_Store
 .gitignore
+=======
+>>>>>>> 285ff29a (merges)
 .DS_Store
