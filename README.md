@@ -26,7 +26,11 @@ For our project, we have developed a daily activity log mobile application, Goal
   * Cloud sdk ([Installation guide](https://cloud.google.com/sdk/docs/install))
   * To setup the Google Cloud you need to sign up for a Google Cloud account ([Google Cloud Signup](https://cloud.google.com/free/?gclid=EAIaIQobChMIz_rayv-79AIVKG1vBB067wviEAAYASABEgIfjfD_BwE&gclsrc=aw.ds))
   * After creating a Google Cloud account navigate to Cloud storage and create a new Bucket and named it 'goaltimer'
+   ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/cloud_1.png)
+   ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/cloud_2.png)
+   ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/cloud_3.png)
   * Then after creating a bucket and installing Cloud sdk on your system, open terminal and type 'gcloud init'. Login with your created Google Cloud and select the goaltimer project you just created on Google Cloud. This would configure the created Cloud bucket into your system in order to run GoalTimer. The GoalTimer app would automatically recognized the bucket with the name 'goaltimer' and would attempt to connect to it. 
+   ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/cloud_4.png)
 * **Testing** <br />
   * Postman ([API Testing](https://www.postman.com/downloads/))
   * Apache JMeter ([Performance Testing](https://jmeter.apache.org/))
@@ -39,15 +43,24 @@ For our project, we have developed a daily activity log mobile application, Goal
 
 ### Running the Backend 
 After the installation of Backend Environment and & Cloud configuration Open the 'goaltimer-backend' on the terminal and type 'gradle bootRun'. GoalTimer backend would run and connects to the Goaltimer Google Cloud Bucket. 
-
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/gradle_bootRun.png)
 
 ### Running the Frontend 
 After the installation of the Frontend Environment and Expo CLI, 
 In the goaltimer-frontend folder > api > api.js change the IP address to your IP address.
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/ip_address_update.png)
 
-open the 'goaltimer-frontend' on the terminal and type 'expo start'. GoalTimer will run on browser and display user for the options to run the app. For this case, we'll run the app on Expo Go. Open the Expo Go app on your phone and login with
+open the 'goaltimer-frontend' on the terminal and type 'expo start'. GoalTimer will run on browser and display user for the options to run the app.
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_start.png)
+
+For this case, we'll run the app on Expo Go. Open the Expo Go app on your phone and login with
 Username: smarttracker.expo@gmail.com
 Password: activitylogtracker
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go.jpg)
+You should be able to see the running GoalTimer
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go1.PNG)
+![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/opening_project.PNG)
+
 
 
 
