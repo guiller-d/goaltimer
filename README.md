@@ -56,12 +56,13 @@ open the 'goaltimer-frontend' on the terminal and type 'expo start'. GoalTimer w
 For this case, we'll run the app on Expo Go. Open the Expo Go app on your phone and login with
 Username: smarttracker.expo@gmail.com
 Password: activitylogtracker
-![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go.jpg)
+
 You should be able to see the running GoalTimer
-![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go1.PNG)
-![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/opening_project.PNG)
-
-
+<p float="left">
+ <kbd> <img src="![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go.jpg" width="320" height="720"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go1.PNG" width="320" height="720"> </kbd>
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/opening_project.PNG" width="320" height="720"> </kbd>
+</p>
 
 
 
