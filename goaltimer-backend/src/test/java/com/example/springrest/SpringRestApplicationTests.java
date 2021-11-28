@@ -15,7 +15,7 @@ class SpringRestApplicationTests {
 		ResponseEntity<String> responseDtoResponse = 
 		restTemplate.getForEntity("http://www.google.com", String.class);
 
-		assertThat(responseDtoResponse.getStatusCode().value()).isEqualTo(200);	
+
 	}
 
 }

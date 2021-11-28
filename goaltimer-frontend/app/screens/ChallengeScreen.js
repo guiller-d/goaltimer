@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Screen from '../components/Screen';
 import Challenge from '../components/Challenge';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
-
-function updateChallenge() {
-    // Invoke the api route
-    api.baseURL.get(api.baseURL.getBaseURL() + 'updateChallenge').then(response => {
-
-        console.log(response.data);
-    });
-}
+import AuthContext from '../auth/context';
 
 function ChallengeScreen(props) {
     const quote = "“Own your Time”"
     const author = " — Goal Timer"
-
+    const [challenge, setChallenge] = useState(false);
     const [array, setArray] = useState([]);
-    var challenges = [];
-    var count = 0;
+    const authContext = useContext(AuthContext);
+  
+ 
     useEffect(() => {
-        api.baseURL.get(api.baseURL.getBaseURL() + 'challenges').then(response => {
-            setArray(response.data._embedded.challenges);
+        let apiStr = endpoints.challenges;
+        api.baseURL.get(apiStr).then(response => {
+            if (response.data != null) {
+                setArray(response.data);
+            }
         });
-    }, []);
+    },[array]);
+    const updateChallenge = (id, active) => {
+        console.log("challengeId");
+        console.log(id);
+        console.log("active");
+        console.log(active);
+        console.log(!active);
+        let apiStr = endpoints.updateChallenge;
+        api.baseURL.post(apiStr, { isActive: !active, userHashID: authContext.user.hashID, id: id}).then(response => {
+           if (response.data != null) {
+
+            }
+        });
+    }
 
     return (
         <Screen>
@@ -57,7 +67,7 @@ function ChallengeScreen(props) {
                         <View>
                              <FlatList key={'listView'} style={{ alignSelf: 'center' }} data={array} showsVerticalScrollIndicator={false} keyExtractor={array => array.name.toString()}
                                 renderItem={({ item }) =>
-                                    <Challenge challengeName={item.name} onPress={updateChallenge} challengeDescription={item.description} />
+                                    <Challenge challengeName={item.name} active={item.active} challengeDescription={item.description} onPress={() => updateChallenge(item.id, item.active)} />
                                 }
                             />
                         </View>

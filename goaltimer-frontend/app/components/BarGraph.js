@@ -23,10 +23,10 @@ function BarGraph({ data, dataCount, daily, weekly, monthly, backgroundColor }) 
     };
     var BAR_WIDTH = 0;
     if (daily) {
-        BAR_WIDTH = dataCount * 60;
+        BAR_WIDTH = dataCount * 70;
     }
     if (weekly) {
-        BAR_WIDTH = dataCount * 50;
+        BAR_WIDTH = dataCount * 60;
     }
     if (monthly) {
         BAR_WIDTH = dataCount * 14;
