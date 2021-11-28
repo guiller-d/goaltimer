@@ -4,3 +4,13 @@ goaltimer-backend/.DS_Store
 goaltimer-backend/.DS_Store
 goaltimer-frontend/.DS_Store
 goaltimer-frontend/app/.DS_Store
+goaltimer-backend/bin/main/.DS_Store
+goaltimer-backend/bin/main/com/.DS_Store
+goaltimer-backend/bin/main/com/example/.DS_Store
+.gitignore
+.DS_Store
+goaltimer-backend/bin/main/.DS_Store
+.gitignore
+goaltimer-backend/bin/main/com/example/.DS_Store
+.gitignore
+.DS_Store
