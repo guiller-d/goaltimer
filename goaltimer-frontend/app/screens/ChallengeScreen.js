@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext} from 'react';
-import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Screen from '../components/Screen';
@@ -12,11 +11,6 @@ function ChallengeScreen(props) {
     const quote = "“Own your Time”"
     const author = " — Goal Timer"
     const [challenge, setChallenge] = useState(false);
-    const [array, setArray] = useState([]);
-    const authContext = useContext(AuthContext);
-  
- 
-
     const [array, setArray] = useState([]);
     const authContext = useContext(AuthContext);
 

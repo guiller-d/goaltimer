@@ -57,11 +57,6 @@ function HomeScreen({ navigation }) {
         console.log("Cancel is pressed");
         setCancel(!isCancel);
     };
-    const filterCancel = () => {
-        console.log("Cancel is pressed");
-        setCancel(!isCancel);
-    };
-
     const activityDaily = async (setFieldValue, field) => {
         setIsActivityDaily(true);
         setIsActivityWeekly(false);
