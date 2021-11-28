@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -132,7 +133,13 @@ public class ActivityController {
     }
     return String.valueOf(count);
   }
- 
+  @DeleteMapping(value = "/removeActivity")
+  public String removeAvailability() throws Exception {
+    repository.deleteAll();
+    System.out.println("repository " + repository.findAll());
+    return "removed successfully";
+  }
+
 
   @PostMapping(value = "/addTime/")
   public ActivityTime addTime(@RequestBody ActivityTime newActivityTime) throws Exception {

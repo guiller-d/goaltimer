@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, Button, Dimensions, Picker, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Picker, FlatList } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import Screen from '../components/Screen';
 import Modal from 'react-native-modal';
@@ -7,6 +7,7 @@ import AuthContext from '../auth/context';
 import api from '../api/api';
 import endpoints from '../api/endpoints';
 import Availability from '../components/Availability';
+import Button from '../components/Button';
 
 function AvailabilityScreen(props) {
 
@@ -73,13 +74,13 @@ function AvailabilityScreen(props) {
     }
   }
 
-const handleDelete = () => {
-  let apiStr = endpoints.removeAvailability
-  api.baseURL.delete(apiStr, ).then(response => {
+  const handleDelete = () => {
+    let apiStr = endpoints.removeAvailability
+    api.baseURL.delete(apiStr,).then(response => {
       console.log(response.data);
+    }
+    );
   }
-  );
-}
 
 
   return (
@@ -92,7 +93,15 @@ const handleDelete = () => {
           />} />
       </View>
       <View style={styles.container}>
-        <Button title="Add Availability" color='green' borderColor='red' onPress={toggleModal} />
+        <Button title="Add Availability" onPress={toggleModal} />
+      </View>
+      <View style={styles.container}>
+        {
+          array.length > 0 ?
+            <Button title="Delete Current Availability" type="delete" onPress={handleDelete} />
+            :<View></View>
+      }
+
       </View>
       <Modal isVisible={isModalVisible} animationIn="bounceIn" animationOut="bounceOut" backdropOpacity={0} onBackdropPress={() => setModalVisible(false)}>
         <View style={{

@@ -130,8 +130,14 @@ function HomeScreen({ navigation }) {
             return;
         }
 
-    }, [activitiesTime]);
-
+    }, []);
+    const handleDelete = () => {
+        let apiStr = endpoints.removeActivity
+        api.baseURL.delete(apiStr, ).then(response => {
+            console.log(response.data);
+        }
+        );
+      }
     const handleSubmit = async (values) => {
         if (authContext != null) {
             let apiStr = endpoints.addActivity;
@@ -230,7 +236,7 @@ function HomeScreen({ navigation }) {
                 </View>
 
             </View>
-
+          
             <View style={styles.activityContainer}>
                 {
                     activities.length > 0 ?
@@ -248,9 +254,17 @@ function HomeScreen({ navigation }) {
                         </View>
 
                 }
+            <View style={styles.container}>
 
+                {
+                    activities.length > 0 ?
+                    <Button title="Delete Current Availability" type="delete" onPress={handleDelete} />
+                    : <View></View>
+                }
+               
             </View>
-
+            </View>
+         
             <AddButton onPress={toggleModal} />
             <Modal coverScreen={false} backdropColor='black' backdropOpacity={0.2} hideModalContentWhileAnimating={true} animationIn='slideInDown' animationOut='slideOutUp' isVisible={isModalVisible} onBackdropPress={() => setModalVisible(false)} onSwipeComplete={() => setModalVisible(false)} swipeDirection="left">
                 <Formik
@@ -318,6 +332,15 @@ const styles = StyleSheet.create({
     homeContainer: {
         alignItems: 'center',
     },
+    container: {
+        flexDirection: 'row',
+        paddingBottom: 15,
+        fontSize: 35,
+        marginLeft: 12,
+        marginRight: 12,
+        color: "#775E5E",
+        justifyContent: 'center',
+      },
     graphContainer: {
         width: '97%',
         alignSelf: 'center',

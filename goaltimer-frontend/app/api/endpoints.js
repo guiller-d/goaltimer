@@ -16,6 +16,7 @@ const getAllTime = "/getAllTime/"
 const updateChallenge = "/updateChallenge/"
 const getUserAvailability = '/getUserAvailability/'
 const removeAvailability = '/removeAvailability/'
+const removeActivity = '/removeActivity/'
 export default {
-    getAllUsers, getAllTime, getAllActivityTime, login, register, settings, accountRemoval, challenges, activities, addActivity, getallactivities, availabilities, addAvailability, addTime, updateChallenge, getUserAvailability, removeAvailability
+    getAllUsers, getAllTime, getAllActivityTime, login, register, settings, accountRemoval, challenges, activities, addActivity, getallactivities, availabilities, addAvailability, addTime, updateChallenge, getUserAvailability, removeAvailability, removeActivity
 }

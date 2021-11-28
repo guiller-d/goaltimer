@@ -5,7 +5,6 @@ function Button({ title, color, onPress, isPressed, type }) {
     return (
         <TouchableOpacity style={{
             height: 40,
-            backgroundColor: 'white',
             justifyContent: 'center',
             alignItems: 'center',
             borderColor: '#85AAE6',
@@ -17,7 +16,7 @@ function Button({ title, color, onPress, isPressed, type }) {
                     <View style={{alignItems: 'center', width: '100%', marginTop: 10}}>
                         <Text style={{
                             fontSize: 20 ,
-                            color: '#85AAE6',
+                            color: type == 'delete' ? 'red' : '#85AAE6',
                             fontFamily: 'Avenir-Medium'
                         }}>{title}</Text>
                         <View style={{width: '100%', height: 5, backgroundColor: '#85AAE6', borderRadius: 20}} />
@@ -26,7 +25,7 @@ function Button({ title, color, onPress, isPressed, type }) {
                     <View>
                         <Text style={{
                             fontSize: 18,
-                            color: '#85AAE6',
+                            color: type == 'delete' ? 'red' : '#85AAE6',
                             fontFamily: 'Avenir-Medium'
                         }}>{title}</Text>
                     </View>

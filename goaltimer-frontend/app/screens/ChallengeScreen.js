@@ -27,7 +27,7 @@ function ChallengeScreen(props) {
             return;
         }
 
-    }, [array]);
+    }, []);
     const updateChallenge = (id, active) => {
         if (authContext.user != null) {
             let apiStr = endpoints.updateChallenge;
