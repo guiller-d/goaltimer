@@ -130,7 +130,7 @@ function HomeScreen({ navigation }) {
             return;
         }
 
-    }, []);
+    }, [activitiesTime]);
     const handleDelete = () => {
         let apiStr = endpoints.removeActivity
         api.baseURL.delete(apiStr, ).then(response => {
@@ -258,7 +258,7 @@ function HomeScreen({ navigation }) {
 
                 {
                     activities.length > 0 ?
-                    <Button title="Delete Current Availability" type="delete" onPress={handleDelete} />
+                    <Button title="Delete Current Activity" type="delete" onPress={handleDelete} />
                     : <View></View>
                 }
                

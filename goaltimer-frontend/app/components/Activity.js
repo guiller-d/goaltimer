@@ -19,7 +19,7 @@ function Activity({activityName, activityDuration, activitySchedule, onPress, co
             
                 <View style={styles.detailsContainer}>
                     <Text style={styles.activityNameText}>{activityName}</Text>
-                    <Text style={styles.durationText}>{activityDuration} {activitySchedule}</Text>
+                    <Text style={styles.durationText}>{activityDuration} minutes {activitySchedule}</Text>
                 </View>
                 <TouchableOpacity style={styles.showButtonContainer} onPress={onPress}>
                     <Image style={styles.chevronRight} source={require('../assets/images/chevron-right.png')} />

@@ -1,5 +1,5 @@
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { StyleSheet, Text, View, Dimensions, Alert, FlatList } from 'react-native';
 import Screen from '../components/Screen';
 import CountDown from 'react-native-countdown-component';
@@ -62,7 +62,7 @@ function TaskDetailScreen({ route }) {
             }
         });
     };
-
+ 
 
     var weekly_time = [];
     var time_count = 0;
