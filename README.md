@@ -64,35 +64,35 @@ You should be able to see the running GoalTimer. Click on it under "recently in 
 </p>
 
 ## Goal Timer - Activity Log Tracker
-Welcom Screen - Sign Up Screen <br />
+**Welcom Screen - Sign Up Screen <br />
 <p float="left">
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8928.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8929.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8930.PNG" width="250" height="600"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8928.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8929.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8930.PNG" width="250" height="550"> </kbd> 
 </p>
 Login Screen - Home Screen - Adding Activity  <br />
 <p float="left">
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8931.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8932.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8933.PNG" width="250" height="600"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8931.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8932.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8933.PNG" width="250" height="550"> </kbd> 
 </p>
 Home Screen with Added Activity - Activity Timer Screen  <br />
 <p float="left">
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8934.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8935.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8936.PNG" width="250" height="600"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8934.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8935.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8936.PNG" width="250" height="550"> </kbd> 
 </p>
 Home Screen with Activity Time on Graph - Adding Available Time  <br />
 <p float="left">
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8937.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8938.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8939.PNG" width="250" height="600"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8937.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8938.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8939.PNG" width="250" height="550"> </kbd> 
 </p>
-Challenge Screen(Addtional Feature) - Setting Screen - Overall Activity Time Usage Screen(Addtional Feature)  <br />
+Challenge Screen(Addtional Feature) - Setting Screen - Overall Activity Time Usage Screen(Addtional Feature)**  <br />
 <p float="left">
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8940.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8941.PNG" width="250" height="600"> </kbd> 
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8943.PNG" width="250" height="600"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8940.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8941.PNG" width="250" height="550"> </kbd> 
+ <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/IMG_8943.PNG" width="250" height="550"> </kbd> 
 </p>
 
 
