@@ -1,4 +1,4 @@
-# GoalTimer -Activity Log Tracker
+# GoalTimer - Daily Activity Log Tracker
 ### Fall 2021: 195B/F Sec 01 Senior Project
 ### Contributors
  * Ahmad Abuzaina
