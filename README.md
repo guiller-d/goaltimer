@@ -57,7 +57,7 @@ For this case, we'll run the app on Expo Go. Open the Expo Go app on your phone 
 Username: smarttracker.expo@gmail.com
 Password: activitylogtracker
 
-You should be able to see the running GoalTimer
+You should be able to see the running GoalTimer. Click on it under "recently in development" and you'll be redirected to the login screen.
 <p float="left">
  <kbd> <img src="![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go.jpg" width="320" height="720"> </kbd> 
  <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go1.PNG" width="320" height="720"> </kbd>
