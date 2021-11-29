@@ -42,11 +42,11 @@ For our project, we have developed a daily activity log mobile application, Goal
 * Java, React Native, JavaScript
 
 ### Running the Backend 
-REQUIRED: YOUR COMPUTER AND PHONE MUST BE CONNECTED TO THE SAME WIFI. 
 After the installation of Backend Environment and & Cloud configuration Open the 'goaltimer-backend' on the terminal and type 'gradle bootRun'. GoalTimer backend would run and connects to the Goaltimer Google Cloud Bucket. 
 ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/gradle_bootRun.png)
 
 ### Running the Frontend 
+REQUIRED: YOUR COMPUTER AND PHONE MUST BE CONNECTED TO THE SAME WIFI. 
 After the installation of the Frontend Environment and Expo CLI, 
 In the goaltimer-frontend folder > api > api.js change the IP address to your IP address.
 ![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/ip_address_update.png)
