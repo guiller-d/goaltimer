@@ -8,6 +8,7 @@
 ### Project Overview
 For our project, we have developed a daily activity log mobile application, GoalTimer, that records and analyses various activities performed by users. The application will ultimately better meet user needs by providing a broader range of advice, thus increasing user engagement.
 
+Three things should be running to run the Goal Timer - Daily Activity Log Tracker; Backend Spring Boot, Front End React Native, and Google Cloud Storage. We’ll go through installation of required software and configurations. All the installation link and configuration guides are provided on this file. Then after the installation required framework and cloud configuration, we’ll be running the backend and frontend on a physical mobile device in iOS or Android. So, let’s first go through the hardware and software used. 
 
 ### Hardware and software used:
 * **IDE** <br />
