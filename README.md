@@ -61,7 +61,6 @@ You should be able to see the running GoalTimer
 <p float="left">
  <kbd> <img src="![alt text](https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go.jpg" width="320" height="720"> </kbd> 
  <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/expo_go1.PNG" width="320" height="720"> </kbd>
- <kbd> <img src="https://github.com/guiller-d/goaltimer/blob/main/documentation/readMe_screenshots/opening_project.PNG" width="320" height="720"> </kbd>
 </p>
 
 
